@@ -12,7 +12,7 @@ const Landing = () => {
         <Paper>
           <Box>
             <Link to="/login">Pieslēgties</Link>
-            <Link>Rēģistrēties</Link>
+            <Link to="/register">Rēģistrēties</Link>
           </Box>
           <Box>
             <h2>Par vietni</h2>
