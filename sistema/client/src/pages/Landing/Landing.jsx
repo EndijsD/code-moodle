@@ -1,6 +1,6 @@
-import { Box, Paper } from "@mui/material";
-import * as S from "./style";
-import { Link } from "react-router-dom";
+import { Box, Divider } from '@mui/material';
+import * as S from './style';
+import { Link } from 'react-router-dom';
 
 const Landing = () => {
   return (
@@ -8,23 +8,28 @@ const Landing = () => {
       <S.HeadingBox>
         <S.H1>Nosaukums</S.H1>
       </S.HeadingBox>
-      <S.box>
-        <Paper>
-          <Box>
-            <Link to="/login">Pieslēgties</Link>
-            <Link to="/register">Rēģistrēties</Link>
-          </Box>
+      <S.Content>
+        <S.StyledPaper>
+          <S.LeftBox>
+            <Link to="login">
+              <S.MainButton>Pieslēgties</S.MainButton>
+            </Link>
+            <Link to="register">
+              <S.MainButton>Rēģistrēties</S.MainButton>
+            </Link>
+          </S.LeftBox>
+          <Divider orientation="vertical" flexItem />
           <Box>
             <h2>Par vietni</h2>
-            <p>
+            <S.Paragraph>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
               sed iure quod cum itaque, commodi mollitia perspiciatis eum id,
               fuga quos repellat ut voluptate molestias vitae. Possimus porro
               facilis iusto!
-            </p>
+            </S.Paragraph>
           </Box>
-        </Paper>
-      </S.box>
+        </S.StyledPaper>
+      </S.Content>
     </>
   );
 };
