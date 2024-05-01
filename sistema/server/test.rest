@@ -1,0 +1,19 @@
+GET http://localhost:3001/students
+
+###
+
+GET http://localhost:3001/students/1
+
+###
+
+POST http://localhost:3001/students
+content-type: application/json
+
+{
+    "vards": "Endijs",
+    "uzvards": "Dārznieks",
+    "klase": "1.kurss",
+    "epasts": "endijsCoolGuy@inbox.lv",
+    "parole": "parole33",
+    "skolas_id": 3
+}

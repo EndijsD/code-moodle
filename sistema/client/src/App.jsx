@@ -1,6 +1,8 @@
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 
 const router = createBrowserRouter([
@@ -8,6 +10,22 @@ const router = createBrowserRouter([
     path: '/',
     element: <Landing />,
     errorElement: <NotFound />,
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
   },
 ]);
 
