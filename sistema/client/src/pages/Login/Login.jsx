@@ -1,17 +1,19 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Button,
   CircularProgress,
   IconButton,
   InputAdornment,
-} from "@mui/material";
-import { useState } from "react";
-import * as S from "./style";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import { useState } from 'react';
+import * as S from './style';
+import { useNavigate } from 'react-router-dom';
+import url from '../../../../url';
+import axios from 'axios';
 
 const initialValues = {
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 };
 
 const Login = () => {
@@ -24,13 +26,43 @@ const Login = () => {
   const handleClickShowPassword = () =>
     setShowPassword((showPassword) => !showPassword);
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    //Tiek pārbaudīts vai ievadlauki nav tukši
+    if (formValues.email !== '' && formValues.password !== '') {
+      //Tiek izveidota nosūtāmā informācija (Parole tiek šifrēta un tad tā tiek salīdzināta ar paroli servera pusē)
+      let authInfo = {
+        table: 'students',
+        email: formValues.email,
+        password: formValues.password,
+      };
+      try {
+        //Dati tiek nosūtīti uz servera pusi
+        setIsPending(true);
+        const res = await axios.post(`${url}auth/login`, authInfo);
+        if (res) console.log(res);
+        //Ja serveris atgriež token un lietotāja id tad lietotājs tiek ielogots (yet to be done)
+        if (res.data.accessToken !== undefined) {
+          if (res.data.userType == 0) {
+            nav('/userpage');
+          } else {
+            nav('/adminpage');
+          }
+        } else {
+          setProblem(true);
+          setIsPending(false);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setProblem(true);
+    }
   };
 
   const handleFormInputChange = (e) => {
     const { name, value } = e.target;
-
+    console.log(e.target.value);
     setFormValues({
       ...formValues,
       [name]: value,
@@ -52,14 +84,14 @@ const Login = () => {
               value={formValues.email}
               onChange={handleFormInputChange}
               required
-              error={problem == "wrong" && true}
+              error={problem == 'wrong' && true}
               autoComplete="true"
             />
 
             <S.textField
               label="Parole"
               variant="standard"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -76,14 +108,14 @@ const Login = () => {
               value={formValues.password}
               onChange={handleFormInputChange}
               required
-              error={problem == "wrong" && true}
+              error={problem == 'wrong' && true}
               autoComplete="true"
             />
 
             <S.button
               variant="contained"
               type="submit"
-              color={problem == "error" && !isPending ? "error" : "primary"}
+              color={problem == 'error' && !isPending ? 'error' : 'primary'}
               disabled={isPending}
             >
               {isPending ? <CircularProgress /> : <>Pievienoties</>}
@@ -92,11 +124,11 @@ const Login = () => {
             <Button
               sx={{
                 borderRadius: 50,
-                mt: "1rem",
+                mt: '1rem',
                 maxWidth: 220,
-                alignSelf: "center",
+                alignSelf: 'center',
               }}
-              onClick={() => nav("/register")}
+              onClick={() => nav('/register')}
             >
               Nav konts? Reģistrējies
             </Button>

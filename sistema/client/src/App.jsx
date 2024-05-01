@@ -1,28 +1,38 @@
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Landing from "./pages/Landing";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import UserMainPage from './pages/UserHome';
+import AdminMainPage from './pages/AdminHome';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Landing />,
   },
   {
-    path: "/login",
+    path: '/login',
     element: <Login />,
   },
   {
-    path: "/register",
+    path: '/register',
     element: <Register />,
+  },
+  {
+    path: '/userpage',
+    element: <UserMainPage />,
+  },
+  {
+    path: '/adminpage',
+    element: <AdminMainPage />,
   },
 ]);
 
 function App() {
   const theme = createTheme({
     palette: {
-      mode: "light",
+      mode: 'light',
     },
   });
 

@@ -271,7 +271,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `db`;
-INSERT INTO `db`.`students` (`students_id`, `vards`, `uzvards`, `klase`, `epasts`, `parole`, `skolas_id`) VALUES (DEFAULT, 'Kārlis', 'Lācītis', '1.kurss', 'lacitis18@inbox.lv', 'parole', 3);
+INSERT INTO `db`.`students` (`students_id`, `vards`, `uzvards`, `klase`, `epasts`, `parole`, `skolas_id`) VALUES (DEFAULT, 'Kārlis', 'Lācītis', '1.kurss', 'lacitis18@inbox.lv', '$2b$10$ZpyuZ.lBh0rSpHhcORhOGOtLrW0Rcl3TXFDW3n06IbiUiYr86AIpy', 3);
 
 COMMIT;
 
@@ -281,7 +281,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `db`;
-INSERT INTO `db`.`skolotajs` (`skolotajs_id`, `vards`, `uzvards`, `epasts`, `parole`) VALUES (DEFAULT, 'Tests', 'Testētājs', 'lacitiskarlis@gmail.com', 'parole');
+INSERT INTO `db`.`skolotajs` (`skolotajs_id`, `vards`, `uzvards`, `epasts`, `parole`) VALUES (DEFAULT, 'Tests', 'Testētājs', 'lacitiskarlis@gmail.com', '$2b$10$ZpyuZ.lBh0rSpHhcORhOGOtLrW0Rcl3TXFDW3n06IbiUiYr86AIpy');
 
 COMMIT;
 
