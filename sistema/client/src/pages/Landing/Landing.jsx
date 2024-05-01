@@ -1,6 +1,6 @@
-import { Box, Paper } from '@mui/material';
-import * as S from './style';
-import { Link } from 'react-router-dom';
+import { Box, Paper } from "@mui/material";
+import * as S from "./style";
+import { Link } from "react-router-dom";
 
 const Landing = () => {
   return (
@@ -11,7 +11,7 @@ const Landing = () => {
       <S.box>
         <Paper>
           <Box>
-            <Link>Pieslēgties</Link>
+            <Link to="/login">Pieslēgties</Link>
             <Link>Rēģistrēties</Link>
           </Box>
           <Box>
