@@ -1,33 +1,103 @@
-import { Check, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Check, Visibility, VisibilityOff } from '@mui/icons-material';
 import {
+  Box,
   Button,
   CircularProgress,
+  FormControl,
   IconButton,
   InputAdornment,
-} from "@mui/material";
-import { useState } from "react";
-import * as S from "./style";
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import * as S from './style';
 // import url from "../../url";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import url from '../../../../url';
 
 const initialUserValues = {
-  vards: "",
-  uzvards: "",
-  skola: "",
-  klase: "",
-  epasts: "",
-  parole: "",
-  parole_atk: "",
+  vards: '',
+  uzvards: '',
+  skola: 0,
+  klase: '',
+  epasts: '',
+  parole: '',
+  parole_atk: '',
 };
 
 const Register = () => {
+  const nav = useNavigate();
   const [userValues, setUserValues] = useState(initialUserValues);
   const [showPassword, setShowPassword] = useState([false, false]);
   const [problems, setProblems] = useState([]);
   const [isPending, setIsPending] = useState(false);
   const [success, setSuccess] = useState(false);
-  const nav = useNavigate();
   const [active, setActive] = useState([false, false]);
+  const [data, setData] = useState([]);
+  const [klases, setKlases] = useState([]);
+  const [tips, setTips] = useState('');
+
+  const FetchData = async () => {
+    try {
+      let res = await axios.get(`${url}skolas`);
+      setData(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const MakeClasses = () => {
+    setKlases([]);
+    let max, type;
+    switch (tips) {
+      case 'Pamatskola':
+        max = 9;
+        type = 1;
+        break;
+      case 'Vidusskola':
+        max = 12;
+        type = 1;
+        break;
+      case 'Tehnikums':
+        max = 4;
+        type = 0;
+        break;
+      case 'Augstskola':
+        max = 5;
+        type = 0;
+        break;
+    }
+    if (type === 1) {
+      for (let i = 1; i < max + 1; i++) {
+        setKlases((oldArray) => [...oldArray, `${i}.klase`]);
+      }
+    } else if (type === 0) {
+      for (let i = 1; i < max + 1; i++) {
+        setKlases((oldArray) => [...oldArray, `${i}.kurss`]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (tips != '') {
+      MakeClasses();
+    }
+  }, [tips]);
+
+  useEffect(() => {
+    FetchData();
+  }, []);
+
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].skolas_id === userValues.skola) {
+        setTips(data[i].tips);
+        break;
+      }
+    }
+  }, [userValues.skola]);
 
   const handleClickShowPassword = (index) => {
     setShowPassword((showPassword) =>
@@ -52,7 +122,6 @@ const Register = () => {
           [name]: value,
         });
   };
-
   return (
     <S.MainBox>
       <S.StyledPaper>
@@ -86,31 +155,55 @@ const Register = () => {
               }}
             />
 
-            <S.InputField
-              label="Skola"
+            <FormControl
+              sx={{ width: '80%', alignSelf: 'center' }}
               variant="standard"
-              name="skola"
-              value={userValues.skola}
-              onChange={handleFormInputChange}
-              error={problems.includes("adr") && !userValues.skola}
-              autoComplete="true"
-              inputProps={{
-                maxLength: 60,
-              }}
-            />
+            >
+              <InputLabel id="skola-label">Skola</InputLabel>
+              <Select
+                disabled={data.length === 0}
+                required
+                name="skola"
+                labelId="skola-label"
+                value={userValues.skola}
+                label="Skola"
+                onChange={handleFormInputChange}
+              >
+                <MenuItem
+                  selected
+                  key={-1}
+                  value={0}
+                  sx={{ display: 'none' }}
+                ></MenuItem>
+                {data.map((school, i) => (
+                  <MenuItem key={i} value={school.skolas_id}>
+                    {school.nosaukums}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-            <S.InputField
-              label="Klase"
+            <FormControl
               variant="standard"
-              name="klase"
-              value={userValues.klase}
-              onChange={handleFormInputChange}
-              error={problems.includes("adr") && !userValues.klase}
-              autoComplete="true"
-              inputProps={{
-                maxLength: 60,
-              }}
-            />
+              sx={{ width: '80%', alignSelf: 'center' }}
+              disabled={klases.length === 0}
+            >
+              <InputLabel id="skola-label">Klase/Kurss</InputLabel>
+              <Select
+                required
+                name="klase"
+                labelId="skola-label"
+                value={userValues.klase}
+                label="Klase/Kurss"
+                onChange={handleFormInputChange}
+              >
+                {klases.map((klases, i) => (
+                  <MenuItem key={i} value={i + 1}>
+                    {klases}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
             <S.InputField
               label="E-pasts"
@@ -129,7 +222,7 @@ const Register = () => {
             <S.InputField
               label="Parole"
               variant="standard"
-              type={showPassword[0] ? "text" : "password"}
+              type={showPassword[0] ? 'text' : 'password'}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -143,7 +236,7 @@ const Register = () => {
                 ),
               }}
               inputProps={{
-                pattern: "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+                pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
                 maxLength: 100,
               }}
               onMouseEnter={() =>
@@ -157,26 +250,26 @@ const Register = () => {
                 )
               }
               sx={{
-                ".MuiFormHelperText-root": {
-                  visibility: active[0] ? "" : "hidden",
+                '.MuiFormHelperText-root': {
+                  visibility: active[0] ? '' : 'hidden',
                 },
                 mb: -2,
               }}
               helperText={
-                "8 rakstzīmes, kur ir vismaz 1 lielais, mazais burts un cipars"
+                '8 rakstzīmes, kur ir vismaz 1 lielais, mazais burts un cipars'
               }
               name="parole"
               value={userValues.parole}
               onChange={handleFormInputChange}
               required
-              error={problems.includes("pass")}
+              error={problems.includes('pass')}
               autoComplete="true"
             />
 
             <S.InputField
               label="Parole atkārtoti"
               variant="standard"
-              type={showPassword[1] ? "text" : "password"}
+              type={showPassword[1] ? 'text' : 'password'}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -190,7 +283,7 @@ const Register = () => {
                 ),
               }}
               inputProps={{
-                pattern: "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+                pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
                 maxLength: 100,
               }}
               onMouseEnter={() =>
@@ -204,19 +297,19 @@ const Register = () => {
                 )
               }
               sx={{
-                ".MuiFormHelperText-root": {
-                  visibility: active[1] ? "" : "hidden",
+                '.MuiFormHelperText-root': {
+                  visibility: active[1] ? '' : 'hidden',
                 },
                 mb: -2,
               }}
               helperText={
-                "8 rakstzīmes, kur ir vismaz 1 lielais, mazais burts un cipars"
+                '8 rakstzīmes, kur ir vismaz 1 lielais, mazais burts un cipars'
               }
               name="parole_atk"
               value={userValues.parole_atk}
               onChange={handleFormInputChange}
               required
-              error={problems.includes("pass")}
+              error={problems.includes('pass')}
               autoComplete="true"
             />
           </S.StyledBox>
@@ -224,13 +317,13 @@ const Register = () => {
           <S.ButtonBox>
             <S.SubmitButton
               variant="contained"
-              type={success ? undefined : "submit"}
+              type={success ? undefined : 'submit'}
               color={
-                problems.includes("error") && !isPending
-                  ? "error"
+                problems.includes('error') && !isPending
+                  ? 'error'
                   : success
-                  ? "success"
-                  : "primary"
+                  ? 'success'
+                  : 'primary'
               }
               disabled={isPending}
             >
@@ -247,9 +340,9 @@ const Register = () => {
               sx={{
                 borderRadius: 50,
                 maxWidth: 220,
-                alignSelf: "center",
+                alignSelf: 'center',
               }}
-              onClick={() => nav("/login")}
+              onClick={() => nav('/login')}
             >
               Ir konts? Autorizējies
             </Button>

@@ -10,6 +10,8 @@ import * as S from './style';
 import { useNavigate } from 'react-router-dom';
 import url from '../../../../url';
 import axios from 'axios';
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
+import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 
 const initialValues = {
   email: '',
@@ -17,11 +19,14 @@ const initialValues = {
 };
 
 const Login = () => {
+  const signIn = useSignIn();
   const [formValues, setFormValues] = useState(initialValues);
   const [showPassword, setShowPassword] = useState(false);
   const [problem, setProblem] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const nav = useNavigate();
+
+  const isAuthenticated = useIsAuthenticated();
 
   const handleClickShowPassword = () =>
     setShowPassword((showPassword) => !showPassword);
@@ -40,13 +45,24 @@ const Login = () => {
         //Dati tiek nosūtīti uz servera pusi
         setIsPending(true);
         const res = await axios.post(`${url}auth/login`, authInfo);
-        if (res) console.log(res);
         //Ja serveris atgriež token un lietotāja id tad lietotājs tiek ielogots (yet to be done)
         if (res.data.accessToken !== undefined) {
-          if (res.data.userType == 0) {
-            nav('/userpage');
+          if (
+            signIn({
+              auth: {
+                token: res.data.accessToken,
+              },
+              userState: {
+                tips: res.data.userType,
+              },
+            })
+          ) {
+            if (res.data.userType == 0) {
+              nav('/userpage');
+            } else {
+              nav('/adminpage');
+            }
           } else {
-            nav('/adminpage');
           }
         } else {
           setProblem(true);
@@ -62,7 +78,6 @@ const Login = () => {
 
   const handleFormInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(e.target.value);
     setFormValues({
       ...formValues,
       [name]: value,

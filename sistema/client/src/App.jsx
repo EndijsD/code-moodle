@@ -6,6 +6,16 @@ import Register from './pages/Register';
 import UserMainPage from './pages/UserHome';
 import AdminMainPage from './pages/AdminHome';
 import NotFound from './pages/NotFound';
+import createStore from 'react-auth-kit/createStore';
+import AuthProvider from 'react-auth-kit';
+import RequireAuth from '@auth-kit/react-router/RequireAuth';
+
+const store = createStore({
+  authName: '_auth',
+  authType: 'cookie',
+  cookieDomain: window.location.hostname,
+  cookieSecure: false,
+});
 
 const router = createBrowserRouter([
   {
@@ -23,11 +33,19 @@ const router = createBrowserRouter([
   },
   {
     path: '/userpage',
-    element: <UserMainPage />,
+    element: (
+      <RequireAuth fallbackPath={'/login'}>
+        <UserMainPage />
+      </RequireAuth>
+    ),
   },
   {
     path: '/adminpage',
-    element: <AdminMainPage />,
+    element: (
+      <RequireAuth fallbackPath={'/login'}>
+        <AdminMainPage />
+      </RequireAuth>
+    ),
   },
 ]);
 
@@ -48,10 +66,12 @@ function App() {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <AuthProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 export default App;

@@ -37,8 +37,10 @@ router.post('/login', async (req, res) => {
               // Ja parole sakrīt ar to kas ir datubāzē, tad izveidojam JWT un nosūtam to atpakaļ,
               // savādāk nosūtam tukšu objektu
               const accessToken = jwt.sign(
-                resultObj,
-                // process.env.ACCESS_TOKEN_SECRET
+                {
+                  exp: Math.floor(Date.now() / 1000) + 60 * 60,
+                  data: resultObj,
+                },
                 'bce8473f-33e8-4e75-8a10-6e4ce8a2421f'
               );
 
