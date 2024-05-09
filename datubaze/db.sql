@@ -93,6 +93,8 @@ CREATE TABLE IF NOT EXISTS `db`.`uzdevumi` (
   `tema` VARCHAR(100) NOT NULL,
   `nosaukums` VARCHAR(100) NOT NULL,
   `apraksts` TEXT NOT NULL,
+  `punkti` FLOAT NOT NULL,
+  `piemers` TEXT NULL,
   PRIMARY KEY (`uzdevumi_id`),
   UNIQUE INDEX `uzdevumi_id_UNIQUE` (`uzdevumi_id` ASC))
 ENGINE = InnoDB;
@@ -197,11 +199,11 @@ DROP TABLE IF EXISTS `db`.`iesniegumi` ;
 
 CREATE TABLE IF NOT EXISTS `db`.`iesniegumi` (
   `iesniegumi_id` INT NOT NULL AUTO_INCREMENT,
-  `punkti` FLOAT NOT NULL,
+  `punkti` FLOAT NULL,
   `datums` DATETIME NOT NULL,
-  `atbilde` TEXT NOT NULL,
+  `atbilde` TEXT NULL,
   `uzdevumi_id` INT NOT NULL,
-  `piebilde` TEXT NOT NULL,
+  `piebilde` TEXT NULL,
   `skolotajs_id` INT NOT NULL,
   `students_id` INT NOT NULL,
   PRIMARY KEY (`iesniegumi_id`, `uzdevumi_id`, `skolotajs_id`, `students_id`),
