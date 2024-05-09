@@ -130,11 +130,17 @@ const Register = () => {
       if (res.length != 0) {
         if (res.data.message === 'Added entry') {
           setIsPending(false);
-          nav('/login');
+          setSuccess(true);
+          setTimeout(() => nav('/login'), 1000);
         }
       }
     } catch (err) {
-      console.log(err);
+      setIsPending(false);
+      if (err.response.data.message.includes('Duplicate entry')) {
+        setProblems('email');
+      } else {
+        setProblems('error');
+      }
     }
   };
 
@@ -248,6 +254,7 @@ const Register = () => {
               value={userValues.epasts}
               onChange={handleFormInputChange}
               required
+              error={problems.includes('email')}
               autoComplete="true"
               inputProps={{
                 maxLength: 100,
