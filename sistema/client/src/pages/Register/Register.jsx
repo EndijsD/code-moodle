@@ -41,8 +41,10 @@ const Register = () => {
 
   const FetchData = async () => {
     try {
+      setIsPending(true);
       let res = await axios.get(`${url}skolas`);
       setData(res.data);
+      if (res.length != 0) setIsPending(false);
     } catch (err) {
       console.log(err);
     }
@@ -112,9 +114,28 @@ const Register = () => {
     );
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(userValues);
+    try {
+      let postData = {
+        vards: userValues.vards,
+        uzvards: userValues.uzvards,
+        klase: userValues.klase,
+        epasts: userValues.epasts,
+        parole: userValues.parole,
+        skolas_id: userValues.skola,
+      };
+      setIsPending(true);
+      const res = await axios.post(`${url}students`, postData);
+      if (res.length != 0) {
+        if (res.data.message === 'Added entry') {
+          setIsPending(false);
+          nav('/login');
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleFormInputChange = (e) => {
