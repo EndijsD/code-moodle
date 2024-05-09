@@ -21,7 +21,7 @@ const initialUserValues = {
   vards: '',
   uzvards: '',
   skola: 0,
-  klase: '',
+  klase: 0,
   epasts: '',
   parole: '',
   parole_atk: '',
@@ -50,7 +50,9 @@ const Register = () => {
 
   const MakeClasses = () => {
     setKlases([]);
-    let max, type;
+    let max,
+      type,
+      min = 1;
     switch (tips) {
       case 'Pamatskola':
         max = 9;
@@ -58,10 +60,15 @@ const Register = () => {
         break;
       case 'Vidusskola':
         max = 12;
+        min = 10;
         type = 1;
         break;
       case 'Tehnikums':
         max = 4;
+        type = 0;
+        break;
+      case 'Ģimnāzija':
+        max = 12;
         type = 0;
         break;
       case 'Augstskola':
@@ -70,11 +77,11 @@ const Register = () => {
         break;
     }
     if (type === 1) {
-      for (let i = 1; i < max + 1; i++) {
+      for (let i = min; i < max + 1; i++) {
         setKlases((oldArray) => [...oldArray, `${i}.klase`]);
       }
     } else if (type === 0) {
-      for (let i = 1; i < max + 1; i++) {
+      for (let i = min; i < max + 1; i++) {
         setKlases((oldArray) => [...oldArray, `${i}.kurss`]);
       }
     }
@@ -107,6 +114,7 @@ const Register = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    console.log(userValues);
   };
 
   const handleFormInputChange = (e) => {
@@ -169,12 +177,12 @@ const Register = () => {
                 label="Skola"
                 onChange={handleFormInputChange}
               >
-                <MenuItem
+                {/* <MenuItem
                   selected
                   key={-1}
                   value={0}
                   sx={{ display: 'none' }}
-                ></MenuItem>
+                ></MenuItem> */}
                 {data.map((school, i) => (
                   <MenuItem key={i} value={school.skolas_id}>
                     {school.nosaukums}
@@ -197,6 +205,12 @@ const Register = () => {
                 label="Klase/Kurss"
                 onChange={handleFormInputChange}
               >
+                {/* <MenuItem
+                  selected
+                  key={-1}
+                  value={0}
+                  sx={{ display: 'none' }}
+                ></MenuItem>  since we select a temp value, the check for selected value passes*/}
                 {klases.map((klases, i) => (
                   <MenuItem key={i} value={i + 1}>
                     {klases}
