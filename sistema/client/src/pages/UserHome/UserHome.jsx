@@ -1,5 +1,7 @@
+import UserHeader from '../../Components/User/UserHeader/UserHeader';
+
 const UserHome = () => {
-  return 'sup';
+  return <UserHeader />;
 };
 
 export default UserHome;
