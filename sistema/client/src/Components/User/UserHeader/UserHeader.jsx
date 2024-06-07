@@ -13,15 +13,12 @@ function UserHeader() {
   return (
     <AppBar>
       <Toolbar>
-        <Typography
-          variant="h6"
-          sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-        >
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
           NOSAUKUMS
         </Typography>
-        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <Box>
           {navItems.map((item, i) => (
-            <Link to={navItemLinks[i]}>
+            <Link to={navItemLinks[i]} key={navItemLinks[i]}>
               <Button key={item} sx={{ color: '#fff' }}>
                 {item}
               </Button>

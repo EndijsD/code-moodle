@@ -1,4 +1,3 @@
-import { Box, Button } from '@mui/material';
 import * as S from './style';
 import { Link } from 'react-router-dom';
 
@@ -6,9 +5,9 @@ const NotFound = () => {
   return (
     <S.Content>
       <S.MainBox>
-        <h1>Lapa netika atrasta!</h1>
+        <S.H1>Lapa netika atrasta!</S.H1>
         <Link>
-          <Button sx={{ fontWeight: 'bold' }}>Atpakaļ uz sākumlapu</Button>
+          <S.ToLandingButton>Atpakaļ uz sākumlapu</S.ToLandingButton>
         </Link>
       </S.MainBox>
     </S.Content>

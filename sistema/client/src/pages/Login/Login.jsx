@@ -8,7 +8,7 @@ import {
 import { useState } from 'react';
 import * as S from './style';
 import { useNavigate } from 'react-router-dom';
-import url from '../../../../url';
+import url from '../../../url';
 import axios from 'axios';
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
@@ -33,17 +33,19 @@ const Login = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setIsPending(true);
+
     //Tiek pārbaudīts vai ievadlauki nav tukši
     if (formValues.email !== '' && formValues.password !== '') {
       //Tiek izveidota nosūtāmā informācija (Parole tiek šifrēta un tad tā tiek salīdzināta ar paroli servera pusē)
-      let authInfo = {
+      const authInfo = {
         table: 'students',
         email: formValues.email,
         password: formValues.password,
       };
+
       try {
         //Dati tiek nosūtīti uz servera pusi
-        setIsPending(true);
         const res = await axios.post(`${url}auth/login`, authInfo);
         //Ja serveris atgriež token un lietotāja id tad lietotājs tiek ielogots (yet to be done)
         if (res.data.accessToken !== undefined) {
@@ -72,6 +74,7 @@ const Login = () => {
         console.log(err);
       }
     } else {
+      setIsPending(false);
       setProblem(true);
     }
   };
@@ -133,14 +136,12 @@ const Login = () => {
               color={problem == 'error' && !isPending ? 'error' : 'primary'}
               disabled={isPending}
             >
-              {isPending ? <CircularProgress /> : <>Pievienoties</>}
+              {isPending ? <CircularProgress size={24.5} /> : <>Pievienoties</>}
             </S.button>
 
             <Button
               sx={{
-                borderRadius: 50,
                 mt: '1rem',
-                maxWidth: 220,
                 alignSelf: 'center',
               }}
               onClick={() => nav('/register')}

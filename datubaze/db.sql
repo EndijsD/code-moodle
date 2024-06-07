@@ -5,12 +5,12 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema db
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `db` ;
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema db
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `db` DEFAULT CHARACTER SET utf8 ;
 USE `db` ;
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `db`.`skolas` (
   `nosaukums` VARCHAR(100) NOT NULL,
   `tips` ENUM("Augstskola", "Vidusskola", "Tehnikums", "Pamatskola") NOT NULL,
   PRIMARY KEY (`skolas_id`),
-  UNIQUE INDEX `skolas_id_UNIQUE` (`skolas_id` ASC))
+  UNIQUE INDEX `skolas_id_UNIQUE` (`skolas_id` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -43,9 +43,9 @@ CREATE TABLE IF NOT EXISTS `db`.`students` (
   `parole` VARCHAR(256) NOT NULL,
   `skolas_id` INT NOT NULL,
   PRIMARY KEY (`students_id`, `skolas_id`),
-  UNIQUE INDEX `students_id_UNIQUE` (`students_id` ASC),
-  UNIQUE INDEX `epasts_UNIQUE` (`epasts` ASC),
-  INDEX `fk_students_skolas1_idx` (`skolas_id` ASC),
+  UNIQUE INDEX `students_id_UNIQUE` (`students_id` ASC) VISIBLE,
+  UNIQUE INDEX `epasts_UNIQUE` (`epasts` ASC) VISIBLE,
+  INDEX `fk_students_skolas1_idx` (`skolas_id` ASC) VISIBLE,
   CONSTRAINT `fk_students_skolas1`
     FOREIGN KEY (`skolas_id`)
     REFERENCES `db`.`skolas` (`skolas_id`)
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `db`.`skolotajs` (
   `epasts` VARCHAR(100) NOT NULL,
   `parole` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`skolotajs_id`),
-  UNIQUE INDEX `skolotajs_id_UNIQUE` (`skolotajs_id` ASC))
+  UNIQUE INDEX `skolotajs_id_UNIQUE` (`skolotajs_id` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `db`.`moduli` (
   `moduli_id` INT NOT NULL AUTO_INCREMENT,
   `nosaukums` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`moduli_id`),
-  UNIQUE INDEX `moduli_id_UNIQUE` (`moduli_id` ASC))
+  UNIQUE INDEX `moduli_id_UNIQUE` (`moduli_id` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `db`.`uzdevumi` (
   `punkti` FLOAT NOT NULL,
   `piemers` TEXT NULL,
   PRIMARY KEY (`uzdevumi_id`),
-  UNIQUE INDEX `uzdevumi_id_UNIQUE` (`uzdevumi_id` ASC))
+  UNIQUE INDEX `uzdevumi_id_UNIQUE` (`uzdevumi_id` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -109,8 +109,8 @@ CREATE TABLE IF NOT EXISTS `db`.`moduli_uzdevumi` (
   `moduli_id` INT NOT NULL,
   `uzdevumi_id` INT NOT NULL,
   PRIMARY KEY (`moduli_id`, `uzdevumi_id`),
-  INDEX `fk_moduli_has_uzdevumi_uzdevumi1_idx` (`uzdevumi_id` ASC),
-  INDEX `fk_moduli_has_uzdevumi_moduli_idx` (`moduli_id` ASC),
+  INDEX `fk_moduli_has_uzdevumi_uzdevumi1_idx` (`uzdevumi_id` ASC) VISIBLE,
+  INDEX `fk_moduli_has_uzdevumi_moduli_idx` (`moduli_id` ASC) VISIBLE,
   CONSTRAINT `fk_moduli_has_uzdevumi_moduli`
     FOREIGN KEY (`moduli_id`)
     REFERENCES `db`.`moduli` (`moduli_id`)
@@ -134,8 +134,8 @@ CREATE TABLE IF NOT EXISTS `db`.`atteli` (
   `adrese` VARCHAR(100) NOT NULL,
   `uzdevumi_id` INT NOT NULL,
   PRIMARY KEY (`atteli_id`, `uzdevumi_id`),
-  UNIQUE INDEX `atteli_id_UNIQUE` (`atteli_id` ASC),
-  INDEX `fk_atteli_uzdevumi1_idx` (`uzdevumi_id` ASC),
+  UNIQUE INDEX `atteli_id_UNIQUE` (`atteli_id` ASC) VISIBLE,
+  INDEX `fk_atteli_uzdevumi1_idx` (`uzdevumi_id` ASC) VISIBLE,
   CONSTRAINT `fk_atteli_uzdevumi1`
     FOREIGN KEY (`uzdevumi_id`)
     REFERENCES `db`.`uzdevumi` (`uzdevumi_id`)
@@ -153,8 +153,8 @@ CREATE TABLE IF NOT EXISTS `db`.`skolotajs_moduli` (
   `skolotajs_id` INT NOT NULL,
   `moduli_id` INT NOT NULL,
   PRIMARY KEY (`skolotajs_id`, `moduli_id`),
-  INDEX `fk_skolotajs_has_moduli_moduli1_idx` (`moduli_id` ASC),
-  INDEX `fk_skolotajs_has_moduli_skolotajs1_idx` (`skolotajs_id` ASC),
+  INDEX `fk_skolotajs_has_moduli_moduli1_idx` (`moduli_id` ASC) VISIBLE,
+  INDEX `fk_skolotajs_has_moduli_skolotajs1_idx` (`skolotajs_id` ASC) VISIBLE,
   CONSTRAINT `fk_skolotajs_has_moduli_skolotajs1`
     FOREIGN KEY (`skolotajs_id`)
     REFERENCES `db`.`skolotajs` (`skolotajs_id`)
@@ -177,8 +177,8 @@ CREATE TABLE IF NOT EXISTS `db`.`moduli_students` (
   `moduli_id` INT NOT NULL,
   `students_id` INT NOT NULL,
   PRIMARY KEY (`moduli_id`, `students_id`),
-  INDEX `fk_moduli_has_students_students1_idx` (`students_id` ASC),
-  INDEX `fk_moduli_has_students_moduli1_idx` (`moduli_id` ASC),
+  INDEX `fk_moduli_has_students_students1_idx` (`students_id` ASC) VISIBLE,
+  INDEX `fk_moduli_has_students_moduli1_idx` (`moduli_id` ASC) VISIBLE,
   CONSTRAINT `fk_moduli_has_students_moduli1`
     FOREIGN KEY (`moduli_id`)
     REFERENCES `db`.`moduli` (`moduli_id`)
@@ -203,14 +203,13 @@ CREATE TABLE IF NOT EXISTS `db`.`iesniegumi` (
   `datums` DATETIME NOT NULL,
   `atbilde` TEXT NULL,
   `uzdevumi_id` INT NOT NULL,
-  `piebilde` TEXT NULL,
   `skolotajs_id` INT NOT NULL,
   `students_id` INT NOT NULL,
   PRIMARY KEY (`iesniegumi_id`, `uzdevumi_id`, `skolotajs_id`, `students_id`),
-  UNIQUE INDEX `rezultati_id_UNIQUE` (`iesniegumi_id` ASC),
-  INDEX `fk_rezultati_uzdevumi1_idx` (`uzdevumi_id` ASC),
-  INDEX `fk_iesniegumi_skolotajs1_idx` (`skolotajs_id` ASC),
-  INDEX `fk_iesniegumi_students1_idx` (`students_id` ASC),
+  UNIQUE INDEX `rezultati_id_UNIQUE` (`iesniegumi_id` ASC) VISIBLE,
+  INDEX `fk_rezultati_uzdevumi1_idx` (`uzdevumi_id` ASC) VISIBLE,
+  INDEX `fk_iesniegumi_skolotajs1_idx` (`skolotajs_id` ASC) VISIBLE,
+  INDEX `fk_iesniegumi_students1_idx` (`students_id` ASC) VISIBLE,
   CONSTRAINT `fk_rezultati_uzdevumi1`
     FOREIGN KEY (`uzdevumi_id`)
     REFERENCES `db`.`uzdevumi` (`uzdevumi_id`)
@@ -236,13 +235,13 @@ DROP TABLE IF EXISTS `db`.`komentari` ;
 
 CREATE TABLE IF NOT EXISTS `db`.`komentari` (
   `komentari_id` INT NOT NULL AUTO_INCREMENT,
-  `komentars` VARCHAR(45) NOT NULL,
+  `komentars` TEXT NOT NULL,
   `ir_students` TINYINT NOT NULL,
   `datums` DATETIME NOT NULL,
   `iesniegumi_id` INT NOT NULL,
   PRIMARY KEY (`komentari_id`, `iesniegumi_id`),
-  INDEX `fk_komentari_iesniegumi1_idx` (`iesniegumi_id` ASC),
-  UNIQUE INDEX `komentari_id_UNIQUE` (`komentari_id` ASC),
+  INDEX `fk_komentari_iesniegumi1_idx` (`iesniegumi_id` ASC) VISIBLE,
+  UNIQUE INDEX `komentari_id_UNIQUE` (`komentari_id` ASC) VISIBLE,
   CONSTRAINT `fk_komentari_iesniegumi1`
     FOREIGN KEY (`iesniegumi_id`)
     REFERENCES `db`.`iesniegumi` (`iesniegumi_id`)
@@ -250,6 +249,12 @@ CREATE TABLE IF NOT EXISTS `db`.`komentari` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+SET SQL_MODE = '';
+DROP USER IF EXISTS admin;
+SET SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+CREATE USER 'admin' IDENTIFIED BY 'vHCMkV0@wb5c';
+
+GRANT ALL ON `db`.* TO 'admin';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

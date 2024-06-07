@@ -1,6 +1,5 @@
 import { Check, Visibility, VisibilityOff } from '@mui/icons-material';
 import {
-  Box,
   Button,
   CircularProgress,
   FormControl,
@@ -12,10 +11,9 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import * as S from './style';
-// import url from "../../url";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import url from '../../../../url';
+import url from '../../../url';
 
 const initialUserValues = {
   vards: '',
@@ -370,7 +368,7 @@ const Register = () => {
               disabled={isPending}
             >
               {isPending ? (
-                <CircularProgress />
+                <CircularProgress size={24.5} />
               ) : success ? (
                 <Check />
               ) : (
@@ -380,8 +378,6 @@ const Register = () => {
 
             <Button
               sx={{
-                borderRadius: 50,
-                maxWidth: 220,
                 alignSelf: 'center',
               }}
               onClick={() => nav('/login')}

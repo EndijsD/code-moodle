@@ -70,7 +70,7 @@ export const InputField = styled(TextField)(({ theme }) => ({
 }));
 
 export const SubmitButton = styled(Button)(({ theme }) => ({
-  borderRadius: 10,
+  borderRadius: 50,
   fontWeight: 700,
   width: 350,
   alignSelf: 'center',
