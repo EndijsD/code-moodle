@@ -4,6 +4,7 @@ import {
   CircularProgress,
   IconButton,
   InputAdornment,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import * as S from './style';
@@ -66,8 +67,8 @@ const Login = () => {
             }
           } else {
           }
-        } else {
-          setProblem(true);
+        } else if (res.data.problem) {
+          setProblem('error');
           setIsPending(false);
         }
       } catch (err) {
@@ -129,6 +130,13 @@ const Login = () => {
               error={problem == 'wrong' && true}
               autoComplete="true"
             />
+            {problem == 'error' ? (
+              <Typography sx={{ textAlign: 'center' }}>
+                Nepareizs epasts un/vai parole!
+              </Typography>
+            ) : (
+              ''
+            )}
 
             <S.button
               variant="contained"

@@ -11,7 +11,7 @@ router.post('/login', async (req, res) => {
   const tables = ['students', 'skolotajs'];
   const email = req.body.email;
   const password = req.body.password;
-
+  let sent = false;
   // Veic vaicājumu datubāzei, kur iegūst ierakstu ar padoto e-pastu
   for (let i = 0; i < 2; i++) {
     db.query(
@@ -21,6 +21,8 @@ router.post('/login', async (req, res) => {
         if (err && i == 1) {
           // Ja ir problēma, tad sūta atpakaļ problēmas ziņu
           res.status(500).json({ message: err.message });
+          sent = true;
+          i = 2;
         } else {
           // Iegūst pirmā elementa objektu, jo vaicājumi vienmēr ir masīvi ar ierakstiem, ja tādi ir atrasti
           const resultObj = result[0];
@@ -45,18 +47,21 @@ router.post('/login', async (req, res) => {
               );
 
               res.send({ accessToken: accessToken, userType: i });
+              sent = true;
               i = 2;
             } else {
               if (i == 1) {
-                res.send({});
+                res.send({ problem: 'Incorrect data' });
+                sent = true;
+                i = 2;
               }
             }
+          } else {
+            if (i == 1 && !sent) {
+              res.send({ problem: 'Incorrect data' });
+              sent = true;
+            }
           }
-          // else {
-          //   if (i == 1) {
-          //     res.send({});
-          //   }
-          // }
         }
       }
     );
