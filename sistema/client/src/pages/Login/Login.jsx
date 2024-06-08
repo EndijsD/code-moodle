@@ -65,7 +65,6 @@ const Login = () => {
             } else {
               nav('/adminpage');
             }
-          } else {
           }
         } else if (res.data.problem) {
           setProblem('error');
