@@ -1,4 +1,4 @@
-import { Check, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Close, Check, Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Button,
   CircularProgress,
@@ -15,11 +15,11 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import url from '../../../url';
 
-const initialUserValues = {
+const initialFormValues = {
   vards: '',
   uzvards: '',
-  skola: 0,
-  klase: 0,
+  skolas_id: '',
+  klase: '',
   epasts: '',
   parole: '',
   parole_atk: '',
@@ -27,84 +27,93 @@ const initialUserValues = {
 
 const Register = () => {
   const nav = useNavigate();
-  const [userValues, setUserValues] = useState(initialUserValues);
+  const [formValues, setFormValues] = useState(initialFormValues);
   const [showPassword, setShowPassword] = useState([false, false]);
   const [problems, setProblems] = useState([]);
   const [isPending, setIsPending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [active, setActive] = useState([false, false]);
-  const [data, setData] = useState([]);
-  const [klases, setKlases] = useState([]);
-  const [tips, setTips] = useState('');
+  const [schools, setSchools] = useState([]);
+  const [classes, setClasses] = useState([[]]);
 
-  const FetchData = async () => {
-    try {
-      setIsPending(true);
-      let res = await axios.get(`${url}skolas`);
-      setData(res.data);
-      if (res.length != 0) setIsPending(false);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const MakeClasses = () => {
-    setKlases([]);
-    let max,
-      type,
-      min = 1;
-    switch (tips) {
-      case 'Pamatskola':
-        max = 9;
-        type = 1;
-        break;
-      case 'Vidusskola':
-        max = 12;
-        min = 10;
-        type = 1;
-        break;
-      case 'Tehnikums':
-        max = 4;
-        type = 0;
-        break;
-      case 'Ģimnāzija':
-        max = 12;
-        type = 0;
-        break;
-      case 'Augstskola':
-        max = 5;
-        type = 0;
-        break;
-    }
-    if (type === 1) {
-      for (let i = min; i < max + 1; i++) {
-        setKlases((oldArray) => [...oldArray, `${i}.klase`]);
-      }
-    } else if (type === 0) {
-      for (let i = min; i < max + 1; i++) {
-        setKlases((oldArray) => [...oldArray, `${i}.kurss`]);
-      }
+  const setResponse = (res, withTimeout = true) => {
+    if (res == 'suc') {
+      setSuccess(true);
+      setTimeout(() => nav('/login'), 1500);
+    } else {
+      setProblems((prev) => prev.concat(res));
+      if (withTimeout) setTimeout(() => setProblems([]), 1500);
     }
   };
 
   useEffect(() => {
-    if (tips != '') {
-      MakeClasses();
-    }
-  }, [tips]);
-
-  useEffect(() => {
-    FetchData();
+    setIsPending(true);
+    axios
+      .get(`${url}skolas`)
+      .then((res) => setSchools(res.data))
+      .catch(() => setResponse('permError', false));
+    setIsPending(false);
   }, []);
 
-  useEffect(() => {
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].skolas_id === userValues.skola) {
-        setTips(data[i].tips);
-        break;
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setIsPending(true);
+
+    let isAnyElEmpty = false;
+    for (const [key, value] of Object.entries(formValues)) {
+      if (value == false) {
+        isAnyElEmpty = true;
+        setResponse(key);
       }
     }
-  }, [userValues.skola]);
+
+    if (!isAnyElEmpty)
+      if (formValues.parole == formValues.parole_atk) {
+        const postData = { ...formValues };
+        delete postData.parole_atk;
+        axios
+          .post(`${url}students`, postData)
+          .then(() => setResponse('suc'))
+          .catch(() => setResponse('error'));
+      } else setResponse('pass');
+
+    setIsPending(false);
+  };
+
+  const updateClasses = (schoolID) => {
+    let type;
+    for (let i = 0; i < schools.length; i++)
+      if (schools[i].skolas_id == schoolID) {
+        type = schools[i].tips;
+        break;
+      }
+
+    let range = [1];
+    let endText = 'kurss';
+    switch (type) {
+      case 'Pamatskola':
+        range.push(9);
+        endText = 'klase';
+        break;
+      case 'Vidusskola':
+        range = [10, 12];
+        endText = 'klase';
+        break;
+      case 'Tehnikums':
+        range.push(4);
+        break;
+      case 'Ģimnāzija':
+        range.push(12);
+        break;
+      case 'Augstskola':
+        range.push(6);
+    }
+
+    let fullArr = [];
+    for (let i = range[0]; i <= range[1]; i++) fullArr.push(i);
+
+    setClasses([fullArr, endText]);
+  };
 
   const handleClickShowPassword = (index) => {
     setShowPassword((showPassword) =>
@@ -112,49 +121,23 @@ const Register = () => {
     );
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      let postData = {
-        vards: userValues.vards,
-        uzvards: userValues.uzvards,
-        klase: userValues.klase,
-        epasts: userValues.epasts,
-        parole: userValues.parole,
-        skolas_id: userValues.skola,
-      };
-      setIsPending(true);
-      const res = await axios.post(`${url}students`, postData);
-      if (res.length != 0) {
-        if (res.data.message === 'Added entry') {
-          setIsPending(false);
-          setSuccess(true);
-          setTimeout(() => nav('/login'), 1000);
-        }
-      }
-    } catch (err) {
-      setIsPending(false);
-      if (err.response.data.message.includes('Duplicate entry')) {
-        setProblems('email');
-      } else {
-        setProblems('error');
-      }
-    }
-  };
-
   const handleFormInputChange = (e) => {
     const { name, value } = e.target;
 
-    userValues.hasOwnProperty(name)
-      ? setUserValues({
-          ...userValues,
-          [name]: value,
-        })
-      : setAddressValues({
-          ...addressValues,
-          [name]: value,
-        });
+    if (name == 'skolas_id') {
+      setFormValues({
+        ...formValues,
+        [name]: value,
+        klase: '',
+      });
+      updateClasses(value);
+    } else
+      setFormValues({
+        ...formValues,
+        [name]: value,
+      });
   };
+
   return (
     <S.MainBox>
       <S.StyledPaper>
@@ -166,49 +149,45 @@ const Register = () => {
               label="Vārds"
               variant="standard"
               name="vards"
-              value={userValues.vards}
+              value={formValues.vards}
               onChange={handleFormInputChange}
               required
-              autoComplete="true"
+              autoComplete="given-name"
               inputProps={{
                 maxLength: 45,
               }}
+              error={problems.includes('vards')}
             />
 
             <S.InputField
               label="Uzvārds"
               variant="standard"
               name="uzvards"
-              value={userValues.uzvards}
+              value={formValues.uzvards}
               onChange={handleFormInputChange}
               required
-              autoComplete="true"
+              autoComplete="family-name"
               inputProps={{
                 maxLength: 45,
               }}
+              error={problems.includes('uzvards')}
             />
 
             <FormControl
               sx={{ width: '80%', alignSelf: 'center' }}
               variant="standard"
+              disabled={!schools.length}
+              required
+              error={problems.includes('skolas_id')}
             >
-              <InputLabel id="skola-label">Skola</InputLabel>
+              <InputLabel htmlFor="school">Skola</InputLabel>
               <Select
-                disabled={data.length === 0}
-                required
-                name="skola"
-                labelId="skola-label"
-                value={userValues.skola}
-                label="Skola"
+                name="skolas_id"
+                value={formValues.skolas_id}
+                inputProps={{ id: 'school' }}
                 onChange={handleFormInputChange}
               >
-                {/* <MenuItem
-                  selected
-                  key={-1}
-                  value={0}
-                  sx={{ display: 'none' }}
-                ></MenuItem> */}
-                {data.map((school, i) => (
+                {schools.map((school, i) => (
                   <MenuItem key={i} value={school.skolas_id}>
                     {school.nosaukums}
                   </MenuItem>
@@ -217,28 +196,22 @@ const Register = () => {
             </FormControl>
 
             <FormControl
-              variant="standard"
               sx={{ width: '80%', alignSelf: 'center' }}
-              disabled={klases.length === 0}
+              variant="standard"
+              disabled={!classes[0].length}
+              required
+              error={problems.includes('klase')}
             >
-              <InputLabel id="skola-label">Klase/Kurss</InputLabel>
+              <InputLabel htmlFor="class">Klase/Kurss</InputLabel>
               <Select
-                required
                 name="klase"
-                labelId="skola-label"
-                value={userValues.klase}
-                label="Klase/Kurss"
+                inputProps={{ id: 'class' }}
+                value={formValues.klase}
                 onChange={handleFormInputChange}
               >
-                {/* <MenuItem
-                  selected
-                  key={-1}
-                  value={0}
-                  sx={{ display: 'none' }}
-                ></MenuItem>  since we select a temp value, the check for selected value passes*/}
-                {klases.map((klases, i) => (
-                  <MenuItem key={i} value={i + 1}>
-                    {klases}
+                {classes[0].map((num) => (
+                  <MenuItem key={num} value={num}>
+                    {num + '. ' + classes[1]}
                   </MenuItem>
                 ))}
               </Select>
@@ -249,11 +222,11 @@ const Register = () => {
               variant="standard"
               type="email"
               name="epasts"
-              value={userValues.epasts}
+              value={formValues.epasts}
               onChange={handleFormInputChange}
               required
-              error={problems.includes('email')}
-              autoComplete="true"
+              error={problems.includes('epasts')}
+              autoComplete="email"
               inputProps={{
                 maxLength: 100,
               }}
@@ -277,7 +250,7 @@ const Register = () => {
               }}
               inputProps={{
                 pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
-                maxLength: 100,
+                maxLength: 256,
               }}
               onMouseEnter={() =>
                 setActive((prev) =>
@@ -299,11 +272,11 @@ const Register = () => {
                 '8 rakstzīmes, kur ir vismaz 1 lielais, mazais burts un cipars'
               }
               name="parole"
-              value={userValues.parole}
+              value={formValues.parole}
               onChange={handleFormInputChange}
               required
-              error={problems.includes('pass')}
-              autoComplete="true"
+              error={problems.includes('pass') || problems.includes('parole')}
+              autoComplete="new-password"
             />
 
             <S.InputField
@@ -324,7 +297,7 @@ const Register = () => {
               }}
               inputProps={{
                 pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
-                maxLength: 100,
+                maxLength: 256,
               }}
               onMouseEnter={() =>
                 setActive((prev) =>
@@ -346,20 +319,25 @@ const Register = () => {
                 '8 rakstzīmes, kur ir vismaz 1 lielais, mazais burts un cipars'
               }
               name="parole_atk"
-              value={userValues.parole_atk}
+              value={formValues.parole_atk}
               onChange={handleFormInputChange}
               required
-              error={problems.includes('pass')}
-              autoComplete="true"
+              error={
+                problems.includes('pass') || problems.includes('parole_atk')
+              }
+              autoComplete="new-password"
             />
           </S.StyledBox>
 
           <S.ButtonBox>
             <S.SubmitButton
               variant="contained"
-              type={success ? undefined : 'submit'}
+              type={
+                success || problems.includes('permError') ? undefined : 'submit'
+              }
               color={
-                problems.includes('error') && !isPending
+                problems.some((el) => ['error', 'permError'].includes(el)) &&
+                !isPending
                   ? 'error'
                   : success
                   ? 'success'
@@ -371,6 +349,8 @@ const Register = () => {
                 <CircularProgress size={24.5} />
               ) : success ? (
                 <Check />
+              ) : problems.some((el) => ['error', 'permError'].includes(el)) ? (
+                <Close />
               ) : (
                 <>Pievienoties</>
               )}

@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `db`.`skolas` ;
 CREATE TABLE IF NOT EXISTS `db`.`skolas` (
   `skolas_id` INT NOT NULL AUTO_INCREMENT,
   `nosaukums` VARCHAR(100) NOT NULL,
-  `tips` ENUM("Augstskola", "Vidusskola", "Tehnikums", "Pamatskola") NOT NULL,
+  `tips` ENUM("Augstskola", "Vidusskola", "Tehnikums", "Pamatskola", "Ģimnāzija") NOT NULL,
   PRIMARY KEY (`skolas_id`),
   UNIQUE INDEX `skolas_id_UNIQUE` (`skolas_id` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `db`.`students` (
   `students_id` INT NOT NULL AUTO_INCREMENT,
   `vards` VARCHAR(45) NOT NULL,
   `uzvards` VARCHAR(45) NOT NULL,
-  `klase` VARCHAR(45) NOT NULL,
+  `klase` VARCHAR(10) NOT NULL,
   `epasts` VARCHAR(100) NOT NULL,
   `parole` VARCHAR(256) NOT NULL,
   `skolas_id` INT NOT NULL,
@@ -269,6 +269,7 @@ INSERT INTO `db`.`skolas` (`skolas_id`, `nosaukums`, `tips`) VALUES (DEFAULT, 'K
 INSERT INTO `db`.`skolas` (`skolas_id`, `nosaukums`, `tips`) VALUES (DEFAULT, 'Liepājas Valsts Tehnikums', 'Tehnikums');
 INSERT INTO `db`.`skolas` (`skolas_id`, `nosaukums`, `tips`) VALUES (DEFAULT, 'RTU Liepāja', 'Augstskola');
 INSERT INTO `db`.`skolas` (`skolas_id`, `nosaukums`, `tips`) VALUES (DEFAULT, 'Liepājas Jāņa Čakstes vidusskola', 'Vidusskola');
+INSERT INTO `db`.`skolas` (`skolas_id`, `nosaukums`, `tips`) VALUES (29, 'Liepājas Valsts ģimnāzija', 'Ģimnāzija');
 
 COMMIT;
 
@@ -278,7 +279,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `db`;
-INSERT INTO `db`.`students` (`students_id`, `vards`, `uzvards`, `klase`, `epasts`, `parole`, `skolas_id`) VALUES (DEFAULT, 'Kārlis', 'Lācītis', '1.kurss', 'lacitis18@inbox.lv', '$2b$10$ZpyuZ.lBh0rSpHhcORhOGOtLrW0Rcl3TXFDW3n06IbiUiYr86AIpy', 3);
+INSERT INTO `db`.`students` (`students_id`, `vards`, `uzvards`, `klase`, `epasts`, `parole`, `skolas_id`) VALUES (DEFAULT, 'Kārlis', 'Lācītis', '1', 'lacitis18@inbox.lv', '$2b$10$ZpyuZ.lBh0rSpHhcORhOGOtLrW0Rcl3TXFDW3n06IbiUiYr86AIpy', 3);
 
 COMMIT;
 
