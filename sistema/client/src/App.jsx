@@ -8,7 +8,7 @@ import AdminMainPage from './pages/AdminHome';
 import NotFound from './pages/NotFound';
 import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
-import RequireAuth from '@auth-kit/react-router/RequireAuth';
+import ProtectedRoute from './ProtectedRoute';
 
 const store = createStore({
   authName: '_auth',
@@ -32,20 +32,22 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: '/userpage',
-    element: (
-      <RequireAuth fallbackPath={'/login'}>
-        <UserMainPage />
-      </RequireAuth>
-    ),
+    element: <ProtectedRoute role={0} />,
+    children: [
+      {
+        path: '/userpage',
+        element: <UserMainPage />,
+      },
+    ],
   },
   {
-    path: '/adminpage',
-    element: (
-      <RequireAuth fallbackPath={'/login'}>
-        <AdminMainPage />
-      </RequireAuth>
-    ),
+    element: <ProtectedRoute role={1} />,
+    children: [
+      {
+        path: '/adminpage',
+        element: <AdminMainPage />,
+      },
+    ],
   },
 ]);
 

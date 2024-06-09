@@ -4,14 +4,16 @@ import {
   CircularProgress,
   IconButton,
   InputAdornment,
+  Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as S from './style';
 import { useNavigate } from 'react-router-dom';
 import url from '../../../url';
 import axios from 'axios';
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 const initialValues = {
   email: '',
@@ -20,13 +22,24 @@ const initialValues = {
 
 const Login = () => {
   const signIn = useSignIn();
+  const auth = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const [formValues, setFormValues] = useState(initialValues);
   const [showPassword, setShowPassword] = useState(false);
   const [problem, setProblem] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const nav = useNavigate();
 
-  const isAuthenticated = useIsAuthenticated();
+  //Ja lietotājs ir ielogojies, tad lietotājs tiek aizvests atpakaļ uz sava lietotāja tipa sākuma lapu
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (auth.userType == 0) {
+        nav('/userpage');
+      } else if (auth.userType == 1) {
+        nav('/adminpage');
+      }
+    }
+  }, []);
 
   const handleClickShowPassword = () =>
     setShowPassword((showPassword) => !showPassword);
@@ -55,19 +68,18 @@ const Login = () => {
                 token: res.data.accessToken,
               },
               userState: {
-                tips: res.data.userType,
+                userType: res.data.userType,
               },
             })
           ) {
             if (res.data.userType == 0) {
               nav('/userpage');
-            } else {
+            } else if (res.data.userType == 1) {
               nav('/adminpage');
             }
-          } else {
           }
-        } else {
-          setProblem(true);
+        } else if (res.data.problem) {
+          setProblem('error');
           setIsPending(false);
         }
       } catch (err) {
@@ -129,6 +141,13 @@ const Login = () => {
               error={problem == 'wrong' && true}
               autoComplete="true"
             />
+            {problem == 'error' ? (
+              <Typography sx={{ textAlign: 'center' }}>
+                Nepareizs epasts un/vai parole!
+              </Typography>
+            ) : (
+              ''
+            )}
 
             <S.button
               variant="contained"
