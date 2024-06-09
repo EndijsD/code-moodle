@@ -61,7 +61,7 @@ const Register = () => {
 
     let isAnyElEmpty = false;
     for (const [key, value] of Object.entries(formValues)) {
-      if (value == false) {
+      if (!value) {
         isAnyElEmpty = true;
         setResponse(key);
       }

@@ -1,10 +1,9 @@
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Close, Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Button,
   CircularProgress,
   IconButton,
   InputAdornment,
-  Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import * as S from './style';
@@ -26,7 +25,7 @@ const Login = () => {
   const isAuthenticated = useIsAuthenticated();
   const [formValues, setFormValues] = useState(initialValues);
   const [showPassword, setShowPassword] = useState(false);
-  const [problem, setProblem] = useState(null);
+  const [problems, setProblems] = useState([]);
   const [isPending, setIsPending] = useState(false);
   const nav = useNavigate();
 
@@ -44,15 +43,27 @@ const Login = () => {
   const handleClickShowPassword = () =>
     setShowPassword((showPassword) => !showPassword);
 
+  const setResponse = (res) => {
+    setProblems((prev) => prev.concat(res));
+    setTimeout(() => setProblems([]), 1500);
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsPending(true);
 
     //Tiek pārbaudīts vai ievadlauki nav tukši
-    if (formValues.email !== '' && formValues.password !== '') {
+    let isAnyElEmpty = false;
+    for (const [key, value] of Object.entries(formValues)) {
+      if (!value) {
+        isAnyElEmpty = true;
+        setResponse(key);
+      }
+    }
+
+    if (!isAnyElEmpty) {
       //Tiek izveidota nosūtāmā informācija (Parole tiek šifrēta un tad tā tiek salīdzināta ar paroli servera pusē)
       const authInfo = {
-        table: 'students',
         email: formValues.email,
         password: formValues.password,
       };
@@ -60,7 +71,6 @@ const Login = () => {
       try {
         //Dati tiek nosūtīti uz servera pusi
         const res = await axios.post(`${url}auth/login`, authInfo);
-        //Ja serveris atgriež token un lietotāja id tad lietotājs tiek ielogots (yet to be done)
         if (res.data.accessToken !== undefined) {
           if (
             signIn({
@@ -79,16 +89,14 @@ const Login = () => {
             }
           }
         } else if (res.data.problem) {
-          setProblem('error');
-          setIsPending(false);
+          setResponse('wrong');
         }
       } catch (err) {
-        console.log(err);
+        setResponse('error');
       }
-    } else {
-      setIsPending(false);
-      setProblem(true);
     }
+
+    setIsPending(false);
   };
 
   const handleFormInputChange = (e) => {
@@ -114,8 +122,8 @@ const Login = () => {
               value={formValues.email}
               onChange={handleFormInputChange}
               required
-              error={problem == 'wrong' && true}
-              autoComplete="true"
+              error={problems.includes('wrong') || problems.includes('email')}
+              autoComplete="email"
             />
 
             <S.textField
@@ -138,24 +146,27 @@ const Login = () => {
               value={formValues.password}
               onChange={handleFormInputChange}
               required
-              error={problem == 'wrong' && true}
-              autoComplete="true"
+              error={
+                problems.includes('wrong') || problems.includes('password')
+              }
+              autoComplete="current-password"
             />
-            {problem == 'error' ? (
-              <Typography sx={{ textAlign: 'center' }}>
-                Nepareizs epasts un/vai parole!
-              </Typography>
-            ) : (
-              ''
-            )}
 
             <S.button
               variant="contained"
               type="submit"
-              color={problem == 'error' && !isPending ? 'error' : 'primary'}
+              color={
+                problems.includes('error') && !isPending ? 'error' : 'primary'
+              }
               disabled={isPending}
             >
-              {isPending ? <CircularProgress size={24.5} /> : <>Pievienoties</>}
+              {isPending ? (
+                <CircularProgress size={24.5} />
+              ) : problems.includes('error') ? (
+                <Close />
+              ) : (
+                <>Pievienoties</>
+              )}
             </S.button>
 
             <Button
