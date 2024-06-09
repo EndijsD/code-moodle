@@ -8,7 +8,6 @@ import AdminMainPage from './pages/AdminHome';
 import NotFound from './pages/NotFound';
 import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
-import RequireAuth from '@auth-kit/react-router/RequireAuth';
 import ProtectedRoute from './ProtectedRoute';
 
 const store = createStore({
