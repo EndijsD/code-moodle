@@ -10,3 +10,8 @@ body,
   display: flex;
   flex-direction: column;
 }
+
+#adminLayout {
+  height: 100%;
+  display: flex;
+}

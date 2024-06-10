@@ -1,5 +1,5 @@
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound';
 import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
 import ProtectedRoute from './ProtectedRoute';
+import SideBar from './Components/Admin/SideBar';
 
 const store = createStore({
   authName: '_auth',
@@ -16,6 +17,15 @@ const store = createStore({
   cookieDomain: window.location.hostname,
   cookieSecure: false,
 });
+
+const AdminLayout = () => {
+  return (
+    <div id="adminLayout">
+      <SideBar />
+      <Outlet />
+    </div>
+  );
+};
 
 const router = createBrowserRouter([
   {
@@ -44,8 +54,30 @@ const router = createBrowserRouter([
     element: <ProtectedRoute role={1} />,
     children: [
       {
-        path: '/adminpage',
-        element: <AdminMainPage />,
+        path: 'admin',
+        element: <AdminLayout />,
+        children: [
+          {
+            index: true,
+            element: <AdminMainPage />,
+          },
+          {
+            path: 'students',
+            element: <h3>To Be Implemented - students</h3>,
+          },
+          {
+            path: 'bank',
+            element: <h3>To Be Implemented - bank</h3>,
+          },
+          {
+            path: 'evaluate',
+            element: <h3>To Be Implemented - evaluate</h3>,
+          },
+          {
+            path: '*',
+            element: <p>neeksiste</p>,
+          },
+        ],
       },
     ],
   },
