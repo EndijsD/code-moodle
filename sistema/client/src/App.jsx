@@ -3,8 +3,8 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import UserMainPage from './pages/UserHome';
-import AdminMainPage from './pages/AdminHome';
+import UserHome from './pages/UserHome';
+import AdminHome from './pages/AdminHome';
 import NotFound from './pages/NotFound';
 import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/userpage',
-        element: <UserMainPage />,
+        element: <UserHome />,
       },
     ],
   },
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <AdminMainPage />,
+            element: <AdminHome />,
           },
           {
             path: 'students',
@@ -75,7 +75,7 @@ const router = createBrowserRouter([
           },
           {
             path: '*',
-            element: <p>neeksiste</p>,
+            element: <NotFound />,
           },
         ],
       },

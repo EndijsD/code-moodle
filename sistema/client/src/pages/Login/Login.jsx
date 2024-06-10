@@ -35,7 +35,7 @@ const Login = () => {
       if (auth.userType == 0) {
         nav('/userpage');
       } else if (auth.userType == 1) {
-        nav('admin');
+        nav('/admin');
       }
     }
   }, []);
@@ -85,7 +85,7 @@ const Login = () => {
             if (res.data.userType == 0) {
               nav('/userpage');
             } else if (res.data.userType == 1) {
-              nav('admin');
+              nav('/admin');
             }
           }
         } else if (res.data.problem) {
