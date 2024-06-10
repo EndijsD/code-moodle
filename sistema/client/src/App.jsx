@@ -10,6 +10,8 @@ import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
 import ProtectedRoute from './ProtectedRoute';
 import SideBar from './Components/Admin/SideBar';
+import NewTask from './pages/NewTask';
+import Bank from './pages/Bank';
 
 const store = createStore({
   authName: '_auth',
@@ -67,7 +69,16 @@ const router = createBrowserRouter([
           },
           {
             path: 'bank',
-            element: <h3>To Be Implemented - bank</h3>,
+            children: [
+              {
+                path: 'newTask',
+                element: <NewTask />,
+              },
+              {
+                index: true,
+                element: <Bank />,
+              },
+            ],
           },
           {
             path: 'evaluate',
