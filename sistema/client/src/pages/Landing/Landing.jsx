@@ -6,7 +6,7 @@ const Landing = () => {
   return (
     <>
       <S.HeadingBox>
-        <S.H1>Nosaukums</S.H1>
+        <S.H1>Code Moodle</S.H1>
       </S.HeadingBox>
       <S.Content>
         <S.StyledPaper>

@@ -1,4 +1,4 @@
-import UserHeader from '../../Components/User/UserHeader';
+import UserHeader from '../../components/User/UserHeader';
 
 const UserHome = () => {
   return <UserHeader />;
