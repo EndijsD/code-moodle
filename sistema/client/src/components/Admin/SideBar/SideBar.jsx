@@ -54,7 +54,6 @@ const SideBar = () => {
           sx={{
             textAlign: 'center',
             py: 4,
-            px: !collapsed && 2,
             fontWeight: collapsed && 'bold',
             textWrap: 'nowrap',
             textShadow: '1px 1px 1px ' + theme.palette.text.primary,
