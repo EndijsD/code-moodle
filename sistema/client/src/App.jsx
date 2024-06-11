@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound';
 import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
 import ProtectedRoute from './ProtectedRoute';
-import SideBar from './Components/Admin/SideBar';
+import SideBar from './components/Admin/SideBar';
 import NewTask from './pages/NewTask';
 import Bank from './pages/Bank';
 
