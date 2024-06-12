@@ -1,6 +1,7 @@
 import express from 'express';
 import requests from './requests.js';
 import authReq from './authReq.js';
+import customDeleteReq from './customDeleteReq.js';
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.use('/skola', requests);
 router.use('/skolotajs', requests);
 router.use('/students', requests);
 router.use('/uzdevumi', requests);
+router.use('/task', customDeleteReq);
 
 export default router;

@@ -49,10 +49,6 @@ const NewTask = () => {
     success: false,
   });
 
-  useEffect(() => {
-    console.log(fieldValid);
-  }, [fieldValid]);
-
   const isWhitespaceString = (str) => !/\S/.test(str); // Checks if string only contains white space returns true/false
 
   const handleFormInputChange = (e) => {
