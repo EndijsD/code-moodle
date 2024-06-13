@@ -12,6 +12,13 @@ body,
 }
 
 #adminLayout {
-  height: 100%;
   display: flex;
 }
+
+/*
+#FF4500 - orangered
+#FFA500 - orange
+#E0E2DB
+#363537
+#2A2B2E
+*/

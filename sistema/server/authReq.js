@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/login', async (req, res) => {
   // Iegūst vajadzīgās vērtības no padotās informācijas
-  const tables = ['students', 'skolotajs'];
+  const tables = ['studenti', 'skolotajs'];
   const email = req.body.email;
   const password = req.body.password;
   let sent = false;

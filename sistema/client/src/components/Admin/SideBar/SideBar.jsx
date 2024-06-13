@@ -1,4 +1,4 @@
-import { Typography, useTheme } from '@mui/material';
+import { Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Sidebar, Menu, MenuItem, sidebarClasses } from 'react-pro-sidebar';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, People, Assignment, Create, Logout } from '@mui/icons-material';
@@ -7,7 +7,7 @@ import useSignOut from 'react-auth-kit/hooks/useSignOut';
 
 const links = [
   { path: '', title: 'Sākumlapa', icon: <Home /> },
-  { path: 'students', title: 'Studenti', icon: <People /> },
+  { path: 'student', title: 'Studenti', icon: <People /> },
   { path: 'bank', title: 'Uzdevumu Banka', icon: <Assignment /> },
   { path: 'evaluate', title: 'Vērtēšana', icon: <Create /> },
 ];
@@ -17,6 +17,7 @@ const SideBar = () => {
   const theme = useTheme();
   const location = useLocation();
   const signOut = useSignOut();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'));
 
   const menuItemStyles = {
     button: {
@@ -32,13 +33,16 @@ const SideBar = () => {
 
   return (
     <Sidebar
-      collapsed={collapsed}
+      collapsed={isSmallScreen ? true : collapsed}
       onMouseEnter={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
       backgroundColor=""
       style={{
         background: 'linear-gradient(45deg, orange, orangered)',
         color: 'white',
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
       }}
       rootStyles={{
         [`.${sidebarClasses.container}`]: {
@@ -54,13 +58,13 @@ const SideBar = () => {
           sx={{
             textAlign: 'center',
             py: 4,
-            fontWeight: collapsed && 'bold',
+            fontWeight: (isSmallScreen || collapsed) && 'bold',
             textWrap: 'nowrap',
             textShadow: '1px 1px 1px ' + theme.palette.text.primary,
           }}
         >
           <Link style={{ color: 'inherit', textDecoration: 'inherit' }}>
-            {collapsed ? 'CM' : 'Code Moodle'}
+            {isSmallScreen || collapsed ? 'CM' : 'Code Moodle'}
           </Link>
         </Typography>
         <Menu menuItemStyles={menuItemStyles}>
@@ -86,7 +90,7 @@ const SideBar = () => {
           })}
         </Menu>
       </div>
-      <Menu style={{ alignSelf: !collapsed && 'center' }}>
+      <Menu style={{ alignSelf: !isSmallScreen && !collapsed && 'center' }}>
         <MenuItem
           component={<Link to="/" />}
           icon={<Logout />}

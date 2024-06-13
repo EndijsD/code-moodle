@@ -72,7 +72,7 @@ const Register = () => {
         const postData = { ...formValues };
         delete postData.parole_atk;
         axios
-          .post(`${url}students`, postData)
+          .post(`${url}studenti`, postData)
           .then(() => setResponse('suc'))
           .catch(() => setResponse('error'));
       } else setResponse('pass');
@@ -89,23 +89,23 @@ const Register = () => {
       }
 
     let range = [1];
-    let endText = 'kurss';
+    let endText = 'klase';
     switch (type) {
       case 'Pamatskola':
         range.push(9);
-        endText = 'klase';
         break;
       case 'Vidusskola':
         range = [10, 12];
-        endText = 'klase';
         break;
       case 'Tehnikums':
         range.push(4);
+        endText = 'kurss';
         break;
       case 'Ģimnāzija':
         range.push(12);
         break;
       case 'Augstskola':
+        endText = 'kurss';
         range.push(6);
     }
 
