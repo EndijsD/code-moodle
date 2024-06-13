@@ -122,7 +122,7 @@ const Bank = () => {
             </Table>
           </TableContainer>
         ) : (
-          <Typography>Nav izveidoti uzdevumi</Typography>
+          !fetchState.pending && <Typography>Nav izveidoti uzdevumi</Typography>
         )}
       </Paper>
     </>

@@ -11,12 +11,11 @@ const useAxios = (url) => {
       .get(url)
       .then((response) => {
         setData(response.data);
-        setIsPending(false);
       })
       .catch((error) => {
         setError(error);
-        setIsPending(false);
-      });
+      })
+      .finally(() => setIsPending(false));
   }, [url]);
 
   return { data, setData, isPending, error };
