@@ -1,19 +1,22 @@
-import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { Box, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import Landing from './pages/Landing';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import UserHome from './pages/UserHome';
-import AdminHome from './pages/AdminHome';
-import NotFound from './pages/NotFound';
+import Landing from './pages/General/Landing';
+import Login from './pages/General/Login';
+import Register from './pages/General/Register';
+import UserHome from './pages/User/Home';
+import AdminHome from './pages/Admin/Home';
+import NotFound from './pages/General/NotFound';
 import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
 import ProtectedRoute from './ProtectedRoute';
 import SideBar from './components/Admin/SideBar';
-import NewTask from './pages/NewTask';
-import Bank from './pages/Bank';
-import Student from './pages/Student';
-import EditTask from './pages/EditTask';
+import NewTask from './pages/Admin/NewTask';
+import Bank from './pages/Admin/Bank';
+import Student from './pages/Admin/Student';
+import EditTask from './pages/Admin/EditTask';
+import UserHeader from './components/User/Header';
+import Profile from './pages/User/Profile';
+import Tasks from './pages/User/Tasks';
 
 const store = createStore({
   authName: '_auth',
@@ -28,6 +31,17 @@ const AdminLayout = () => {
       <SideBar />
       <Outlet />
     </div>
+  );
+};
+
+const UserLayout = () => {
+  return (
+    <>
+      <UserHeader />
+      <Box sx={{ m: 4 }}>
+        <Outlet />
+      </Box>
+    </>
   );
 };
 
@@ -49,8 +63,30 @@ const router = createBrowserRouter([
     element: <ProtectedRoute role={0} />,
     children: [
       {
-        path: '/userpage',
-        element: <UserHome />,
+        path: '/user',
+        element: <UserLayout />,
+        children: [
+          {
+            index: true,
+            element: <UserHome />,
+          },
+          {
+            path: 'tasks',
+            element: <Tasks />,
+          },
+          {
+            path: 'grades',
+            element: <div>To be implemented - Grades</div>,
+          },
+          {
+            path: 'profile',
+            element: <Profile />,
+          },
+          {
+            path: '*',
+            element: <NotFound />,
+          },
+        ],
       },
     ],
   },
