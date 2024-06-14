@@ -221,7 +221,7 @@ const EditTask = () => {
             ) : status.error ? (
               <Close />
             ) : (
-              <>Izveidot</>
+              <>Mainīt</>
             )}
           </Button>
         </S.Form>
