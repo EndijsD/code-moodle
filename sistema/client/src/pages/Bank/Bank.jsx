@@ -103,7 +103,7 @@ const Bank = () => {
                         <TableCell align="center">{item.punkti}</TableCell>
                         <TableCell align="center">
                           <ButtonGroup variant="contained">
-                            <Link to="/">
+                            <Link to={`editTask/${item.uzdevumi_id}`}>
                               <Button>
                                 <EditIcon />
                               </Button>
