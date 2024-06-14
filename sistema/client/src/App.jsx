@@ -12,6 +12,7 @@ import ProtectedRoute from './ProtectedRoute';
 import SideBar from './components/Admin/SideBar';
 import NewTask from './pages/NewTask';
 import Bank from './pages/Bank';
+import Student from './pages/Student';
 import EditTask from './pages/EditTask';
 
 const store = createStore({
@@ -65,12 +66,16 @@ const router = createBrowserRouter([
             element: <AdminHome />,
           },
           {
-            path: 'students',
-            element: <h3>To Be Implemented - students</h3>,
+            path: 'student',
+            element: <Student />,
           },
           {
             path: 'bank',
             children: [
+              {
+                index: true,
+                element: <Bank />,
+              },
               {
                 path: 'newTask',
                 element: <NewTask />,

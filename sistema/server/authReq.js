@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/login', async (req, res) => {
   // Iegūst vajadzīgās vērtības no padotās informācijas
-  const tables = ['students', 'skolotajs'];
+  const tables = ['studenti', 'skolotajs'];
   const email = req.body.email;
   const password = req.body.password;
   let sent = false;
@@ -40,7 +40,7 @@ router.post('/login', async (req, res) => {
               // savādāk nosūtam tukšu objektu
               const accessToken = jwt.sign(
                 {
-                  exp: Math.floor(Date.now() / 1000) + 60 * 60,
+                  exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
                   data: resultObj,
                 },
                 'bce8473f-33e8-4e75-8a10-6e4ce8a2421f'
