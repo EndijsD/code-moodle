@@ -11,17 +11,7 @@ import axios from 'axios';
 import url from '../../../url';
 import { Check, Close } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-
-const languages = [
-  {
-    value: 'cpp',
-    label: 'C++',
-  },
-  {
-    value: 'js',
-    label: 'Javascript',
-  },
-];
+import { languages } from '../../languages';
 
 const NewTask = () => {
   const nav = useNavigate();

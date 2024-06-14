@@ -13,6 +13,7 @@ import SideBar from './components/Admin/SideBar';
 import NewTask from './pages/NewTask';
 import Bank from './pages/Bank';
 import Student from './pages/Student';
+import EditTask from './pages/EditTask';
 
 const store = createStore({
   authName: '_auth',
@@ -78,6 +79,14 @@ const router = createBrowserRouter([
               {
                 path: 'newTask',
                 element: <NewTask />,
+              },
+              {
+                path: 'editTask/:id',
+                element: <EditTask />,
+              },
+              {
+                index: true,
+                element: <Bank />,
               },
             ],
           },
