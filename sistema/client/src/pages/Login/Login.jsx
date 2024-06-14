@@ -13,19 +13,29 @@ import axios from 'axios';
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+import FormError from '../../components/FormError/FormError';
 
 const initialValues = {
   email: '',
   password: '',
 };
 
+const errorMes = {
+  email: 'Epasta lauks nav aizpildīts',
+  password: 'Paroles lauks nav aizpildīts',
+  wrong: 'Nepareizs epasts / parole',
+  error: 'Servera problēma',
+  notAccepted: 'Jūsu konts vēl nav apstiprināts',
+};
+
 const Login = () => {
   const signIn = useSignIn();
   const auth = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
-  const [formValues, setFormValues] = useState(initialValues);
+  const [form, setForm] = useState(initialValues);
   const [showPassword, setShowPassword] = useState(false);
   const [problems, setProblems] = useState([]);
+  const [problem, setProblem] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const nav = useNavigate();
 
@@ -44,6 +54,7 @@ const Login = () => {
     setShowPassword((showPassword) => !showPassword);
 
   const setResponse = (res) => {
+    setProblem(errorMes[res]);
     setProblems((prev) => prev.concat(res));
     setTimeout(() => setProblems([]), 1500);
   };
@@ -52,9 +63,8 @@ const Login = () => {
     e.preventDefault();
     setIsPending(true);
 
-    //Tiek pārbaudīts vai ievadlauki nav tukši
     let isAnyElEmpty = false;
-    for (const [key, value] of Object.entries(formValues)) {
+    for (const [key, value] of Object.entries(form).reverse()) {
       if (!value) {
         isAnyElEmpty = true;
         setResponse(key);
@@ -62,16 +72,10 @@ const Login = () => {
     }
 
     if (!isAnyElEmpty) {
-      //Tiek izveidota nosūtāmā informācija (Parole tiek šifrēta un tad tā tiek salīdzināta ar paroli servera pusē)
-      const authInfo = {
-        email: formValues.email,
-        password: formValues.password,
-      };
-
       try {
-        //Dati tiek nosūtīti uz servera pusi
-        const res = await axios.post(`${url}auth/login`, authInfo);
-        if (res.data.accessToken !== undefined) {
+        const res = await axios.post(`${url}auth/login`, form);
+        console.log(res);
+        if (res.data.accessToken) {
           if (
             signIn({
               auth: {
@@ -88,6 +92,8 @@ const Login = () => {
               nav('/admin');
             }
           }
+        } else if (res.data.userType == 0) {
+          setResponse('notAccepted');
         } else if (res.data.problem) {
           setResponse('wrong');
         }
@@ -101,8 +107,8 @@ const Login = () => {
 
   const handleFormInputChange = (e) => {
     const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
+    setForm({
+      ...form,
       [name]: value,
     });
   };
@@ -113,13 +119,14 @@ const Login = () => {
         <S.StyledPaper>
           <S.Form onSubmit={handleFormSubmit}>
             <S.h1>Autorizēties</S.h1>
+            <FormError text={problem} mb={'1rem'} />
 
             <S.textField
               label="E-pasts"
               variant="standard"
               type="email"
               name="email"
-              value={formValues.email}
+              value={form.email}
               onChange={handleFormInputChange}
               required
               error={problems.includes('wrong') || problems.includes('email')}
@@ -143,7 +150,7 @@ const Login = () => {
                 ),
               }}
               name="password"
-              value={formValues.password}
+              value={form.password}
               onChange={handleFormInputChange}
               required
               error={

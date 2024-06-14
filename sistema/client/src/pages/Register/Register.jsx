@@ -14,6 +14,7 @@ import * as S from './style';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import url from '../../../url';
+import FormError from '../../components/FormError/FormError';
 
 const initialFormValues = {
   vards: '',
@@ -25,11 +26,25 @@ const initialFormValues = {
   parole_atk: '',
 };
 
+const errorMes = {
+  permError: 'Servera problēma: nevarēja iegūt skolas',
+  pass: 'Paroles lauki nesakrīt',
+  error: 'Servera problēma: nevarēja veikt pieprasījumu',
+  vards: 'Vārda lauks nav aizpildīts',
+  uzvards: 'Uzvārda lauks nav aizpildīts',
+  skolas_id: 'Skola nav izvēlēta',
+  klase: 'Klase nav izvēlēta',
+  epasts: 'Epasta lauks nav aizpildīts',
+  parole: 'Paroles lauks nav aizpildīts',
+  parole_atk: 'Atkārtotas paroles lauks nav aizpildīts',
+};
+
 const Register = () => {
   const nav = useNavigate();
   const [formValues, setFormValues] = useState(initialFormValues);
   const [showPassword, setShowPassword] = useState([false, false]);
   const [problems, setProblems] = useState([]);
+  const [problem, setProblem] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [active, setActive] = useState([false, false]);
@@ -41,6 +56,7 @@ const Register = () => {
       setSuccess(true);
       setTimeout(() => nav('/login'), 1500);
     } else {
+      setProblem(errorMes[res]);
       setProblems((prev) => prev.concat(res));
       if (withTimeout) setTimeout(() => setProblems([]), 1500);
     }
@@ -60,7 +76,7 @@ const Register = () => {
     setIsPending(true);
 
     let isAnyElEmpty = false;
-    for (const [key, value] of Object.entries(formValues)) {
+    for (const [key, value] of Object.entries(formValues).reverse()) {
       if (!value) {
         isAnyElEmpty = true;
         setResponse(key);
@@ -145,6 +161,8 @@ const Register = () => {
           <S.Title>Reģistrēties</S.Title>
 
           <S.StyledBox>
+            <FormError text={problem} />
+
             <S.InputField
               label="Vārds"
               variant="standard"
