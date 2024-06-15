@@ -17,6 +17,7 @@ import EditTask from './pages/Admin/EditTask';
 import UserHeader from './components/User/Header';
 import Profile from './pages/User/Profile';
 import Tasks from './pages/User/Tasks';
+import Evaluate from './pages/Admin/Evaluate';
 
 const store = createStore({
   authName: '_auth',
@@ -128,7 +129,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'evaluate',
-            element: <h3>To Be Implemented - evaluate</h3>,
+            element: <Evaluate />,
           },
           {
             path: '*',
