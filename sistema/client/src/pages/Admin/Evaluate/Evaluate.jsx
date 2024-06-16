@@ -5,6 +5,7 @@ import { Button, CircularProgress, Paper } from '@mui/material';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
+import Title from '../../../components/General/Title';
 
 const Evaluate = () => {
   const [fetchState, setFetchState] = useState({
@@ -98,65 +99,69 @@ const Evaluate = () => {
         alignItems: 'center',
         ...((fetchState.pending && { justifyContent: 'center' }) ||
           (fetchState.failed && { justifyContent: 'center' })),
-        py: '5%',
+        py: '1%',
       }}
     >
       {data ? (
-        <DataGrid
-          getRowId={getRowId}
-          rows={data}
-          columns={columns}
-          autosizeOptions={{
-            columns: [
-              'Vārds',
-              'Uzvārds',
-              'Skola',
-              'Klase/Kurss',
-              'Uzdevuma nosaukums',
-              'Darbības',
-            ],
-            includeHeaders: false,
-          }}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-          localeText={{
-            columnHeaderSortIconLabel: 'Šķirot',
-            columnMenuLabel: 'Opcijas',
-            columnMenuSortAsc: 'Šķirot augoši',
-            columnMenuSortDesc: 'Šķirot dilstoši',
-            columnMenuUnsort: 'Nešķirot',
-            columnMenuFilter: 'Filtrēt',
-            columnMenuHideColumn: 'Paslēpt kolonnas',
-            columnMenuManageColumns: 'Pārvaldīt kolonnas',
-            filterPanelColumns: 'Kolonnas',
-            filterPanelOperator: 'Operators',
-            filterPanelInputLabel: 'Vērtība',
-            filterPanelDeleteIconLabel: 'Izdzēst',
-            filterPanelInputPlaceholder: 'Filtrēšanas vērtība',
-            filterOperatorContains: 'satur',
-            filterOperatorEquals: 'vienāds',
-            filterOperatorStartsWith: 'sākas ar',
-            filterOperatorEndsWith: 'beidzas ar',
-            filterOperatorIsEmpty: 'ir tukšs',
-            filterOperatorIsNotEmpty: 'nav tukšs',
-            filterOperatorIsAnyOf: 'ir jebkurš no',
-            columnsPanelTextFieldLabel: 'Atrast kolonnu',
-            columnsPanelTextFieldPlaceholder: 'Kolonnas nosaukums',
-            columnsPanelShowAllButton: 'Rādīt visu',
-            columnsPanelHideAllButton: 'Paslēpt visu',
-            MuiTablePagination: {
-              labelRowsPerPage: 'Rindas lapā:',
-              labelDisplayedRows: ({ from, to, count }) =>
-                `${from} - ${to} no ${count}`,
-              getItemAriaLabel: (type) =>
-                `Iet uz ${type == 'next' ? 'nākamo' : 'iepriekšējo'} lappusi`,
-            },
-          }}
-        />
+        <>
+          <Title text="Vērtēšana" />
+
+          <DataGrid
+            getRowId={getRowId}
+            rows={data}
+            columns={columns}
+            autosizeOptions={{
+              columns: [
+                'Vārds',
+                'Uzvārds',
+                'Skola',
+                'Klase/Kurss',
+                'Uzdevuma nosaukums',
+                'Darbības',
+              ],
+              includeHeaders: false,
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+            localeText={{
+              columnHeaderSortIconLabel: 'Šķirot',
+              columnMenuLabel: 'Opcijas',
+              columnMenuSortAsc: 'Šķirot augoši',
+              columnMenuSortDesc: 'Šķirot dilstoši',
+              columnMenuUnsort: 'Nešķirot',
+              columnMenuFilter: 'Filtrēt',
+              columnMenuHideColumn: 'Paslēpt kolonnas',
+              columnMenuManageColumns: 'Pārvaldīt kolonnas',
+              filterPanelColumns: 'Kolonnas',
+              filterPanelOperator: 'Operators',
+              filterPanelInputLabel: 'Vērtība',
+              filterPanelDeleteIconLabel: 'Izdzēst',
+              filterPanelInputPlaceholder: 'Filtrēšanas vērtība',
+              filterOperatorContains: 'satur',
+              filterOperatorEquals: 'vienāds',
+              filterOperatorStartsWith: 'sākas ar',
+              filterOperatorEndsWith: 'beidzas ar',
+              filterOperatorIsEmpty: 'ir tukšs',
+              filterOperatorIsNotEmpty: 'nav tukšs',
+              filterOperatorIsAnyOf: 'ir jebkurš no',
+              columnsPanelTextFieldLabel: 'Atrast kolonnu',
+              columnsPanelTextFieldPlaceholder: 'Kolonnas nosaukums',
+              columnsPanelShowAllButton: 'Rādīt visu',
+              columnsPanelHideAllButton: 'Paslēpt visu',
+              MuiTablePagination: {
+                labelRowsPerPage: 'Rindas lapā:',
+                labelDisplayedRows: ({ from, to, count }) =>
+                  `${from} - ${to} no ${count}`,
+                getItemAriaLabel: (type) =>
+                  `Iet uz ${type == 'next' ? 'nākamo' : 'iepriekšējo'} lappusi`,
+              },
+            }}
+          />
+        </>
       ) : (
         <CircularProgress />
       )}
