@@ -105,7 +105,6 @@ const Evaluate = () => {
       {data ? (
         <>
           <Title text="Vērtēšana" />
-
           <DataGrid
             getRowId={getRowId}
             rows={data}
