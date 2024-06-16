@@ -18,6 +18,7 @@ import UserHeader from './components/User/Header';
 import Profile from './pages/User/Profile';
 import Tasks from './pages/User/Tasks';
 import Evaluate from './pages/Admin/Evaluate';
+import EvaluateItem from './pages/Admin/EvaluateItem';
 
 const store = createStore({
   authName: '_auth',
@@ -129,7 +130,16 @@ const router = createBrowserRouter([
           },
           {
             path: 'evaluate',
-            element: <Evaluate />,
+            children: [
+              {
+                index: true,
+                element: <Evaluate />,
+              },
+              {
+                path: 'task/:id',
+                element: <EvaluateItem />,
+              },
+            ],
           },
           {
             path: '*',
