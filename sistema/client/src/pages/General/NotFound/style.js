@@ -5,6 +5,7 @@ export const Content = styled(Box)({
   justifyContent: 'center',
   alignItems: 'center',
   flex: 1,
+  height: '100%',
 });
 
 export const MainBox = styled(Paper)({

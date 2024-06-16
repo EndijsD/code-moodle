@@ -38,7 +38,7 @@ const UserLayout = () => {
   return (
     <>
       <UserHeader />
-      <Box sx={{ m: 4 }}>
+      <Box sx={{ m: 4, height: '100%' }}>
         <Outlet />
       </Box>
     </>
@@ -68,20 +68,21 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <UserHome />,
-          },
-          {
-            path: 'tasks',
+            // element: <UserHome />,
             element: <Tasks />,
           },
+          // {
+          //   path: 'tasks',
+          //   element: <Tasks />,
+          // },
           {
             path: 'grades',
             element: <div>To be implemented - Grades</div>,
           },
-          {
-            path: 'profile',
-            element: <Profile />,
-          },
+          // {
+          //   path: 'profile',
+          //   element: <Profile />,
+          // },
           {
             path: '*',
             element: <NotFound />,
@@ -99,12 +100,13 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <AdminHome />,
-          },
-          {
-            path: 'student',
+            // element: <AdminHome />,
             element: <Student />,
           },
+          // {
+          //   path: 'student',
+          //   element: <Student />,
+          // },
           {
             path: 'bank',
             children: [

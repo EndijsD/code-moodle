@@ -6,6 +6,12 @@ export const Form = styled('form')(({ theme }) => ({
   padding: '4rem 3rem',
   gap: 10,
 
+  '& .dropzone': {
+    minHeight: 'auto',
+    paddingBottom: '10px',
+    overflow: 'visible',
+  },
+
   [theme.breakpoints.down('sm')]: {
     width: 'auto',
   },

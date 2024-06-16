@@ -6,8 +6,8 @@ import { useState } from 'react';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 
 const links = [
-  { path: '', title: 'Sākumlapa', icon: <Home /> },
-  { path: 'student', title: 'Studenti', icon: <People /> },
+  // { path: '', title: 'Sākumlapa', icon: <Home /> },
+  { path: '', title: 'Studenti', icon: <People /> }, // path: 'student'
   { path: 'bank', title: 'Uzdevumu Banka', icon: <Assignment /> },
   { path: 'evaluate', title: 'Vērtēšana', icon: <Create /> },
 ];
