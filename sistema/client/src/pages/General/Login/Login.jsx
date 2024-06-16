@@ -82,6 +82,7 @@ const Login = () => {
               },
               userState: {
                 userType: res.data.userType,
+                userID: res.data.userID,
               },
             })
           ) {

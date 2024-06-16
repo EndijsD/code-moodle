@@ -6,12 +6,13 @@ import {
   TextField,
 } from '@mui/material';
 import * as S from './style';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import url from '../../../../url';
 import { Check, Close } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { languages } from '../../../languages';
+import { DropzoneArea } from 'mui-file-dropzone';
 
 const NewTask = () => {
   const nav = useNavigate();
@@ -32,7 +33,6 @@ const NewTask = () => {
     language: false,
     points: false,
   });
-  const [file, setFile] = useState(null);
   const [status, setStatus] = useState({
     pending: false,
     error: false,
@@ -125,8 +125,9 @@ const NewTask = () => {
           label="Tēma"
           name="topic"
           onChange={handleFormInputChange}
-          value={data.topic}
+          value={data.topic || ''}
           helperText={fieldValid.topic && fieldError}
+          autoComplete="off"
         />
         <TextField
           error={fieldValid.name}
@@ -135,8 +136,9 @@ const NewTask = () => {
           label="Uzdevuma nosaukums"
           name="name"
           onChange={handleFormInputChange}
-          value={data.name}
+          value={data.name || ''}
           helperText={fieldValid.name && fieldError}
+          autoComplete="off"
         />
         <TextField
           error={fieldValid.description}
@@ -145,8 +147,10 @@ const NewTask = () => {
           label="Apraksts"
           name="description"
           onChange={handleFormInputChange}
-          value={data.description}
+          value={data.description || ''}
           helperText={fieldValid.description && fieldError}
+          autoComplete="off"
+          multiline
         />
         <TextField
           error={fieldValid.language}
@@ -156,8 +160,9 @@ const NewTask = () => {
           select
           label="Programmēšanas valoda"
           onChange={handleFormInputChange}
-          value={data.language}
+          value={data.language || ''}
           helperText={fieldValid.language && 'Neaizpildīts obligātais lauciņš!'}
+          autoComplete="off"
         >
           {languages.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -172,8 +177,9 @@ const NewTask = () => {
           label="Punkti"
           name="points"
           type="number"
-          value={data.points}
+          value={data.points || ''}
           onChange={handleFormInputChange}
+          autoComplete="off"
         />
         <TextField
           fullWidth
@@ -183,21 +189,28 @@ const NewTask = () => {
           helperText={
             data.language == '' ? 'Izvēlaties programmēšanas valodu!' : false
           }
-          value={data.example}
+          value={data.example || ''}
           onChange={handleFormInputChange}
+          autoComplete="off"
         />
-        <input
-          onChange={(e) => {
-            setFile(e.target.files[0]);
-          }}
-          type="file"
+        <DropzoneArea
+          acceptedFiles={['image/*']}
+          dropzoneText={'Nomet vai uzspied'}
+          onChange={(files) => console.log('Files:', files)}
+          filesLimit={10}
+          showPreviews
+          showPreviewsInDropzone={false}
+          useChipsForPreview
+          previewText="Izvēlētie faili"
+          dropzoneClass="dropzone"
+          showAlerts={false}
         />
         <Button
           color={
             status.error ? 'error' : status.success ? 'success' : 'primary'
           }
           disabled={status.pending ? true : false}
-          variant={status.error || status.success ? 'contained' : 'outlined'}
+          variant="contained"
           type="submit"
         >
           {status.pending ? (

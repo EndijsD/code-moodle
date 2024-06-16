@@ -41,7 +41,11 @@ router.post('/login', async (req, res) => {
                   process.env.ACCESS_TOKEN_SECRET
                 );
 
-                res.send({ accessToken: accessToken, userType: i });
+                res.send({
+                  accessToken: accessToken,
+                  userType: i,
+                  userID: resultObj.studenti_id,
+                });
                 sent = true;
                 i = 2;
               } else {

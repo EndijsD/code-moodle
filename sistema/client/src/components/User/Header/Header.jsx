@@ -10,10 +10,10 @@ import useSignOut from 'react-auth-kit/hooks/useSignOut';
 import { useTheme } from '@mui/material';
 
 const links = [
-  { path: '', title: 'Sākumlapa', icon: <Home /> },
-  { path: 'tasks', title: 'Uzdevumi', icon: <Assignment /> },
+  // { path: '', title: 'Sākumlapa', icon: <Home /> },
+  { path: '', title: 'Uzdevumi', icon: <Assignment /> }, // path: 'tasks'
   { path: 'grades', title: 'Vertējumi', icon: <Grade /> },
-  { path: 'profile', title: 'Profils', icon: <Person /> },
+  // { path: 'profile', title: 'Profils', icon: <Person /> },
 ];
 
 const UserHeader = () => {
