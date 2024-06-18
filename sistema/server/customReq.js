@@ -69,6 +69,41 @@ router.get('/modules_tasks/:id', (req, res) => {
   );
 });
 
+router.get('/tasks_of_module/:id', (req, res) => {
+  const id = req.params.id;
+
+  db.query(
+    `SELECT uzdevumi.*
+    FROM uzdevumi INNER JOIN moduli_uzdevumi 
+    ON moduli_uzdevumi.uzdevumi_id = uzdevumi.uzdevumi_id
+    WHERE moduli_uzdevumi.moduli_id = ?`,
+    id,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+router.delete('/removeTask/:id/:taskId', (req, res) => {
+  const id = req.params.id;
+  const taskId = req.params.taskId;
+  db.query(
+    `DELETE FROM moduli_uzdevumi WHERE uzdevumi_id = ? and moduli_id = ?`,
+    [taskId, id],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
 router.get('/taskInfo', (req, res) => {
   db.query(
     `SELECT st.vards, st.uzvards, st.klase, sk.nosaukums as skola, sk.tips, i.iesniegumi_id, uzd.nosaukums

@@ -16,6 +16,10 @@ import UserHeader from './components/User/Header';
 import Tasks from './pages/User/Tasks';
 import Evaluate from './pages/Admin/Evaluate';
 import SingleTask from './pages/General/SingleTask';
+import Modules from './pages/Admin/Modules';
+import Assign from './pages/Admin/Assign';
+import NewModule from './pages/Admin/NewModule';
+import EditModule from './pages/Admin/EditModule';
 
 const store = createStore({
   authName: '_auth',
@@ -159,6 +163,110 @@ const router = createBrowserRouter([
               {
                 path: ':subID',
                 element: <SingleTask />,
+              },
+            ],
+          },
+          {
+            path: 'assign',
+            children: [
+              {
+                index: true,
+                element: <Assign />,
+              },
+            ],
+          },
+          {
+            path: 'modules',
+            children: [
+              {
+                index: true,
+                element: <Modules />,
+              },
+              {
+                path: 'edit/:id',
+                element: <EditModule />,
+              },
+              {
+                path: 'create',
+                element: <NewModule />,
+              },
+            ],
+          },
+          {
+            path: 'assign',
+            children: [
+              {
+                index: true,
+                element: <Assign />,
+              },
+            ],
+          },
+          {
+            path: 'modules',
+            children: [
+              {
+                index: true,
+                element: <Modules />,
+              },
+              {
+                path: 'edit/:id',
+                element: <EditModule />,
+              },
+              {
+                path: 'create',
+                element: <NewModule />,
+              },
+            ],
+          },
+          {
+            path: 'assign',
+            children: [
+              {
+                index: true,
+                element: <Assign />,
+              },
+            ],
+          },
+          {
+            path: 'modules',
+            children: [
+              {
+                index: true,
+                element: <Modules />,
+              },
+              {
+                path: 'edit/:id',
+                element: <EditModule />,
+              },
+              {
+                path: 'create',
+                element: <NewModule />,
+              },
+            ],
+          },
+          {
+            path: 'assign',
+            children: [
+              {
+                index: true,
+                element: <Assign />,
+              },
+            ],
+          },
+          {
+            path: 'modules',
+            children: [
+              {
+                index: true,
+                element: <Modules />,
+              },
+              {
+                path: 'edit/:id',
+                element: <EditModule />,
+              },
+              {
+                path: 'create',
+                element: <NewModule />,
               },
             ],
           },
