@@ -67,14 +67,14 @@ const Modules = () => {
                   variant="outlined"
                   sx={{
                     display: 'flex',
+                    height: '15vh',
+                    pt: 2,
                     flexDirection: 'column',
-                    alignContent: 'space-between',
+                    justifyContent: 'space-between',
                   }}
                 >
                   <Typography
                     sx={{
-                      pb: '5vh',
-                      pt: '5vh',
                       textAlign: 'center',
                     }}
                   >
@@ -95,8 +95,9 @@ const Modules = () => {
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
+                  alignItems: 'center',
                   flexDirection: 'row',
-                  py: '7vh',
+                  height: '15vh',
                   background: 'linear-gradient(45deg, orange, orangered)',
                   color: 'background.default',
                 }}
