@@ -53,11 +53,12 @@ const ChatBox = ({ subID }) => {
       style={{
         height: 300,
         maxWidth: 700,
+        boxShadow: '0 0 1px #363537',
+        borderRadius: '10px',
       }}
     >
       <MessageList
         style={{
-          background: '#f0f0f0',
           borderTopLeftRadius: '10px',
           borderTopRightRadius: '10px',
         }}
@@ -87,7 +88,6 @@ const ChatBox = ({ subID }) => {
         value={message}
         onChange={(val) => setMessage(val)}
         style={{
-          background: '#f0f0f0',
           borderBottomLeftRadius: '10px',
           borderBottomRightRadius: '10px',
         }}

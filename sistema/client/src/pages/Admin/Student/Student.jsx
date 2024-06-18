@@ -2,7 +2,6 @@ import { Grid, Typography, useMediaQuery } from '@mui/material';
 import useAxios from '../../../../hooks/useAxios';
 import url from '../../../../url';
 import InfoCard from '../../../components/User/InfoCard';
-import * as S from './style';
 import Title from '../../../components/General/Title';
 import axios from 'axios';
 
@@ -47,14 +46,14 @@ const Students = () => {
   };
 
   return (
-    <S.StyledBox sx={{ m: '32px 10%' }}>
+    <>
       <Title text="Studentu Pieņemšana" />
       {!isPending &&
         (data.length ? (
           <Grid
             container
             spacing={4}
-            sx={{ justifyContent: belowMd && 'center' }}
+            sx={{ justifyContent: belowMd && 'center', textAlign: 'center' }}
           >
             {data.map((user) => {
               return (
@@ -77,7 +76,7 @@ const Students = () => {
             Nav jauni pieprasījumi!
           </Typography>
         ))}
-    </S.StyledBox>
+    </>
   );
 };
 

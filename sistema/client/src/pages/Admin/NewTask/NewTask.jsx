@@ -1,8 +1,12 @@
 import {
+  Box,
   Button,
   CircularProgress,
+  FormControl,
+  FormHelperText,
+  InputLabel,
   MenuItem,
-  Paper,
+  Select,
   TextField,
 } from '@mui/material';
 import * as S from './style';
@@ -101,23 +105,16 @@ const NewTask = () => {
   };
 
   return (
-    <Paper
+    <Box
       sx={{
+        width: '100%',
+        height: '100%',
         display: 'flex',
-        width: 9000,
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      <S.Form
-        onSubmit={handleSubmit}
-        sx={{
-          width: '60%',
-          height: '80%',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
+      <S.Form onSubmit={handleSubmit}>
         <TextField
           error={fieldValid.topic}
           fullWidth
@@ -152,24 +149,29 @@ const NewTask = () => {
           autoComplete="off"
           multiline
         />
-        <TextField
-          error={fieldValid.language}
-          required
-          fullWidth
-          name="language"
-          select
-          label="Programmēšanas valoda"
-          onChange={handleFormInputChange}
-          value={data.language || ''}
-          helperText={fieldValid.language && 'Neaizpildīts obligātais lauciņš!'}
-          autoComplete="off"
-        >
-          {languages.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
+        <FormControl>
+          <InputLabel htmlFor="prog_lan">Programmēšanas valoda</InputLabel>
+          <Select
+            inputProps={{ id: 'prog_lan' }}
+            error={fieldValid.language}
+            required
+            fullWidth
+            name="language"
+            label="Programmēšanas valoda"
+            onChange={handleFormInputChange}
+            value={data.language || ''}
+            autoComplete="off"
+          >
+            {languages.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+          <FormHelperText>
+            {fieldValid.language && 'Neaizpildīts obligātais lauciņš!'}
+          </FormHelperText>
+        </FormControl>
         <TextField
           error={fieldValid.points}
           required
@@ -224,7 +226,7 @@ const NewTask = () => {
           )}
         </Button>
       </S.Form>
-    </Paper>
+    </Box>
   );
 };
 

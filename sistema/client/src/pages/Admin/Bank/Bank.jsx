@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ButtonGroup,
   CircularProgress,
@@ -30,27 +31,28 @@ const Bank = () => {
     setFetchState({ pending: true, failed: false });
     axios
       .get(url + 'uzdevumi')
-      .then(function (response) {
+      .then((response) => {
         setData(response.data);
         setFetchState({
           ...fetchState,
           pending: false,
         });
       })
-      .catch(function (error) {
+      .catch((error) => {
         setFetchState({
           failed: true,
           pending: false,
         });
-        console.log(error);
       });
   };
 
   const deleteTask = (id, itemId) => {
-    axios.delete(url + 'task/' + id).then(function () {
-      const temp = [...data];
-      temp.splice(itemId, 1);
-      setData(temp);
+    axios.delete(url + 'uzdevumi/' + id).then((res) => {
+      if (res.statusText == 'OK') {
+        const temp = [...data];
+        temp.splice(itemId, 1);
+        setData(temp);
+      }
     });
   };
 
@@ -59,31 +61,24 @@ const Bank = () => {
   }, []);
 
   return (
-    <Paper
-      sx={{
-        width: 9000,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'normal',
-        alignItems: 'center',
-        ...((fetchState.pending && { justifyContent: 'center' }) ||
-          (fetchState.failed && { justifyContent: 'center' })),
-        p: '32px 10%',
-      }}
-    >
+    <>
       {fetchState.pending ? (
-        <CircularProgress />
+        <Box sx={{ height: '100%', alignContent: 'center' }}>
+          <CircularProgress />
+        </Box>
       ) : fetchState.failed ? (
-        <>Servera kļūda!</>
+        <Box sx={{ height: '100%', alignContent: 'center' }}>
+          Servera kļūda!
+        </Box>
       ) : (
         <>
-          <Title text="Uzdevumu banka" />
-          <Link to="newTask">
-            <Button variant="outlined">Jauns uzdevums</Button>
+          <Title text="Uzdevumu Banka" />
+          <Link to="newTask" style={{ marginBottom: 16 }}>
+            <Button variant="contained">Jauns uzdevums</Button>
           </Link>
         </>
       )}
-      {!fetchState.failed && !fetchState.pending && data != null ? (
+      {!fetchState.failed && !fetchState.pending && data.length ? (
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -96,7 +91,7 @@ const Bank = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data !== null &&
+              {data != null &&
                 data.map((item, i) => {
                   return (
                     <TableRow key={i}>
@@ -127,7 +122,7 @@ const Bank = () => {
       ) : (
         !fetchState.pending && <Typography>Nav izveidoti uzdevumi</Typography>
       )}
-    </Paper>
+    </>
   );
 };
 

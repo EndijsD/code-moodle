@@ -5,7 +5,10 @@ const router = express.Router();
 
 router.get('/newStudents', (req, res) => {
   db.query(
-    `select studenti_id, vards, uzvards, klase, epasts, st.skolas_id, nosaukums, tips from studenti st join skolas sk on st.skolas_id = sk.skolas_id where akceptets = false`,
+    `select studenti_id, vards, uzvards, klase, epasts, st.skolas_id, nosaukums, tips
+    from studenti st
+    join skolas sk on st.skolas_id = sk.skolas_id
+    where akceptets = false`,
     (err, result) => {
       if (err) {
         res.status(500).json({ message: err.message });
@@ -68,11 +71,12 @@ router.get('/modules_tasks/:id', (req, res) => {
 
 router.get('/taskInfo', (req, res) => {
   db.query(
-    `SELECT st.vards, st.uzvards, st.klase, sk.nosaukums as "skola", sk.tips, i.iesniegumi_id, uzd.nosaukums
-FROM studenti st INNER JOIN skolas sk  ON st.skolas_id = sk.skolas_id
-INNER JOIN iesniegumi i ON i.studenti_id = st.studenti_id
-INNER JOIN uzdevumi uzd ON uzd.uzdevumi_id = i.uzdevumi_id
-WHERE st.akceptets = 1 AND i.punkti is NULL;`,
+    `SELECT st.vards, st.uzvards, st.klase, sk.nosaukums as skola, sk.tips, i.iesniegumi_id, uzd.nosaukums
+    FROM studenti st
+    JOIN skolas sk  ON st.skolas_id = sk.skolas_id
+    JOIN iesniegumi i ON i.studenti_id = st.studenti_id
+    JOIN uzdevumi uzd ON uzd.uzdevumi_id = i.uzdevumi_id
+    WHERE st.akceptets = 1 AND i.punkti is NULL;`,
     (err, result) => {
       if (err) {
         res.status(500).json({ message: err.message });
@@ -89,7 +93,7 @@ router.get('/singleTask/:userID/:moduleID/:taskID', (req, res) => {
   const taskID = req.params.taskID;
 
   db.query(
-    `select i.iesniegumi_id, i.punkti as i_punkti, u.punkti as u_punkti, i.datums as i_datums, atbilde, tema, u.nosaukums, apraksts, valoda, piemers
+    `select i.iesniegumi_id, i.punkti as i_punkti, u.punkti as u_punkti, datums, atbilde, tema, u.nosaukums, apraksts, valoda, piemers
     from moduli_studenti ms
     join moduli m on m.moduli_id = ms.moduli_id
     join moduli_uzdevumi mu on mu.moduli_id = m.moduli_id
@@ -107,11 +111,29 @@ router.get('/singleTask/:userID/:moduleID/:taskID', (req, res) => {
   );
 });
 
+router.get('/singleTask/:subID', (req, res) => {
+  const subID = req.params.subID;
+
+  db.query(
+    `select i.punkti as i_punkti, u.punkti as u_punkti, datums, atbilde, tema, u.nosaukums, apraksts, valoda, piemers
+    from iesniegumi i
+    join uzdevumi u on u.uzdevumi_id = i.uzdevumi_id
+    where i.iesniegumi_id = ?`,
+    subID,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+      } else {
+        res.send(result[0]);
+      }
+    }
+  );
+});
+
 router.get('/comments/:subID', (req, res) => {
   const subID = req.params.subID;
 
   db.query(
-    //`select komentars, ir_students, datums from komentari where iesniegumi_id = ? order by datums`,
     `select concat(vards, ' ', uzvards) as sutitajs, komentars, ir_students, k.datums as k_datums
     from komentari k
     join iesniegumi i on i.iesniegumi_id = k.iesniegumi_id

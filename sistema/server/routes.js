@@ -2,12 +2,10 @@ import express from 'express';
 import requests from './requests.js';
 import authReq from './authReq.js';
 import customReq from './customReq.js';
-import customDeleteReq from './customDeleteReq.js';
 
 const router = express.Router();
 
 router.use('/custom', customReq);
-router.use('/task', customDeleteReq);
 router.use('/auth', authReq);
 router.use('/skolotajs', requests);
 router.use('/studenti', requests);

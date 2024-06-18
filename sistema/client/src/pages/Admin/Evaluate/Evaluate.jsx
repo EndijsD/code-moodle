@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import url from '../../../../url';
-import { Button, CircularProgress, Paper } from '@mui/material';
+import { Box, Button, CircularProgress, Paper } from '@mui/material';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
@@ -13,8 +13,10 @@ const Evaluate = () => {
     failed: false,
   });
   const [data, setData] = useState(null);
+
   const fetchTasks = () => {
     setFetchState({ pending: true, failed: false });
+
     axios
       .get(url + 'custom/taskInfo')
       .then(function (response) {
@@ -55,19 +57,18 @@ const Evaluate = () => {
       flex: 1,
       minWidth: 200,
       headerName: 'Uzdevuma nosaukums',
-      description: 'This column has a value getter and is not sortable.',
     },
     {
       field: 'darbibas',
       flex: 1,
       minWidth: 200,
+      align: 'center',
       headerName: 'Darbības',
-      description: 'This column has a value getter and is not sortable.',
       sortable: false,
       renderCell: (params) => {
         return (
-          <Link to={`task/${params.row.iesniegumi_id}`}>
-            <Button>
+          <Link to={params.row.iesniegumi_id.toString()}>
+            <Button variant="contained">
               <AssignmentIcon />
             </Button>
           </Link>
@@ -79,29 +80,13 @@ const Evaluate = () => {
   useEffect(() => {
     fetchTasks();
   }, []);
-  useEffect(() => {
-    if (data !== null) {
-      console.log(data);
-    }
-  }, [data]);
 
-  function getRowId(row) {
+  const getRowId = (row) => {
     return row.iesniegumi_id;
-  }
+  };
 
   return (
-    <Paper
-      sx={{
-        width: 9000,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'normal',
-        alignItems: 'center',
-        ...((fetchState.pending && { justifyContent: 'center' }) ||
-          (fetchState.failed && { justifyContent: 'center' })),
-        p: '32px 0',
-      }}
-    >
+    <>
       {data ? (
         <>
           <Title text="Vērtēšana" />
@@ -118,7 +103,6 @@ const Evaluate = () => {
                 'Uzdevuma nosaukums',
                 'Darbības',
               ],
-              includeHeaders: false,
             }}
             initialState={{
               pagination: {
@@ -158,13 +142,25 @@ const Evaluate = () => {
                 getItemAriaLabel: (type) =>
                   `Iet uz ${type == 'next' ? 'nākamo' : 'iepriekšējo'} lappusi`,
               },
+              noRowsLabel: 'Nav iesniegumu ko vērtēt',
+            }}
+            disableRowSelectionOnClick
+            sx={{
+              '& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus': {
+                outline: 'none',
+              },
+              '& .MuiDataGrid-columnHeaderTitleContainer': {
+                justifyContent: 'center',
+              },
             }}
           />
         </>
       ) : (
-        <CircularProgress />
+        <Box sx={{ height: '100%', alignContent: 'center' }}>
+          <CircularProgress />
+        </Box>
       )}
-    </Paper>
+    </>
   );
 };
 

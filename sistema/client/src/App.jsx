@@ -3,8 +3,6 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import Landing from './pages/General/Landing';
 import Login from './pages/General/Login';
 import Register from './pages/General/Register';
-import UserHome from './pages/User/Home';
-import AdminHome from './pages/Admin/Home';
 import NotFound from './pages/General/NotFound';
 import createStore from 'react-auth-kit/createStore';
 import AuthProvider from 'react-auth-kit';
@@ -15,11 +13,9 @@ import Bank from './pages/Admin/Bank';
 import Student from './pages/Admin/Student';
 import EditTask from './pages/Admin/EditTask';
 import UserHeader from './components/User/Header';
-import Profile from './pages/User/Profile';
 import Tasks from './pages/User/Tasks';
 import Evaluate from './pages/Admin/Evaluate';
 import SingleTask from './pages/General/SingleTask';
-import EvaluateItem from './pages/Admin/EvaluateItem';
 
 const store = createStore({
   authName: '_auth',
@@ -30,10 +26,20 @@ const store = createStore({
 
 const AdminLayout = () => {
   return (
-    <div id="adminLayout">
+    <Box sx={{ display: 'flex' }}>
       <SideBar />
-      <Outlet />
-    </div>
+      <Box
+        sx={{
+          m: '32px 10%',
+          display: 'flex',
+          flexDirection: 'column',
+          flex: 1,
+          alignItems: 'center',
+        }}
+      >
+        <Outlet />
+      </Box>
+    </Box>
   );
 };
 
@@ -47,6 +53,7 @@ const UserLayout = () => {
           display: 'flex',
           flexDirection: 'column',
           flex: 1,
+          alignItems: 'center',
         }}
       >
         <Outlet />
@@ -150,12 +157,8 @@ const router = createBrowserRouter([
                 element: <Evaluate />,
               },
               {
-                path: ':studentID/:moduleID/:taskID',
-                element: (
-                  <Box m={'32px 10%'}>
-                    <SingleTask />
-                  </Box>
-                ),
+                path: ':subID',
+                element: <SingleTask />,
               },
             ],
           },

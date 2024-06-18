@@ -1,8 +1,13 @@
 import {
+  Box,
   Button,
   CircularProgress,
+  FormControl,
+  FormHelperText,
+  InputLabel,
   MenuItem,
   Paper,
+  Select,
   TextField,
 } from '@mui/material';
 import * as S from '../NewTask/style';
@@ -112,29 +117,17 @@ const EditTask = () => {
   }, []);
 
   return (
-    <Paper
+    <Box
       sx={{
+        width: '100%',
+        height: '100%',
         display: 'flex',
-        width: 9000,
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
       {data != undefined ? (
-        <S.Form
-          onSubmit={handleSubmit}
-          sx={{
-            width: '60%',
-            height: '80%',
-            display: 'flex',
-            justifyContent: 'center',
-            '& .dropzone': {
-              minHeight: 'auto',
-              paddingBottom: '10px',
-              overflow: 'visible',
-            },
-          }}
-        >
+        <S.Form onSubmit={handleSubmit}>
           <TextField
             error={fieldValid.topic}
             fullWidth
@@ -169,25 +162,29 @@ const EditTask = () => {
             autoComplete="off"
             multiline
           />
-          <TextField
-            error={fieldValid.language}
-            required
-            fullWidth
-            name="language"
-            select
-            label="Programmēšanas valoda"
-            onChange={handleFormInputChange}
-            value={data.language || ''}
-            helperText={
-              fieldValid.language && 'Neaizpildīts obligātais lauciņš!'
-            }
-          >
-            {languages.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
+          <FormControl>
+            <InputLabel htmlFor="prog_lan">Programmēšanas valoda</InputLabel>
+            <Select
+              inputProps={{ id: 'prog_lan' }}
+              error={fieldValid.language}
+              required
+              fullWidth
+              name="language"
+              label="Programmēšanas valoda"
+              onChange={handleFormInputChange}
+              value={data.language || ''}
+              autoComplete="off"
+            >
+              {languages.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>
+              {fieldValid.language && 'Neaizpildīts obligātais lauciņš!'}
+            </FormHelperText>
+          </FormControl>
           <TextField
             error={fieldValid.points}
             required
@@ -247,7 +244,7 @@ const EditTask = () => {
       ) : (
         data == undefined && <CircularProgress />
       )}
-    </Paper>
+    </Box>
   );
 };
 

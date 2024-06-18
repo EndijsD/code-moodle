@@ -15,7 +15,7 @@ const ModuleAccordion = ({
   moduleID,
 }) => {
   return (
-    <Accordion>
+    <Accordion sx={{ width: '100%' }}>
       <AccordionSummary
         expandIcon={<ExpandMore />}
         sx={{

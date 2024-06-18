@@ -19,10 +19,11 @@ import moment from 'moment';
 const SingleTask = () => {
   const nav = useNavigate();
   const auth = useAuthUser();
-  const { studentID, moduleID, taskID } = useParams();
-  const finalStudentID = auth.userID || studentID;
+  const { moduleID, taskID, subID } = useParams();
+  const linkEnd =
+    auth.userType == 1 ? subID : auth.userID + '/' + moduleID + '/' + taskID;
   const { data, setData, isPending } = useAxios(
-    url + 'custom/singleTask/' + finalStudentID + '/' + moduleID + '/' + taskID
+    url + 'custom/singleTask/' + linkEnd
   );
 
   const handleSubmit = () => {
@@ -31,6 +32,7 @@ const SingleTask = () => {
         axios
           .patch(url + 'iesniegumi/' + data.iesniegumi_id, {
             atbilde: data.atbilde,
+            punkti: NULL,
           })
           .then((res) => {
             if (res.statusText == 'OK') {
@@ -53,17 +55,15 @@ const SingleTask = () => {
           });
       }
     else {
-      if (data.iesniegumi_id) {
-        axios
-          .patch(url + 'iesniegumi/' + data.iesniegumi_id, {
-            punkti: data.i_punkti,
-          })
-          .then((res) => {
-            if (res.statusText == 'OK') {
-              nav('/admin/evaluate');
-            }
-          });
-      }
+      axios
+        .patch(url + 'iesniegumi/' + subID, {
+          punkti: data.i_punkti,
+        })
+        .then((res) => {
+          if (res.statusText == 'OK') {
+            nav('/admin/evaluate');
+          }
+        });
     }
   };
 
@@ -85,7 +85,7 @@ const SingleTask = () => {
             <S.Header>
               {auth.userType == 1 ? (
                 <TextField
-                  value={data.i_punkti}
+                  value={data.i_punkti || ''}
                   onChange={setPoints}
                   variant="standard"
                   sx={{ width: 60 }}
@@ -143,7 +143,7 @@ const SingleTask = () => {
           </Grid>
           <Grid item xs={1}>
             <Typography variant="h5">Komentāri</Typography>
-            <ChatBox subID={data.iesniegumi_id} />
+            <ChatBox subID={auth.userType == 1 ? subID : data.iesniegumi_id} />
           </Grid>
           <Grid
             item

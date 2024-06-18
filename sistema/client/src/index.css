@@ -11,10 +11,6 @@ body,
   flex-direction: column;
 }
 
-#adminLayout {
-  display: flex;
-}
-
 /*
 #FF4500 - orangered
 #FFA500 - orange
@@ -38,6 +34,15 @@ body,
   background: transparent;
 }
 
+.cs-button:disabled {
+  opacity: 1;
+  color: rgba(255, 165, 0, 0.4);
+}
+
 .cs-button {
   color: rgba(255, 165, 0, 0.8);
+}
+
+.cs-chat-container .cs-message-input {
+  border-top-color: rgba(255, 165, 0, 0.2);
 }

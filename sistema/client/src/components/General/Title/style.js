@@ -7,4 +7,6 @@ export const Title = styled(Typography)({
   width: 'fit-content',
   padding: '20px 30px',
   color: 'white',
+  alignSelf: 'center',
+  marginBottom: 32,
 });
