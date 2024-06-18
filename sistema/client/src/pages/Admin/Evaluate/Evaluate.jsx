@@ -79,11 +79,6 @@ const Evaluate = () => {
   useEffect(() => {
     fetchTasks();
   }, []);
-  useEffect(() => {
-    if (data !== null) {
-      console.log(data);
-    }
-  }, [data]);
 
   function getRowId(row) {
     return row.iesniegumi_id;

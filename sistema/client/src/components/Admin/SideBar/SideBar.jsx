@@ -1,14 +1,23 @@
 import { Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Sidebar, Menu, MenuItem, sidebarClasses } from 'react-pro-sidebar';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, People, Assignment, Create, Logout } from '@mui/icons-material';
+import {
+  Home,
+  People,
+  Assignment,
+  Create,
+  Logout,
+  AssignmentInd,
+  Widgets,
+} from '@mui/icons-material';
 import { useState } from 'react';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
-
 const links = [
   // { path: '', title: 'Sākumlapa', icon: <Home /> },
   { path: '', title: 'Studenti', icon: <People /> }, // path: 'student'
   { path: 'bank', title: 'Uzdevumu Banka', icon: <Assignment /> },
+  { path: 'modules', title: 'Moduļi', icon: <Widgets /> },
+  { path: 'assign', title: 'Uzdošana', icon: <AssignmentInd /> },
   { path: 'evaluate', title: 'Vērtēšana', icon: <Create /> },
 ];
 
