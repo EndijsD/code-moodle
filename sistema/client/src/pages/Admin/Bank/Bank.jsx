@@ -17,6 +17,7 @@ import { Link } from 'react-router-dom';
 import url from '../../../../url';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Title from '../../../components/General/Title';
 
 const Bank = () => {
   const [fetchState, setFetchState] = useState({
@@ -67,7 +68,7 @@ const Bank = () => {
         alignItems: 'center',
         ...((fetchState.pending && { justifyContent: 'center' }) ||
           (fetchState.failed && { justifyContent: 'center' })),
-        p: '5% 10%',
+        p: '1%',
       }}
     >
       {fetchState.pending ? (
@@ -75,9 +76,12 @@ const Bank = () => {
       ) : fetchState.failed ? (
         <>Servera kļūda!</>
       ) : (
-        <Link to="newTask">
-          <Button variant="outlined">Jauns uzdevums</Button>
-        </Link>
+        <>
+          <Title text="Uzdevumu banka" />
+          <Link to="newTask">
+            <Button variant="outlined">Jauns uzdevums</Button>
+          </Link>
+        </>
       )}
       {!fetchState.failed && !fetchState.pending && data != null ? (
         <TableContainer component={Paper}>

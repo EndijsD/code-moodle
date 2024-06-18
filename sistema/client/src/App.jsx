@@ -19,6 +19,7 @@ import Profile from './pages/User/Profile';
 import Tasks from './pages/User/Tasks';
 import Evaluate from './pages/Admin/Evaluate';
 import SingleTask from './pages/General/SingleTask';
+import EvaluateItem from './pages/Admin/EvaluateItem';
 
 const store = createStore({
   authName: '_auth',
