@@ -49,15 +49,7 @@ const Modules = () => {
   };
 
   return (
-    <Paper
-      sx={{
-        width: 9000,
-        p: '2%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
+    <>
       <Title text="Moduļi" />
       <TextField
         value={search}
@@ -117,7 +109,7 @@ const Modules = () => {
       ) : (
         <CircularProgress />
       )}
-    </Paper>
+    </>
   );
 };
 

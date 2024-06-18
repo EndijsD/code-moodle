@@ -117,16 +117,7 @@ const EditModule = () => {
   };
 
   return (
-    <Paper
-      sx={{
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        py: 4,
-        px: 4,
-      }}
-    >
+    <>
       <Title text="Moduļa rediģēšana" />
       {status.pending ? (
         <CircularProgress />
@@ -275,7 +266,7 @@ const EditModule = () => {
       ) : (
         <Typography>Nav uzdevumu!</Typography>
       )}
-    </Paper>
+    </>
   );
 };
 
