@@ -68,7 +68,7 @@ const Bank = () => {
         alignItems: 'center',
         ...((fetchState.pending && { justifyContent: 'center' }) ||
           (fetchState.failed && { justifyContent: 'center' })),
-        p: '1%',
+        p: '32px 10%',
       }}
     >
       {fetchState.pending ? (
