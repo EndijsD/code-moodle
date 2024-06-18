@@ -1,11 +1,11 @@
-import express from "express";
-import db from "./db.js";
-import moment from "moment";
-import bcrypt from "bcrypt";
+import express from 'express';
+import db from './db.js';
+import moment from 'moment';
+import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   const table = req.baseUrl.slice(1);
 
   db.query(`SELECT * FROM ${table}`, (err, result) => {
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   const table = req.baseUrl.slice(1);
   const id = req.params.id;
 
@@ -34,7 +34,7 @@ router.get("/:id", async (req, res) => {
   );
 });
 
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   const table = req.baseUrl.slice(1);
   if (req.body.parole) {
     req.body.parole = bcrypt.hashSync(req.body.parole, 10);
@@ -50,18 +50,18 @@ router.post("/", async (req, res) => {
       if (err) {
         res.status(500).json({ message: err.message });
       } else {
-        res.json({ message: "Added entry", id: result.insertId });
+        res.json({ message: 'Added entry', id: result.insertId });
       }
     }
   );
 });
 
 const isNumeric = (str) => {
-  if (typeof str != "string") return false;
+  if (typeof str != 'string') return false;
   return !isNaN(str) && !isNaN(parseFloat(str));
 };
 
-router.patch("/:id", async (req, res) => {
+router.patch('/:id', async (req, res) => {
   const table = req.baseUrl.slice(1);
   const id = req.params.id;
 
@@ -70,13 +70,13 @@ router.patch("/:id", async (req, res) => {
   }
 
   const keys = Object.keys(req.body)
-    .map((key) => key + "=?")
+    .map((key) => key + '=?')
     .toString();
 
   const values = Object.values(req.body).map((value) =>
     !isNumeric(value) && moment(value, moment.ISO_8601, true).isValid()
-      ? moment(value).format("YYYY-MM-DD HH:mm:ss")
-      : value && (value.constructor === Array || typeof value === "object")
+      ? moment(value).format('YYYY-MM-DD HH:mm:ss')
+      : value && (value.constructor === Array || typeof value === 'object')
       ? JSON.stringify(value)
       : value
   );
@@ -88,13 +88,13 @@ router.patch("/:id", async (req, res) => {
       if (err) {
         res.status(500).json({ message: err.message });
       } else {
-        res.json({ message: "Updated entry: " + id });
+        res.json({ message: 'Updated entry: ' + id });
       }
     }
   );
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const table = req.baseUrl.slice(1);
   const id = req.params.id;
 
@@ -102,7 +102,7 @@ router.delete("/:id", async (req, res) => {
     if (err) {
       res.status(500).json({ message: err.message });
     } else {
-      res.json({ message: "Deleted entry: " + id });
+      res.json({ message: 'Deleted entry: ' + id });
     }
   });
 });

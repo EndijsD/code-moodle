@@ -14,7 +14,14 @@ const Tasks = () => {
     data.length &&
     data.map((module, i) => {
       return (
-        <ModuleAccordion key={i} title={module.m_nos} tasks={module.uzdevumi} />
+        <ModuleAccordion
+          key={i}
+          title={module.m_nos}
+          tasks={module.uzdevumi}
+          max_points={module.p_kopa}
+          gotten_points={module.i_kopa}
+          moduleID={module.moduli_id}
+        />
       );
     })
   );

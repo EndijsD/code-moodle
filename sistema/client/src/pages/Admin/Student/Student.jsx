@@ -47,7 +47,7 @@ const Students = () => {
   };
 
   return (
-    <S.StyledBox sx={{ m: 4 }}>
+    <S.StyledBox sx={{ m: '32px 10%' }}>
       <Title text="Studentu Pieņemšana" />
       {!isPending &&
         (data.length ? (

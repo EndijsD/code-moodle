@@ -7,7 +7,13 @@ import {
 import { ExpandMore } from '@mui/icons-material';
 import TaskButton from '../TaskButton';
 
-const ModuleAccordion = ({ title, tasks }) => {
+const ModuleAccordion = ({
+  title,
+  tasks,
+  max_points,
+  gotten_points,
+  moduleID,
+}) => {
   return (
     <Accordion>
       <AccordionSummary
@@ -26,7 +32,9 @@ const ModuleAccordion = ({ title, tasks }) => {
         <Typography sx={{ fontWeight: '500', fontSize: 30 }}>
           {title}
         </Typography>
-        {/* <Typography sx={{ fontWeight: 'italic', fontSize: 20 }}>0/5</Typography> */}
+        <Typography sx={{ fontWeight: 'italic', fontSize: 20 }}>
+          {gotten_points} / {max_points}
+        </Typography>
       </AccordionSummary>
       <AccordionDetails
         sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
@@ -38,7 +46,10 @@ const ModuleAccordion = ({ title, tasks }) => {
               i={i + 1}
               title={task.u_nos}
               topic={task.tema}
-              id={task.uzdevumi_id}
+              taskID={task.uzdevumi_id}
+              moduleID={moduleID}
+              gotten_points={task.i_punkti}
+              max_points={task.u_punkti}
             />
           );
         })}

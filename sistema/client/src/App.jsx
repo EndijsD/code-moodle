@@ -18,6 +18,7 @@ import UserHeader from './components/User/Header';
 import Profile from './pages/User/Profile';
 import Tasks from './pages/User/Tasks';
 import Evaluate from './pages/Admin/Evaluate';
+import SingleTask from './pages/General/SingleTask';
 
 const store = createStore({
   authName: '_auth',
@@ -39,7 +40,14 @@ const UserLayout = () => {
   return (
     <>
       <UserHeader />
-      <Box sx={{ m: 4, height: '100%' }}>
+      <Box
+        sx={{
+          m: '32px 10%',
+          display: 'flex',
+          flexDirection: 'column',
+          flex: 1,
+        }}
+      >
         <Outlet />
       </Box>
     </>
@@ -68,25 +76,34 @@ const router = createBrowserRouter([
         element: <UserLayout />,
         children: [
           {
-            index: true,
+            // index: true,
             // element: <UserHome />,
-            element: <Tasks />,
+          },
+          {
+            path: 'tasks',
+            children: [
+              {
+                index: true,
+                element: <Tasks />,
+              },
+              {
+                path: ':moduleID/:taskID',
+                element: <SingleTask />,
+              },
+            ],
           },
           // {
-          //   path: 'tasks',
-          //   element: <Tasks />,
+          //   path: 'grades',
+          //   element: <div>To be implemented - Grades</div>,
           // },
-          {
-            path: 'grades',
-            element: <div>To be implemented - Grades</div>,
-          },
           // {
           //   path: 'profile',
           //   element: <Profile />,
           // },
           {
+            index: true,
             path: '*',
-            element: <NotFound />,
+            element: <NotFound link={'tasks'} />,
           },
         ],
       },
@@ -99,15 +116,14 @@ const router = createBrowserRouter([
         path: 'admin',
         element: <AdminLayout />,
         children: [
+          // {
+          // index: true,
+          // element: <AdminHome />,
+          // },
           {
-            index: true,
-            // element: <AdminHome />,
+            path: 'students',
             element: <Student />,
           },
-          // {
-          //   path: 'student',
-          //   element: <Student />,
-          // },
           {
             path: 'bank',
             children: [
@@ -123,19 +139,29 @@ const router = createBrowserRouter([
                 path: 'editTask/:id',
                 element: <EditTask />,
               },
-              {
-                index: true,
-                element: <Bank />,
-              },
             ],
           },
           {
             path: 'evaluate',
-            element: <Evaluate />,
+            children: [
+              {
+                index: true,
+                element: <Evaluate />,
+              },
+              {
+                path: ':studentID/:moduleID/:taskID',
+                element: (
+                  <Box m={'32px 10%'}>
+                    <SingleTask />
+                  </Box>
+                ),
+              },
+            ],
           },
           {
+            index: true,
             path: '*',
-            element: <NotFound />,
+            element: <NotFound link={'students'} />,
           },
         ],
       },

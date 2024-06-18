@@ -1,12 +1,20 @@
-import { Box, Button, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import * as S from './style';
 
-const TaskButton = ({ i, title, topic, id }) => {
+const TaskButton = ({
+  i,
+  title,
+  topic,
+  taskID,
+  moduleID,
+  gotten_points,
+  max_points,
+}) => {
   const theme = useTheme();
 
   return (
-    <Link to={id.toString()}>
+    <Link to={moduleID + '/' + taskID}>
       <S.AnimButton>
         <Box
           sx={{
@@ -17,7 +25,11 @@ const TaskButton = ({ i, title, topic, id }) => {
         >
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography
-              sx={{ color: theme.palette.text.secondary, fontSize: 12 }}
+              sx={{
+                color: theme.palette.text.secondary,
+                fontSize: 12,
+                textWrap: 'nowrap',
+              }}
             >
               Nr. p. k.
             </Typography>
@@ -39,20 +51,17 @@ const TaskButton = ({ i, title, topic, id }) => {
             </Typography>
             <Typography sx={{ fontWeight: '500' }}>{topic}</Typography>
           </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography
+              sx={{ color: theme.palette.text.secondary, fontSize: 12 }}
+            >
+              Punkti
+            </Typography>
+            <Typography sx={{ fontWeight: '500' }}>
+              {(gotten_points || 0) + ' / ' + max_points}
+            </Typography>
+          </Box>
         </Box>
-        {/* <Typography>
-              this is button this is link Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
-              amet blandit leo lobortis eget.
-            </Typography> */}
-        {/* <Forward
-            sx={{
-              fontSize: 50,
-              // color: 'white',
-              // stroke: theme.palette.primary.main,
-              // strokeWidth: 2,
-            }}
-          /> */}
       </S.AnimButton>
     </Link>
   );
