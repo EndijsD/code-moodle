@@ -14,7 +14,7 @@ import { useState } from 'react';
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
 const links = [
   // { path: '', title: 'Sākumlapa', icon: <Home /> },
-  { path: '', title: 'Studenti', icon: <People /> }, // path: 'student'
+  { path: 'students', title: 'Studenti', icon: <People /> },
   { path: 'bank', title: 'Uzdevumu Banka', icon: <Assignment /> },
   { path: 'modules', title: 'Moduļi', icon: <Widgets /> },
   { path: 'assign', title: 'Uzdošana', icon: <AssignmentInd /> },
@@ -72,7 +72,10 @@ const SideBar = () => {
             textShadow: '1px 1px 1px ' + theme.palette.text.primary,
           }}
         >
-          <Link style={{ color: 'inherit', textDecoration: 'inherit' }}>
+          <Link
+            to={'students'}
+            style={{ color: 'inherit', textDecoration: 'inherit' }}
+          >
             {isSmallScreen || collapsed ? 'CM' : 'Code Moodle'}
           </Link>
         </Typography>

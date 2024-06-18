@@ -43,9 +43,9 @@ const Login = () => {
   useEffect(() => {
     if (isAuthenticated) {
       if (auth.userType == 0) {
-        nav('/user');
+        nav('/user/tasks');
       } else if (auth.userType == 1) {
-        nav('/admin');
+        nav('/admin/students');
       }
     }
   }, []);
@@ -87,9 +87,9 @@ const Login = () => {
             })
           ) {
             if (res.data.userType == 0) {
-              nav('/user');
+              nav('/user/tasks');
             } else if (res.data.userType == 1) {
-              nav('/admin');
+              nav('/admin/students');
             }
           }
         } else if (res.data.userType == 0) {

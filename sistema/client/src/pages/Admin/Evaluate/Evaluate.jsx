@@ -94,7 +94,7 @@ const Evaluate = () => {
         alignItems: 'center',
         ...((fetchState.pending && { justifyContent: 'center' }) ||
           (fetchState.failed && { justifyContent: 'center' })),
-        py: '1%',
+        p: '32px 0',
       }}
     >
       {data ? (

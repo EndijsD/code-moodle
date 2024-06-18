@@ -22,3 +22,22 @@ body,
 #363537
 #2A2B2E
 */
+
+.cs-message--outgoing .cs-message__content {
+  background: rgba(255, 165, 0, 0.8);
+}
+
+.cs-message--incoming .cs-message__content,
+.cs-message-input__content-editor-wrapper,
+.ps__thumb-y {
+  background: rgba(255, 165, 0, 0.4);
+}
+
+.cs-message-input__content-editor,
+.cs-message-input__content-editor-container {
+  background: transparent;
+}
+
+.cs-button {
+  color: rgba(255, 165, 0, 0.8);
+}

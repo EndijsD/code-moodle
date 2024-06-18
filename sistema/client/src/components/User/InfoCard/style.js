@@ -23,6 +23,8 @@ export const StyledCard = styled(Card)(({ error }) => ({
   minWidth: 275,
   position: 'relative',
   border: 'solid 2px transparent',
+  height: '100%',
+  alignContent: 'center',
 
   '&:hover': {
     '#cardActions': {

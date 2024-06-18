@@ -11,8 +11,8 @@ import { useTheme } from '@mui/material';
 
 const links = [
   // { path: '', title: 'Sākumlapa', icon: <Home /> },
-  { path: '', title: 'Uzdevumi', icon: <Assignment /> }, // path: 'tasks'
-  { path: 'grades', title: 'Vertējumi', icon: <Grade /> },
+  // { path: 'tasks', title: 'Uzdevumi', icon: <Assignment /> },
+  // { path: 'grades', title: 'Vertējumi', icon: <Grade /> },
   // { path: 'profile', title: 'Profils', icon: <Person /> },
 ];
 
@@ -29,7 +29,10 @@ const UserHeader = () => {
     >
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          <Link style={{ color: 'inherit', textDecoration: 'inherit' }}>
+          <Link
+            to={'tasks'}
+            style={{ color: 'inherit', textDecoration: 'inherit' }}
+          >
             Code Moodle
           </Link>
         </Typography>
