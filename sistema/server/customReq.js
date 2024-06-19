@@ -122,6 +122,19 @@ router.get('/taskInfo', (req, res) => {
   );
 });
 
+router.get('/generalStudentInfo', (req, res) => {
+  db.query(
+    `SELECT studenti.*,skolas.tips ,skolas.nosaukums as "skola" from studenti inner join skolas on studenti.skolas_id = skolas.skolas_id;`,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
 router.get('/singleTask/:userID/:moduleID/:taskID', (req, res) => {
   const userID = req.params.userID;
   const moduleID = req.params.moduleID;
@@ -181,6 +194,37 @@ router.get('/comments/:subID', (req, res) => {
         res.status(500).json({ message: err.message });
       } else {
         res.send(result);
+      }
+    }
+  );
+});
+
+router.post('/studentModules', async (req, res) => {
+  const keys = Object.keys(req.body).toString();
+  const values = Object.values(req.body);
+
+  db.query(
+    `select studenti_id from moduli_studenti where studenti_id = ? and moduli_id = ?`,
+    [req.body.studenti_id, req.body.moduli_id],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message });
+        console.log(err);
+      } else {
+        if (result.length == 0) {
+          db.query(
+            `INSERT INTO moduli_studenti (${keys}) VALUES (?)`,
+            [values],
+            (err, result) => {
+              if (err) {
+                res.status(500).json({ message: err.message });
+                console.log(err);
+              } else {
+                res.json({ message: 'Added entry' });
+              }
+            }
+          );
+        }
       }
     }
   );

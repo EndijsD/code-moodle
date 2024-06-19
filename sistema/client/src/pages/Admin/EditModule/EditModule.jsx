@@ -125,7 +125,12 @@ const EditModule = () => {
         <Typography>Servera kļūda!</Typography>
       ) : input != '' && tasks != null ? (
         <Box sx={{ width: '100%' }}>
-          <TextField fullWidth value={input} onChange={handleChange} />
+          <TextField
+            fullWidth
+            value={input}
+            placeholder="Moduļa nosaukums"
+            onChange={handleChange}
+          />
           <Typography
             variant="h4"
             sx={{
