@@ -44,7 +44,7 @@ const Assign = () => {
       getItemAriaLabel: (type) =>
         `Iet uz ${type == 'next' ? 'nākamo' : 'iepriekšējo'} lappusi`,
     },
-    noRowsLabel: 'Nav iesniegumu ko vērtēt',
+    noRowsLabel: 'Nav datu!',
   });
 
   const [status, setStatus] = useState({
