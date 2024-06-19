@@ -91,7 +91,6 @@ const StudentProfiles = () => {
       .get(`${url}custom/generalStudentInfo`)
       .then(function (res) {
         setStudents(res.data);
-        console.log(res.data);
         setStatus({ pending: false, error: false, success: false });
       })
       .catch(function (err) {
