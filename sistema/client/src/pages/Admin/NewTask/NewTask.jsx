@@ -17,6 +17,7 @@ import { Check, Close } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { languages } from '../../../languages';
 import { DropzoneArea } from 'mui-file-dropzone';
+import Title from '../../../components/General/Title';
 
 const NewTask = () => {
   const nav = useNavigate();
@@ -112,8 +113,10 @@ const NewTask = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'column',
       }}
     >
+      <Title text="Jauns uzdevums" />
       <S.Form onSubmit={handleSubmit}>
         <TextField
           error={fieldValid.topic}

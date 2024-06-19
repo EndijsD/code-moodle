@@ -18,6 +18,7 @@ import { Check, Close } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { languages } from '../../../languages';
 import { DropzoneArea } from 'mui-file-dropzone';
+import Title from '../../../components/General/Title';
 
 const EditTask = () => {
   const { id } = useParams();
@@ -124,8 +125,10 @@ const EditTask = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'column',
       }}
     >
+      <Title text="Uzdevuma rediģēšana" />
       {data != undefined ? (
         <S.Form onSubmit={handleSubmit}>
           <TextField

@@ -88,7 +88,7 @@ const NewModule = () => {
 
   return (
     <>
-      <Title text="Moduļa rediģēšana" />
+      <Title text="Jauns modulis" />
       {status.pending ? (
         <CircularProgress />
       ) : status.error ? (
