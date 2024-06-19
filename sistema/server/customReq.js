@@ -23,8 +23,9 @@ router.get('/modules_tasks/:id', (req, res) => {
   const id = req.params.id;
 
   db.query(
-    `select m.nosaukums as m_nos, u.uzdevumi_id, tema, u.nosaukums as u_nos, u.punkti as u_punkti, i.punkti as i_punkti, m.moduli_id
-    from moduli_studenti ms
+    `select i.iesniegumi_id, concat(s.vards, " ", s.uzvards) as vardsUzvards, m.nosaukums as m_nos, u.uzdevumi_id, tema, u.nosaukums as u_nos, u.punkti as u_punkti, i.punkti as i_punkti, m.moduli_id
+    from studenti s
+    join moduli_studenti ms on ms.studenti_id = s.studenti_id
     join moduli m on m.moduli_id = ms.moduli_id
     join moduli_uzdevumi mu on mu.moduli_id = m.moduli_id
     join uzdevumi u on u.uzdevumi_id = mu.uzdevumi_id
@@ -47,6 +48,9 @@ router.get('/modules_tasks/:id', (req, res) => {
           const moduleID = el.moduli_id;
           delete el.moduli_id;
 
+          const fullName = el.vardsUzvards;
+          delete el.vardsUzvards;
+
           if (existingItem) {
             existingItem.p_kopa += el.u_punkti;
             existingItem.i_kopa += el.i_punkti;
@@ -57,6 +61,7 @@ router.get('/modules_tasks/:id', (req, res) => {
               m_nos: moduleName,
               p_kopa: taskPoints,
               i_kopa: gottenPoints,
+              vardsUzvards: fullName,
               uzdevumi: [{ ...el }],
             });
 
@@ -124,7 +129,10 @@ router.get('/taskInfo', (req, res) => {
 
 router.get('/generalStudentInfo', (req, res) => {
   db.query(
-    `SELECT studenti.*,skolas.tips ,skolas.nosaukums as "skola" from studenti inner join skolas on studenti.skolas_id = skolas.skolas_id where studenti.akceptets = 1;`,
+    `SELECT studenti.*, skolas.tips, skolas.nosaukums as skola
+    from studenti
+    join skolas on studenti.skolas_id = skolas.skolas_id
+    where studenti.akceptets = 1;`,
     (err, result) => {
       if (err) {
         res.status(500).json({ message: err.message });

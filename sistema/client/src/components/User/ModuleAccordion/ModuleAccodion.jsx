@@ -13,6 +13,8 @@ const ModuleAccordion = ({
   max_points,
   gotten_points,
   moduleID,
+  isTeacher,
+  studentIDFromTeacher,
 }) => {
   return (
     <Accordion sx={{ width: '100%' }}>
@@ -50,6 +52,9 @@ const ModuleAccordion = ({
               moduleID={moduleID}
               gotten_points={task.i_punkti}
               max_points={task.u_punkti}
+              subID={task.iesniegumi_id}
+              isTeacher={isTeacher}
+              studentIDFromTeacher={studentIDFromTeacher}
             />
           );
         })}

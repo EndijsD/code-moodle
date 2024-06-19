@@ -32,7 +32,7 @@ const SingleTask = () => {
         axios
           .patch(url + 'iesniegumi/' + data.iesniegumi_id, {
             atbilde: data.atbilde,
-            punkti: NULL,
+            punkti: null,
           })
           .then((res) => {
             if (res.statusText == 'OK') {

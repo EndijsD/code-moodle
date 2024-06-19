@@ -2,15 +2,16 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import url from '../../../../url';
 import {
+  Box,
   Button,
+  ButtonGroup,
   Card,
   CircularProgress,
   Grid,
-  Paper,
   TextField,
   Typography,
 } from '@mui/material';
-import { Add, Edit } from '@mui/icons-material';
+import { Add, Delete, Edit } from '@mui/icons-material';
 import Title from '../../../components/General/Title';
 import { Link } from 'react-router-dom';
 
@@ -48,6 +49,17 @@ const Modules = () => {
     setSearch(e.target.value);
   };
 
+  const handleDelete = (moduleID, arrEl) => {
+    axios.delete(url + 'moduli/' + moduleID).then((res) => {
+      if (res.statusText == 'OK') {
+        const temp = [...data];
+        temp.splice(arrEl, 1);
+        setData(temp);
+        setDisplay(temp);
+      }
+    });
+  };
+
   return (
     <>
       <Title text="Moduļi" />
@@ -68,23 +80,36 @@ const Modules = () => {
                   sx={{
                     display: 'flex',
                     height: '15vh',
-                    pt: 2,
                     flexDirection: 'column',
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Typography
-                    sx={{
-                      textAlign: 'center',
-                    }}
-                  >
-                    {item.nosaukums}
-                  </Typography>
-                  <Link to={`edit/${item.moduli_id}`}>
-                    <Button variant="outlined" sx={{ width: '100%' }}>
-                      Rediģēt <Edit />
+                  <Box sx={{ flex: 1, alignContent: 'center' }}>
+                    <Typography
+                      sx={{
+                        textAlign: 'center',
+                      }}
+                    >
+                      {item.nosaukums}
+                    </Typography>
+                  </Box>
+                  <ButtonGroup sx={{ width: '100%' }}>
+                    <Button
+                      variant="outlined"
+                      sx={{ width: '50%' }}
+                      onClick={() => handleDelete(item.moduli_id, i)}
+                    >
+                      Dzēst <Delete />
                     </Button>
-                  </Link>
+                    <Link
+                      to={`edit/${item.moduli_id}`}
+                      style={{ width: '50%' }}
+                    >
+                      <Button variant="outlined" sx={{ width: '100%' }}>
+                        Rediģēt <Edit />
+                      </Button>
+                    </Link>
+                  </ButtonGroup>
                 </Card>
               </Grid>
             );

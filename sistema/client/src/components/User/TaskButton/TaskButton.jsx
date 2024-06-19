@@ -10,12 +10,23 @@ const TaskButton = ({
   moduleID,
   gotten_points,
   max_points,
+  subID,
+  isTeacher,
+  studentIDFromTeacher,
 }) => {
   const theme = useTheme();
 
   return (
-    <Link to={moduleID + '/' + taskID}>
-      <S.AnimButton>
+    <Link
+      to={
+        isTeacher && subID
+          ? '/admin/evaluate/' + subID
+          : isTeacher && !subID
+          ? '/admin/studentProfiles/' + studentIDFromTeacher
+          : moduleID + '/' + taskID
+      }
+    >
+      <S.AnimButton disabled={isTeacher && !subID}>
         <Box
           sx={{
             display: 'flex',

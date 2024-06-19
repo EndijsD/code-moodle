@@ -231,7 +231,7 @@ const EditModule = () => {
                   >
                     <Card
                       sx={{
-                        boxShadow: 6,
+                        boxShadow: 1,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -260,7 +260,7 @@ const EditModule = () => {
               })}
           </Grid>
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={handleSubmit}
             fullWidth
             sx={{ mt: 4 }}

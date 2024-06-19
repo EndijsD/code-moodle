@@ -35,7 +35,6 @@ const NewModule = () => {
     axios
       .get(`${url}uzdevumi/`)
       .then(function (res) {
-        console.log(res.data);
         setAllTasks(res.data);
         for (let i = 0; i < res.data.length; i++) {
           tempArr[i] = [res.data[i].uzdevumi_id, 'off'];
@@ -201,7 +200,7 @@ const NewModule = () => {
                   >
                     <Card
                       sx={{
-                        boxShadow: 6,
+                        boxShadow: 1,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -230,7 +229,7 @@ const NewModule = () => {
               })}
           </Grid>
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={handleSubmit}
             fullWidth
             sx={{ mt: 4 }}

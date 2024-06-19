@@ -114,7 +114,6 @@ const router = createBrowserRouter([
           //   element: <Profile />,
           // },
           {
-            index: true,
             path: '*',
             element: <NotFound link={'tasks'} />,
           },
@@ -155,6 +154,27 @@ const router = createBrowserRouter([
             ],
           },
           {
+            path: 'modules',
+            children: [
+              {
+                index: true,
+                element: <Modules />,
+              },
+              {
+                path: 'edit/:id',
+                element: <EditModule />,
+              },
+              {
+                path: 'create',
+                element: <NewModule />,
+              },
+            ],
+          },
+          {
+            path: 'assign',
+            element: <Assign />,
+          },
+          {
             path: 'evaluate',
             children: [
               {
@@ -168,126 +188,29 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: 'assign',
-            children: [
-              {
-                index: true,
-                element: <Assign />,
-              },
-            ],
-          },
-          {
-            path: 'modules',
-            children: [
-              {
-                index: true,
-                element: <Modules />,
-              },
-              {
-                path: 'edit/:id',
-                element: <EditModule />,
-              },
-              {
-                path: 'create',
-                element: <NewModule />,
-              },
-            ],
-          },
-          {
-            path: 'assign',
-            children: [
-              {
-                index: true,
-                element: <Assign />,
-              },
-            ],
-          },
-          {
-            path: 'modules',
-            children: [
-              {
-                index: true,
-                element: <Modules />,
-              },
-              {
-                path: 'edit/:id',
-                element: <EditModule />,
-              },
-              {
-                path: 'create',
-                element: <NewModule />,
-              },
-            ],
-          },
-          {
-            path: 'assign',
-            children: [
-              {
-                index: true,
-                element: <Assign />,
-              },
-            ],
-          },
-          {
-            path: 'modules',
-            children: [
-              {
-                index: true,
-                element: <Modules />,
-              },
-              {
-                path: 'edit/:id',
-                element: <EditModule />,
-              },
-              {
-                path: 'create',
-                element: <NewModule />,
-              },
-            ],
-          },
-          {
-            path: 'assign',
-            children: [
-              {
-                index: true,
-                element: <Assign />,
-              },
-            ],
-          },
-          {
-            path: 'modules',
-            children: [
-              {
-                index: true,
-                element: <Modules />,
-              },
-              {
-                path: 'edit/:id',
-                element: <EditModule />,
-              },
-              {
-                path: 'create',
-                element: <NewModule />,
-              },
-            ],
-          },
-          {
             path: 'studentProfiles',
             children: [
               {
                 index: true,
                 element: <StudentProfiles />,
               },
+              {
+                path: ':studentID',
+                element: <Tasks />,
+              },
             ],
           },
           {
-            index: true,
             path: '*',
             element: <NotFound link={'students'} />,
           },
         ],
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);
 

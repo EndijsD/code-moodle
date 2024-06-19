@@ -109,27 +109,11 @@ const StudentProfiles = () => {
   return (
     <>
       {status.pending ? (
-        <Box
-          sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <Box sx={{ height: '100%', alignContent: 'center' }}>
           <CircularProgress />
         </Box>
       ) : status.error ? (
-        <Box
-          sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <Box sx={{ height: '100%', alignContent: 'center' }}>
           <Typography>Servera kļūda!</Typography>
         </Box>
       ) : students != null ? (

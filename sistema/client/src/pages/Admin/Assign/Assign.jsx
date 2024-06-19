@@ -45,6 +45,10 @@ const Assign = () => {
         `Iet uz ${type == 'next' ? 'nākamo' : 'iepriekšējo'} lappusi`,
     },
     noRowsLabel: 'Nav datu!',
+    footerRowSelected: (count) =>
+      count !== 1
+        ? `${count.toLocaleString()} rindas izvēlētas`
+        : `${count.toLocaleString()} rinda izvēlēta`,
   });
 
   const [status, setStatus] = useState({
