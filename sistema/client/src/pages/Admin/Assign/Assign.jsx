@@ -112,7 +112,6 @@ const Assign = () => {
   };
 
   const handleSubmit = () => {
-    console.log(selected.students[0] + '  ' + selected.modules[0]);
     for (let i = 0; i < selected.students.length; i++) {
       for (let k = 0; k < selected.modules.length; k++) {
         let postObj = {

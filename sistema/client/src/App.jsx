@@ -20,6 +20,7 @@ import Modules from './pages/Admin/Modules';
 import Assign from './pages/Admin/Assign';
 import NewModule from './pages/Admin/NewModule';
 import EditModule from './pages/Admin/EditModule';
+import StudentProfiles from './pages/Admin/StudentProfiles/StudentProfiles';
 
 const store = createStore({
   authName: '_auth',
@@ -267,6 +268,15 @@ const router = createBrowserRouter([
               {
                 path: 'create',
                 element: <NewModule />,
+              },
+            ],
+          },
+          {
+            path: 'studentProfiles',
+            children: [
+              {
+                index: true,
+                element: <StudentProfiles />,
               },
             ],
           },

@@ -124,7 +124,7 @@ router.get('/taskInfo', (req, res) => {
 
 router.get('/generalStudentInfo', (req, res) => {
   db.query(
-    `SELECT studenti.*,skolas.tips ,skolas.nosaukums as "skola" from studenti inner join skolas on studenti.skolas_id = skolas.skolas_id;`,
+    `SELECT studenti.*,skolas.tips ,skolas.nosaukums as "skola" from studenti inner join skolas on studenti.skolas_id = skolas.skolas_id where studenti.akceptets = 1;`,
     (err, result) => {
       if (err) {
         res.status(500).json({ message: err.message });
