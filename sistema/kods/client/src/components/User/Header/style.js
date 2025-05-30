@@ -14,7 +14,6 @@ export const HeaderItemButton = {
 
 export const LogOut = {
   background: '#fff',
-  color: theme.palette.text.primary,
   display: 'inline-flex',
   verticalAlign: 'middle',
   borderRadius: '50px',

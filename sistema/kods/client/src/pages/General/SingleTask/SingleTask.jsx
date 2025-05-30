@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
-import useAxios from '../../../../hooks/useAxios'
+import useAxios from '../../../hooks/useAxios'
 import url from '../../../../url'
 import * as S from './style'
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser'

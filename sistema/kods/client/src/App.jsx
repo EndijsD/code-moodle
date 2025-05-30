@@ -22,7 +22,7 @@ import NewModule from './pages/Teacher/NewModule'
 import EditModule from './pages/Teacher/EditModule'
 import StudentProfiles from './pages/Teacher/StudentProfiles/StudentProfiles'
 import * as S from './style'
-import { theme } from './theme'
+import { themeStyle } from './theme'
 
 const store = createStore({
   authName: '_auth',
@@ -201,7 +201,7 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-  const theme = createTheme(theme)
+  const theme = createTheme(themeStyle)
 
   return (
     <AuthProvider store={store}>

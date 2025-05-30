@@ -1,4 +1,4 @@
-export const theme = {
+export const themeStyle = {
   palette: {
     mode: 'light',
     primary: {

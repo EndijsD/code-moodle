@@ -29,7 +29,11 @@ const UserHeader = () => {
               </Button>
             </Link>
           ))}
-          <Link style={S.LogOut} to='/' onClick={() => signOut()}>
+          <Link
+            style={{ ...S.LogOut, color: theme.palette.text.primary }}
+            to='/'
+            onClick={() => signOut()}
+          >
             <Logout />
           </Link>
         </Box>
