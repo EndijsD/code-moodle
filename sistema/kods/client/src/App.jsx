@@ -1,71 +1,57 @@
-import { Box, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import Landing from './pages/General/Landing';
-import Login from './pages/General/Login';
-import Register from './pages/General/Register';
-import NotFound from './pages/General/NotFound';
-import createStore from 'react-auth-kit/createStore';
-import AuthProvider from 'react-auth-kit';
-import ProtectedRoute from './ProtectedRoute';
-import SideBar from './components/Admin/SideBar';
-import NewTask from './pages/Admin/NewTask';
-import Bank from './pages/Admin/Bank';
-import Student from './pages/Admin/Student';
-import EditTask from './pages/Admin/EditTask';
-import UserHeader from './components/User/Header';
-import Tasks from './pages/User/Tasks';
-import Evaluate from './pages/Admin/Evaluate';
-import SingleTask from './pages/General/SingleTask';
-import Modules from './pages/Admin/Modules';
-import Assign from './pages/Admin/Assign';
-import NewModule from './pages/Admin/NewModule';
-import EditModule from './pages/Admin/EditModule';
-import StudentProfiles from './pages/Admin/StudentProfiles/StudentProfiles';
+import { Box, createTheme, CssBaseline, ThemeProvider } from '@mui/material'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import Landing from './pages/General/Landing'
+import Login from './pages/General/Login'
+import Register from './pages/General/Register'
+import NotFound from './pages/General/NotFound'
+import createStore from 'react-auth-kit/createStore'
+import AuthProvider from 'react-auth-kit'
+import ProtectedRoute from './ProtectedRoute'
+import SideBar from './components/Teacher/SideBar'
+import NewTask from './pages/Teacher/NewTask'
+import Bank from './pages/Teacher/Bank'
+import Student from './pages/Teacher/Student'
+import EditTask from './pages/Teacher/EditTask'
+import UserHeader from './components/User/Header'
+import Tasks from './pages/User/Tasks'
+import Evaluate from './pages/Teacher/Evaluate'
+import SingleTask from './pages/General/SingleTask'
+import Modules from './pages/Teacher/Modules'
+import Assign from './pages/Teacher/Assign'
+import NewModule from './pages/Teacher/NewModule'
+import EditModule from './pages/Teacher/EditModule'
+import StudentProfiles from './pages/Teacher/StudentProfiles/StudentProfiles'
+import * as S from './style'
+import { theme } from './theme'
 
 const store = createStore({
   authName: '_auth',
   authType: 'cookie',
   cookieDomain: window.location.hostname,
   cookieSecure: false,
-});
+})
 
-const AdminLayout = () => {
+const TeacherLayout = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <SideBar />
-      <Box
-        sx={{
-          m: '32px 10%',
-          display: 'flex',
-          flexDirection: 'column',
-          flex: 1,
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={S.TeacherLayout}>
         <Outlet />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 const UserLayout = () => {
   return (
     <>
       <UserHeader />
-      <Box
-        sx={{
-          m: '32px 10%',
-          display: 'flex',
-          flexDirection: 'column',
-          flex: 1,
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={S.StudentLayout}>
         <Outlet />
       </Box>
     </>
-  );
-};
+  )
+}
 
 const router = createBrowserRouter([
   {
@@ -125,12 +111,12 @@ const router = createBrowserRouter([
     element: <ProtectedRoute role={1} />,
     children: [
       {
-        path: 'admin',
-        element: <AdminLayout />,
+        path: 'teacher',
+        element: <TeacherLayout />,
         children: [
           // {
           // index: true,
-          // element: <AdminHome />,
+          // element: <TeacherHome />,
           // },
           {
             path: 'students',
@@ -212,23 +198,10 @@ const router = createBrowserRouter([
     path: '*',
     element: <NotFound />,
   },
-]);
+])
 
 function App() {
-  const theme = createTheme({
-    palette: {
-      mode: 'light',
-      primary: {
-        main: '#ff4500',
-      },
-      background: {
-        default: '#fdfdfd',
-      },
-    },
-    typography: {
-      fontFamily: '"Prompt", sans-serif',
-    },
-  });
+  const theme = createTheme(theme)
 
   return (
     <AuthProvider store={store}>
@@ -237,6 +210,6 @@ function App() {
         <RouterProvider router={router} />
       </ThemeProvider>
     </AuthProvider>
-  );
+  )
 }
-export default App;
+export default App

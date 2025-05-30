@@ -3,25 +3,26 @@ import {
   Message,
   MessageInput,
   MessageList,
-} from '@chatscope/chat-ui-kit-react';
-import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import { useEffect, useState } from 'react';
-import url from '../../../../url';
-import axios from 'axios';
-import moment from 'moment';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
+} from '@chatscope/chat-ui-kit-react'
+import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css'
+import { useEffect, useState } from 'react'
+import url from '../../../../url'
+import axios from 'axios'
+import moment from 'moment'
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
+import * as S from './style'
 
 const ChatBox = ({ subID }) => {
-  const [comments, setComments] = useState([]);
-  const [message, setMessage] = useState('');
-  const auth = useAuthUser();
+  const [comments, setComments] = useState([])
+  const [message, setMessage] = useState('')
+  const auth = useAuthUser()
 
   useEffect(() => {
     if (subID)
       axios.get(url + 'custom/comments/' + subID).then((response) => {
-        setComments(response.data);
-      });
-  }, [subID]);
+        setComments(response.data)
+      })
+  }, [subID])
 
   const handleSend = () => {
     if (subID) {
@@ -34,7 +35,7 @@ const ChatBox = ({ subID }) => {
         })
         .then((res) => {
           if (res.statusText == 'OK') {
-            setMessage('');
+            setMessage('')
             setComments([
               ...comments,
               {
@@ -42,27 +43,15 @@ const ChatBox = ({ subID }) => {
                 ir_students: auth.userType == 1 ? 0 : 1,
                 datums: moment().format('YYYY-MM-DD HH:mm:ss'),
               },
-            ]);
+            ])
           }
-        });
+        })
     }
-  };
+  }
 
   return (
-    <ChatContainer
-      style={{
-        height: 300,
-        maxWidth: 700,
-        boxShadow: '0 0 1px #363537',
-        borderRadius: '10px',
-      }}
-    >
-      <MessageList
-        style={{
-          borderTopLeftRadius: '10px',
-          borderTopRightRadius: '10px',
-        }}
-      >
+    <ChatContainer style={S.ChatContainerStyle}>
+      <MessageList style={S.MessageStyle}>
         {comments.map((comment, i) => (
           <Message
             key={i}
@@ -87,16 +76,13 @@ const ChatBox = ({ subID }) => {
       <MessageInput
         value={message}
         onChange={(val) => setMessage(val)}
-        style={{
-          borderBottomLeftRadius: '10px',
-          borderBottomRightRadius: '10px',
-        }}
-        placeholder="Ziņa..."
+        style={S.MessageStyle}
+        placeholder='Ziņa...'
         attachButton={false}
         onSend={handleSend}
       />
     </ChatContainer>
-  );
-};
+  )
+}
 
-export default ChatBox;
+export default ChatBox

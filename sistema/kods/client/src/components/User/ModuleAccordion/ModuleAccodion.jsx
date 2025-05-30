@@ -3,9 +3,10 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
-} from '@mui/material';
-import { ExpandMore } from '@mui/icons-material';
-import TaskButton from '../TaskButton';
+} from '@mui/material'
+import { ExpandMore } from '@mui/icons-material'
+import TaskButton from '../TaskButton'
+import * as S from './style'
 
 const ModuleAccordion = ({
   title,
@@ -18,19 +19,7 @@ const ModuleAccordion = ({
 }) => {
   return (
     <Accordion sx={{ width: '100%' }}>
-      <AccordionSummary
-        expandIcon={<ExpandMore />}
-        sx={{
-          '.MuiAccordionSummary-content': {
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            mr: '16px',
-          },
-          '.MuiAccordionSummary-content.Mui-expanded': {
-            m: '20px 16px 0 0',
-          },
-        }}
-      >
+      <AccordionSummary expandIcon={<ExpandMore />} sx={S.AccordionSummary}>
         <Typography sx={{ fontWeight: '500', fontSize: 30 }}>
           {title}
         </Typography>
@@ -56,11 +45,11 @@ const ModuleAccordion = ({
               isTeacher={isTeacher}
               studentIDFromTeacher={studentIDFromTeacher}
             />
-          );
+          )
         })}
       </AccordionDetails>
     </Accordion>
-  );
-};
+  )
+}
 
-export default ModuleAccordion;
+export default ModuleAccordion

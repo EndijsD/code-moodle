@@ -1,12 +1,12 @@
-import { styled, alpha } from '@mui/system';
-import { Box, Button, Paper, TextField, Typography } from '@mui/material';
+import { styled, alpha } from '@mui/system'
+import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 
 export const MainBox = styled(Box)({
   display: 'flex',
   justifyContent: 'center',
   flex: 1,
   alignItems: 'center',
-});
+})
 
 export const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: '2rem 0',
@@ -38,27 +38,27 @@ export const StyledPaper = styled(Paper)(({ theme }) => ({
   [theme.breakpoints.down(400)]: {
     padding: 0,
   },
-}));
+}))
 
 export const Form = styled('form')({
   display: 'flex',
   flexDirection: 'column',
   gap: '2rem',
-});
+})
 
 export const Title = styled(Typography)(({ theme }) => ({
   fontSize: '2em',
   fontWeight: 800,
   textAlign: 'center',
   color: theme.palette.mode == 'light' && theme.palette.grey[800],
-}));
+}))
 
 export const SubTitle = styled(Typography)(({ theme }) => ({
   background: alpha(theme.palette.primary.main, 0.1),
   padding: '1rem 2rem',
   borderRadius: 5,
   color: theme.palette.mode == 'light' && theme.palette.grey[700],
-}));
+}))
 
 export const InputField = styled(TextField)(({ theme }) => ({
   width: '80%',
@@ -67,7 +67,7 @@ export const InputField = styled(TextField)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     width: '100%',
   },
-}));
+}))
 
 export const SubmitButton = styled(Button)(({ theme }) => ({
   borderRadius: 50,
@@ -78,7 +78,7 @@ export const SubmitButton = styled(Button)(({ theme }) => ({
   [theme.breakpoints.down(400)]: {
     width: '100%',
   },
-}));
+}))
 
 export const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -94,17 +94,19 @@ export const StyledBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     background: 'none',
   },
-}));
+}))
 
 export const ButtonBox = styled(Box)({
   padding: 20,
   display: 'flex',
   flexDirection: 'column',
   gap: '1rem',
-});
+})
 
 export const Info = styled(Typography)({
   display: 'inline',
   verticalAlign: 'super',
   fontSize: 12,
-});
+})
+
+export const FormControlSx = { width: '80%', alignSelf: 'center' }

@@ -1,6 +1,6 @@
-import { Box, Typography, useTheme } from '@mui/material';
-import { Link } from 'react-router-dom';
-import * as S from './style';
+import { Box, Typography, useTheme } from '@mui/material'
+import { Link } from 'react-router-dom'
+import * as S from './style'
 
 const TaskButton = ({
   i,
@@ -14,68 +14,61 @@ const TaskButton = ({
   isTeacher,
   studentIDFromTeacher,
 }) => {
-  const theme = useTheme();
+  const theme = useTheme()
 
   return (
     <Link
       to={
         isTeacher && subID
-          ? '/admin/evaluate/' + subID
+          ? '/teacher/evaluate/' + subID
           : isTeacher && !subID
-          ? '/admin/studentProfiles/' + studentIDFromTeacher
+          ? '/teacher/studentProfiles/' + studentIDFromTeacher
           : moduleID + '/' + taskID
       }
     >
       <S.AnimButton disabled={isTeacher && !subID}>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}
-        >
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box sx={S.Main}>
+          <Box sx={S.ColContainer}>
             <Typography
               sx={{
                 color: theme.palette.text.secondary,
-                fontSize: 12,
-                textWrap: 'nowrap',
+                ...S.itemText,
               }}
             >
               Nr. p. k.
             </Typography>
-            <Typography sx={{ fontWeight: '500' }}>{i}</Typography>
+            <Typography sx={S.itemText}>{i}</Typography>
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box sx={S.ColContainer}>
             <Typography
               sx={{ color: theme.palette.text.secondary, fontSize: 12 }}
             >
               Nosaukums
             </Typography>
-            <Typography sx={{ fontWeight: '500' }}>{title}</Typography>
+            <Typography sx={S.itemText}>{title}</Typography>
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box sx={S.ColContainer}>
             <Typography
               sx={{ color: theme.palette.text.secondary, fontSize: 12 }}
             >
               Tēma
             </Typography>
-            <Typography sx={{ fontWeight: '500' }}>{topic}</Typography>
+            <Typography sx={S.itemText}>{topic}</Typography>
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box sx={S.ColContainer}>
             <Typography
               sx={{ color: theme.palette.text.secondary, fontSize: 12 }}
             >
               Punkti
             </Typography>
-            <Typography sx={{ fontWeight: '500' }}>
+            <Typography sx={S.itemText}>
               {(gotten_points || 0) + ' / ' + max_points}
             </Typography>
           </Box>
         </Box>
       </S.AnimButton>
     </Link>
-  );
-};
+  )
+}
 
-export default TaskButton;
+export default TaskButton
