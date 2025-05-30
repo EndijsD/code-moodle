@@ -21,6 +21,8 @@ import Assign from './pages/Teacher/Assign'
 import NewModule from './pages/Teacher/NewModule'
 import EditModule from './pages/Teacher/EditModule'
 import StudentProfiles from './pages/Teacher/StudentProfiles/StudentProfiles'
+import * as S from './style'
+import { theme } from './theme'
 
 const store = createStore({
   authName: '_auth',
@@ -33,15 +35,7 @@ const TeacherLayout = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <SideBar />
-      <Box
-        sx={{
-          m: '32px 10%',
-          display: 'flex',
-          flexDirection: 'column',
-          flex: 1,
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={S.TeacherLayout}>
         <Outlet />
       </Box>
     </Box>
@@ -52,15 +46,7 @@ const UserLayout = () => {
   return (
     <>
       <UserHeader />
-      <Box
-        sx={{
-          m: '32px 10%',
-          display: 'flex',
-          flexDirection: 'column',
-          flex: 1,
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={S.StudentLayout}>
         <Outlet />
       </Box>
     </>
@@ -215,20 +201,7 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-  const theme = createTheme({
-    palette: {
-      mode: 'light',
-      primary: {
-        main: '#ff4500',
-      },
-      background: {
-        default: '#fdfdfd',
-      },
-    },
-    typography: {
-      fontFamily: '"Prompt", sans-serif',
-    },
-  })
+  const theme = createTheme(theme)
 
   return (
     <AuthProvider store={store}>

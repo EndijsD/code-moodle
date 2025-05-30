@@ -1,27 +1,11 @@
 import { Typography, useMediaQuery, useTheme } from '@mui/material'
 import { Sidebar, Menu, MenuItem, sidebarClasses } from 'react-pro-sidebar'
 import { Link, useLocation } from 'react-router-dom'
-import {
-  Home,
-  People,
-  Assignment,
-  Create,
-  Logout,
-  AssignmentInd,
-  Widgets,
-  Groups,
-} from '@mui/icons-material'
+import { Logout } from '@mui/icons-material'
 import { useState } from 'react'
 import useSignOut from 'react-auth-kit/hooks/useSignOut'
-const links = [
-  // { path: '', title: 'Sākumlapa', icon: <Home /> },
-  { path: 'students', title: 'Pieņemšana', icon: <People /> },
-  { path: 'bank', title: 'Uzdevumu Banka', icon: <Assignment /> },
-  { path: 'modules', title: 'Moduļi', icon: <Widgets /> },
-  { path: 'assign', title: 'Uzdošana', icon: <AssignmentInd /> },
-  { path: 'evaluate', title: 'Vērtēšana', icon: <Create /> },
-  { path: 'studentProfiles', title: 'Studenti', icon: <Groups /> },
-]
+import * as S from './style'
+import { links } from './links'
 
 const SideBar = () => {
   const [collapsed, setCollapsed] = useState(true)
@@ -48,13 +32,7 @@ const SideBar = () => {
       onMouseEnter={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
       backgroundColor=''
-      style={{
-        background: 'linear-gradient(45deg, orange, orangered)',
-        color: 'white',
-        height: '100vh',
-        position: 'sticky',
-        top: 0,
-      }}
+      style={S.SideBarStyle}
       rootStyles={{
         [`.${sidebarClasses.container}`]: {
           display: 'flex',

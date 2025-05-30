@@ -14,19 +14,7 @@ import useSignIn from 'react-auth-kit/hooks/useSignIn'
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
 import FormError from '../../../components/General/FormError'
-
-const initialValues = {
-  email: '',
-  password: '',
-}
-
-const errorMes = {
-  email: 'Epasta lauks nav aizpildīts',
-  password: 'Paroles lauks nav aizpildīts',
-  wrong: 'Nepareizs epasts / parole',
-  error: 'Servera problēma',
-  notAccepted: 'Jūsu konts vēl nav apstiprināts',
-}
+import { errorMes, initialValues } from '../../../data/General/LoginData'
 
 const Login = () => {
   const signIn = useSignIn()
@@ -176,13 +164,7 @@ const Login = () => {
               )}
             </S.button>
 
-            <Button
-              sx={{
-                mt: '1rem',
-                alignSelf: 'center',
-              }}
-              onClick={() => nav('/register')}
-            >
+            <Button sx={S.ButtonSx} onClick={() => nav('/register')}>
               Nav konts? Reģistrējies
             </Button>
           </S.Form>
