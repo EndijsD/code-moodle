@@ -68,7 +68,7 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    element: <ProtectedRoute role={0} />,
+    element: <ProtectedRoute role='students' />,
     children: [
       {
         path: '/user',
@@ -108,7 +108,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <ProtectedRoute role={1} />,
+    element: <ProtectedRoute role='skolotajs' />,
     children: [
       {
         path: 'teacher',

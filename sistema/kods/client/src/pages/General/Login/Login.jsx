@@ -8,7 +8,6 @@ import {
 import { useEffect, useState } from 'react'
 import * as S from './style'
 import { useNavigate } from 'react-router-dom'
-import url from '../../../../url'
 import axios from 'axios'
 import useSignIn from 'react-auth-kit/hooks/useSignIn'
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
@@ -28,15 +27,15 @@ const Login = () => {
   const nav = useNavigate()
 
   //Ja lietotājs ir ielogojies, tad lietotājs tiek aizvests atpakaļ uz sava lietotāja tipa sākuma lapu
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (auth.userType == 0) {
-        nav('/user/tasks')
-      } else if (auth.userType == 1) {
-        nav('/teacher/students')
-      }
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     if (auth.userType == 0) {
+  //       nav('/user/tasks')
+  //     } else if (auth.userType == 1) {
+  //       nav('/teacher/students')
+  //     }
+  //   }
+  // }, [])
 
   const handleClickShowPassword = () =>
     setShowPassword((showPassword) => !showPassword)
@@ -61,29 +60,16 @@ const Login = () => {
 
     if (!isAnyElEmpty) {
       try {
-        const res = await axios.post(`${url}auth/login`, form)
-        if (res.data.accessToken) {
-          if (
-            signIn({
-              auth: {
-                token: res.data.accessToken,
-              },
-              userState: {
-                userType: res.data.userType,
-                userID: res.data.userID,
-              },
-            })
-          ) {
-            if (res.data.userType == 0) {
-              nav('/user/tasks')
-            } else if (res.data.userType == 1) {
-              nav('/teacher/students')
-            }
-          }
-        } else if (res.data.userType == 0) {
-          setResponse('notAccepted')
-        } else if (res.data.problem) {
-          setResponse('wrong')
+        const res = await axios.post(`auth/login`, form)
+
+        if (
+          signIn({
+            auth: { token: res.data.accessToken },
+            userState: res.data,
+          })
+        ) {
+          if (res.data.loma == 'students') nav('/user/tasks')
+          else if (res.data.loma == 'skolotajs') nav('/teacher/students')
         }
       } catch (err) {
         setResponse('error')
