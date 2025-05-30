@@ -1,7 +1,7 @@
-import * as S from './style';
+import * as S from './style'
 
-const AdminHome = () => {
-  return <p>AdminHome</p>;
-};
+const TeacherHome = () => {
+  return <p>TeacherHome</p>
+}
 
-export default AdminHome;
+export default TeacherHome

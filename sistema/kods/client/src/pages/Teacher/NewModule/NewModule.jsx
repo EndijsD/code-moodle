@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import url from '../../../../url';
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import url from '../../../../url'
 import {
   Box,
   Button,
@@ -9,85 +9,79 @@ import {
   Checkbox,
   CircularProgress,
   Grid,
-  Paper,
   TextField,
   Typography,
-} from '@mui/material';
-import Title from '../../../components/General/Title';
+} from '@mui/material'
+import Title from '../../../components/General/Title'
+import * as S from './style'
+import { initStatus } from '../../../data/initStatus'
+import { initSearch } from '../../../data/Teacher/EditModule/data'
 
 const NewModule = () => {
-  const nav = useNavigate();
-  const [search, setSearch] = useState({
-    tema: '',
-    nos: '',
-    valoda: '',
-    punkti: '',
-  });
-  const [input, setInput] = useState('');
-  const [allTasks, setAllTasks] = useState(null);
-  const [checkbox, setCheckbox] = useState(null);
-  const [status, setStatus] = useState({
-    pending: true,
-    error: false,
-  });
-  let tempArr = [];
+  const nav = useNavigate()
+  const [search, setSearch] = useState(initSearch)
+  const [input, setInput] = useState('')
+  const [allTasks, setAllTasks] = useState(null)
+  const [checkbox, setCheckbox] = useState(null)
+  const [status, setStatus] = useState(initStatus)
+  let tempArr = []
   const fetchData = () => {
     axios
       .get(`${url}uzdevumi/`)
       .then(function (res) {
-        setAllTasks(res.data);
+        setAllTasks(res.data)
         for (let i = 0; i < res.data.length; i++) {
-          tempArr[i] = [res.data[i].uzdevumi_id, 'off'];
+          tempArr[i] = [res.data[i].uzdevumi_id, 'off']
         }
-        setStatus({ pending: false, error: false });
-        setCheckbox(tempArr);
+        setStatus({ pending: false, error: false })
+        setCheckbox(tempArr)
       })
       .catch(function (error) {
-        console.log(error);
-        setStatus({ pending: false, error: true });
-      });
-  };
+        console.log(error)
+        setStatus({ pending: false, error: true })
+      })
+  }
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   const handleChange = (e) => {
-    setInput(e.target.value);
-  };
+    setInput(e.target.value)
+  }
 
   const handleSearchChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setSearch({
       ...search,
       [name]: value,
-    });
-  };
+    })
+  }
 
   const handleCheckbox = (e) => {
-    let { value, name } = e.target;
-    let temp = [...checkbox];
-    temp[Number(name)][1] = value == 'on' ? 'off' : 'on';
-    setCheckbox(temp);
-  };
+    let { value, name } = e.target
+    let temp = [...checkbox]
+    temp[Number(name)][1] = value == 'on' ? 'off' : 'on'
+    setCheckbox(temp)
+  }
 
   const handleSubmit = () => {
-    let newId;
+    let newId
     axios.post(`${url}moduli`, { nosaukums: input }).then(function (res) {
-      newId = res.data.id;
+      newId = res.data.id
       for (let i = 0; i < allTasks.length; i++) {
         if (checkbox[i][1] == 'on') {
-          let temp = { uzdevumi_id: checkbox[i][0], moduli_id: newId };
-          axios.post(`${url}moduli_uzdevumi`, temp);
+          let temp = { uzdevumi_id: checkbox[i][0], moduli_id: newId }
+          axios.post(`${url}moduli_uzdevumi`, temp)
         }
       }
-      nav('/admin/modules');
-    });
-  };
+      nav('/teacher/modules')
+    })
+  }
 
   return (
     <>
-      <Title text="Jauns modulis" />
+      <Title text='Jauns modulis' />
       {status.pending ? (
         <CircularProgress />
       ) : status.error ? (
@@ -97,65 +91,43 @@ const NewModule = () => {
           <TextField
             fullWidth
             value={input}
-            placeholder="Moduļa nosaukums"
+            placeholder='Moduļa nosaukums'
             onChange={handleChange}
           />
-          <Typography
-            variant="h4"
-            sx={{
-              textAlign: 'center',
-              my: 4,
-              fontWeight: 'bold',
-              width: '100%',
-              py: 2,
-              background: 'linear-gradient(45deg, orange, orangered)',
-              color: 'background.default',
-            }}
-          >
+          <Typography variant='h4' sx={S.TitleSx}>
             Uzdevumi
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography
-              variant="h4"
-              sx={{
-                textAlign: 'center',
-                my: 4,
-                fontWeight: 'bold',
-                width: '20%',
-                py: 2,
-                background: 'linear-gradient(45deg, orange, orangered)',
-                color: 'background.default',
-              }}
-            >
+            <Typography variant='h4' sx={S.Title2Sx}>
               Filtrēšana
             </Typography>
             <TextField
               onChange={handleSearchChange}
               value={search.tema}
-              name="tema"
-              variant="standard"
-              placeholder="Tēma"
+              name='tema'
+              variant='standard'
+              placeholder='Tēma'
             />
             <TextField
               onChange={handleSearchChange}
               value={search.nos}
-              name="nos"
-              variant="standard"
-              placeholder="Uzdevums"
+              name='nos'
+              variant='standard'
+              placeholder='Uzdevums'
             />
             <TextField
               onChange={handleSearchChange}
               value={search.valoda}
-              name="valoda"
-              variant="standard"
-              placeholder="Programmēšanas valoda"
+              name='valoda'
+              variant='standard'
+              placeholder='Programmēšanas valoda'
             />
             <TextField
               onChange={handleSearchChange}
               value={search.punkti}
-              name="punkti"
-              variant="standard"
-              placeholder="Punkti"
+              name='punkti'
+              variant='standard'
+              placeholder='Punkti'
             />
           </Box>
           <Grid container spacing={2}>
@@ -198,17 +170,7 @@ const NewModule = () => {
                           : search.punkti == '' && 'block',
                     }}
                   >
-                    <Card
-                      sx={{
-                        boxShadow: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        minHeight: '20vh',
-                      }}
-                      variant="outlined"
-                    >
+                    <Card sx={S.ItemCard} variant='outlined'>
                       <Checkbox
                         name={`${i}`}
                         value={checkbox[i][1]}
@@ -225,11 +187,11 @@ const NewModule = () => {
                       </Box>
                     </Card>
                   </Grid>
-                );
+                )
               })}
           </Grid>
           <Button
-            variant="contained"
+            variant='contained'
             onClick={handleSubmit}
             fullWidth
             sx={{ mt: 4 }}
@@ -241,7 +203,7 @@ const NewModule = () => {
         <Typography>Nav uzdevumu!</Typography>
       )}
     </>
-  );
-};
+  )
+}
 
-export default NewModule;
+export default NewModule

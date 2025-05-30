@@ -3,6 +3,13 @@ import {
   Button,
   ButtonGroup,
   CircularProgress,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Paper,
   Table,
   TableBody,
@@ -11,70 +18,76 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import url from '../../../../url';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Title from '../../../components/General/Title';
+} from '@mui/material'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import url from '../../../../url'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import Title from '../../../components/General/Title'
+import { MessageContainerSx } from './BankStyle'
 
 const Bank = () => {
   const [fetchState, setFetchState] = useState({
     pending: true,
     failed: false,
-  });
-  const [data, setData] = useState(null);
+  })
+  const [data, setData] = useState(null)
+  const [open, setOpen] = useState(false)
 
   const fetchBankItems = () => {
-    setFetchState({ pending: true, failed: false });
+    setFetchState({ pending: true, failed: false })
     axios
       .get(url + 'uzdevumi')
       .then((response) => {
-        setData(response.data);
+        setData(response.data)
         setFetchState({
           ...fetchState,
           pending: false,
-        });
+        })
       })
       .catch((error) => {
         setFetchState({
           failed: true,
           pending: false,
-        });
-      });
-  };
+        })
+      })
+  }
 
   const deleteTask = (id, itemId) => {
     axios.delete(url + 'uzdevumi/' + id).then((res) => {
-      if (res.statusText == 'OK') {
-        const temp = [...data];
-        temp.splice(itemId, 1);
-        setData(temp);
+      if (res.status == 200) {
+        const temp = [...data]
+        temp.splice(itemId, 1)
+        setData(temp)
       }
-    });
-  };
+    })
+  }
 
   useEffect(() => {
-    fetchBankItems();
-  }, []);
+    fetchBankItems()
+  }, [])
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen)
+  }
 
   return (
     <>
       {fetchState.pending ? (
-        <Box sx={{ height: '100%', alignContent: 'center' }}>
+        <Box sx={MessageContainerSx}>
           <CircularProgress />
         </Box>
       ) : fetchState.failed ? (
-        <Box sx={{ height: '100%', alignContent: 'center' }}>
-          Servera kļūda!
-        </Box>
+        <Box sx={MessageContainerSx}>Servera kļūda!</Box>
       ) : (
         <>
-          <Title text="Uzdevumu Banka" />
-          <Link to="newTask" style={{ marginBottom: 16 }}>
-            <Button variant="contained">Jauns uzdevums</Button>
+          <Title text='Uzdevumu Banka' />
+          <Link to='newTask' style={{ marginBottom: 16 }}>
+            <Button variant='contained' onClick={toggleDrawer(true)}>
+              Jauns uzdevums
+            </Button>
           </Link>
         </>
       )}
@@ -83,11 +96,11 @@ const Bank = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell align="center">Tēma</TableCell>
-                <TableCell align="center">Uzdevuma nosaukum</TableCell>
-                <TableCell align="center">Programmēsanas valoda</TableCell>
-                <TableCell align="center">Punkti</TableCell>
-                <TableCell align="center">Darbības</TableCell>
+                <TableCell align='center'>Tēma</TableCell>
+                <TableCell align='center'>Uzdevuma nosaukum</TableCell>
+                <TableCell align='center'>Programmēsanas valoda</TableCell>
+                <TableCell align='center'>Punkti</TableCell>
+                <TableCell align='center'>Darbības</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -95,12 +108,12 @@ const Bank = () => {
                 data.map((item, i) => {
                   return (
                     <TableRow key={i}>
-                      <TableCell align="center">{item.tema}</TableCell>
-                      <TableCell align="center">{item.nosaukums}</TableCell>
-                      <TableCell align="center">{item.valoda}</TableCell>
-                      <TableCell align="center">{item.punkti}</TableCell>
-                      <TableCell align="center">
-                        <ButtonGroup variant="contained">
+                      <TableCell align='center'>{item.tema}</TableCell>
+                      <TableCell align='center'>{item.nosaukums}</TableCell>
+                      <TableCell align='center'>{item.valoda}</TableCell>
+                      <TableCell align='center'>{item.punkti}</TableCell>
+                      <TableCell align='center'>
+                        <ButtonGroup variant='contained'>
                           <Link to={`editTask/${item.uzdevumi_id}`}>
                             <Button>
                               <EditIcon />
@@ -114,7 +127,7 @@ const Bank = () => {
                         </ButtonGroup>
                       </TableCell>
                     </TableRow>
-                  );
+                  )
                 })}
             </TableBody>
           </Table>
@@ -123,7 +136,7 @@ const Bank = () => {
         !fetchState.pending && <Typography>Nav izveidoti uzdevumi</Typography>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Bank;
+export default Bank

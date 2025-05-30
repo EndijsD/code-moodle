@@ -1,3 +1,5 @@
+import { DataGridSx } from '../../../data/DataGrid/style'
+
 export const loaderBoxSx = {
   width: '100%',
   height: '100%',
@@ -25,12 +27,7 @@ export const dataGridContainerSx = {
 
 export const dataGridSx = {
   height: '100%',
-  '& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-columnHeaderTitleContainer': {
-    justifyContent: 'center',
-  },
+  ...DataGridSx,
 }
 
 export const submitButtonSx = {

@@ -5,26 +5,26 @@ import {
   InputAdornment,
   TextField,
   Typography,
-} from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import useAxios from '../../../../hooks/useAxios';
-import url from '../../../../url';
-import * as S from './style';
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import CodeEditor from '@uiw/react-textarea-code-editor';
-import ChatBox from '../../../components/General/ChatBox';
-import axios from 'axios';
-import moment from 'moment';
+} from '@mui/material'
+import { useNavigate, useParams } from 'react-router-dom'
+import useAxios from '../../../../hooks/useAxios'
+import url from '../../../../url'
+import * as S from './style'
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
+import CodeEditor from '@uiw/react-textarea-code-editor'
+import ChatBox from '../../../components/General/ChatBox'
+import axios from 'axios'
+import moment from 'moment'
 
 const SingleTask = () => {
-  const nav = useNavigate();
-  const auth = useAuthUser();
-  const { moduleID, taskID, subID } = useParams();
+  const nav = useNavigate()
+  const auth = useAuthUser()
+  const { moduleID, taskID, subID } = useParams()
   const linkEnd =
-    auth.userType == 1 ? subID : auth.userID + '/' + moduleID + '/' + taskID;
+    auth.userType == 1 ? subID : auth.userID + '/' + moduleID + '/' + taskID
   const { data, setData, isPending } = useAxios(
     url + 'custom/singleTask/' + linkEnd
-  );
+  )
 
   const handleSubmit = () => {
     if (auth.userType == 0)
@@ -36,9 +36,9 @@ const SingleTask = () => {
           })
           .then((res) => {
             if (res.statusText == 'OK') {
-              nav('/user/tasks');
+              nav('/user/tasks')
             }
-          });
+          })
       } else {
         axios
           .post(url + 'iesniegumi', {
@@ -50,9 +50,9 @@ const SingleTask = () => {
           })
           .then((res) => {
             if (res.statusText == 'OK') {
-              nav('/user/tasks');
+              nav('/user/tasks')
             }
-          });
+          })
       }
     else {
       axios
@@ -61,21 +61,21 @@ const SingleTask = () => {
         })
         .then((res) => {
           if (res.statusText == 'OK') {
-            nav('/admin/evaluate');
+            nav('/teacher/evaluate')
           }
-        });
+        })
     }
-  };
+  }
 
   const isNumeric = (str) => {
-    if (typeof str != 'string') return false;
-    return !isNaN(str) && !isNaN(parseFloat(str));
-  };
+    if (typeof str != 'string') return false
+    return !isNaN(str) && !isNaN(parseFloat(str))
+  }
 
   const setPoints = (val) => {
     if (isNumeric(val.target.value) || val.target.value == '')
-      setData({ ...data, i_punkti: val.target.value });
-  };
+      setData({ ...data, i_punkti: val.target.value })
+  }
 
   return (
     <>
@@ -87,41 +87,41 @@ const SingleTask = () => {
                 <TextField
                   value={data.i_punkti || ''}
                   onChange={setPoints}
-                  variant="standard"
+                  variant='standard'
                   sx={{ width: 60 }}
                   InputProps={{
                     endAdornment: (
-                      <InputAdornment position="end">
+                      <InputAdornment position='end'>
                         / {data.u_punkti}
                       </InputAdornment>
                     ),
                   }}
                 />
               ) : (
-                <Typography variant="h5">
+                <Typography variant='h5'>
                   {(data.i_punkti || 0) + ' / ' + data.u_punkti}
                 </Typography>
               )}
               <Box sx={{ alignSelf: 'center', textAlign: 'center' }}>
-                <Typography variant="h6" color="text.secondary">
+                <Typography variant='h6' color='text.secondary'>
                   {data.tema}
                 </Typography>
                 <Typography
-                  variant="h4"
+                  variant='h4'
                   sx={{ fontWeight: '600', letterSpacing: 5 }}
                 >
                   {data.nosaukums}
                 </Typography>
               </Box>
               <Box>
-                <Button variant="contained" onClick={handleSubmit}>
+                <Button variant='contained' onClick={handleSubmit}>
                   Iesniegt
                 </Button>
               </Box>
             </S.Header>
           </Grid>
           <Grid item xs={1} sx={{ justifySelf: 'center' }}>
-            <Typography variant="h5">Programmas Kods</Typography>
+            <Typography variant='h5'>Programmas Kods</Typography>
             <Box sx={{ height: 300, overflow: 'auto', maxWidth: 700 }}>
               <CodeEditor
                 value={data.atbilde}
@@ -142,7 +142,7 @@ const SingleTask = () => {
             </Box>
           </Grid>
           <Grid item xs={1}>
-            <Typography variant="h5">Komentāri</Typography>
+            <Typography variant='h5'>Komentāri</Typography>
             <ChatBox subID={auth.userType == 1 ? subID : data.iesniegumi_id} />
           </Grid>
           <Grid
@@ -155,7 +155,7 @@ const SingleTask = () => {
               alignItems: !data.piemers && 'center',
             }}
           >
-            <Typography variant="h5">Apraksts</Typography>
+            <Typography variant='h5'>Apraksts</Typography>
             <Typography sx={{ maxWidth: 700 }}>{data.apraksts}</Typography>
             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
               <Box
@@ -175,7 +175,7 @@ const SingleTask = () => {
               xs={1}
               sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
             >
-              <Typography variant="h5">Piemērs</Typography>
+              <Typography variant='h5'>Piemērs</Typography>
               <Box sx={{ height: 300, overflow: 'auto', maxWidth: 700 }}>
                 <CodeEditor
                   disabled
@@ -199,7 +199,7 @@ const SingleTask = () => {
         </Grid>
       )}
     </>
-  );
-};
+  )
+}
 
-export default SingleTask;
+export default SingleTask

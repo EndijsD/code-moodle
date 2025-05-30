@@ -1,6 +1,6 @@
-import { Box, Typography, useTheme } from '@mui/material';
-import { Link } from 'react-router-dom';
-import * as S from './style';
+import { Box, Typography, useTheme } from '@mui/material'
+import { Link } from 'react-router-dom'
+import * as S from './style'
 
 const TaskButton = ({
   i,
@@ -14,15 +14,15 @@ const TaskButton = ({
   isTeacher,
   studentIDFromTeacher,
 }) => {
-  const theme = useTheme();
+  const theme = useTheme()
 
   return (
     <Link
       to={
         isTeacher && subID
-          ? '/admin/evaluate/' + subID
+          ? '/teacher/evaluate/' + subID
           : isTeacher && !subID
-          ? '/admin/studentProfiles/' + studentIDFromTeacher
+          ? '/teacher/studentProfiles/' + studentIDFromTeacher
           : moduleID + '/' + taskID
       }
     >
@@ -75,7 +75,7 @@ const TaskButton = ({
         </Box>
       </S.AnimButton>
     </Link>
-  );
-};
+  )
+}
 
-export default TaskButton;
+export default TaskButton

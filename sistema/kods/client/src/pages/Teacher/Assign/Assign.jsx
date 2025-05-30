@@ -6,30 +6,21 @@ import url from '../../../../url'
 import { DataGrid } from '@mui/x-data-grid'
 import { useNavigate } from 'react-router-dom'
 import DoneIcon from '@mui/icons-material/Done'
+import * as S from './AssignStyle'
+import { LocaleText } from '../../../data/DataGrid/DataGridLocaleText'
 import {
-  loaderBoxSx,
-  sectionTitleSx,
-  dataGridSx,
-  submitButtonSx,
-  dataGridContainerSx,
-  errorBoxSx,
-} from './AssignStyle'
-import { LocaleText } from '../../../data/DataGridLocaleText'
-import { moduleColumns, studentColumns } from '../../../data/Assign'
+  moduleColumns,
+  studentColumns,
+} from '../../../data/Teacher/AssignPage/Assign'
+import { initStatus } from '../../../data/initStatus'
 
 const Assign = () => {
-  const nav = useNavigate()
   const [students, setStudents] = useState(null)
   const [modules, setModules] = useState(null)
   const [selected, setSelected] = useState({ students: [], modules: [] })
   const [localeText, _] = useState(LocaleText)
-  const [containerWidth, setContainerWidth] = useState('100%')
-
-  const [status, setStatus] = useState({
-    pending: true,
-    error: false,
-    success: false,
-  })
+  const [status, setStatus] = useState(initStatus)
+  const nav = useNavigate()
 
   const fetchData = () => {
     axios
@@ -79,46 +70,30 @@ const Assign = () => {
         location.reload()
       }, 1000)
     }
-    nav('/admin/assign')
+    nav('/teacher/assign')
   }
 
   useEffect(() => {
     fetchData()
   }, [])
 
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth
-      if (width < 600) {
-        setContainerWidth('100%')
-      } else if (width < 960) {
-        setContainerWidth('90%')
-      } else {
-        setContainerWidth('80%')
-      }
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
   return (
     <>
       {status.pending ? (
-        <Box sx={loaderBoxSx}>
+        <Box sx={S.loaderBoxSx}>
           <CircularProgress />
         </Box>
       ) : status.error ? (
-        <Box sx={errorBoxSx}>
+        <Box sx={S.errorBoxSx}>
           <Typography>Servera kļūda!</Typography>
         </Box>
       ) : students != null && modules != null ? (
         <>
           <Title text='Moduļu uzdošana' />
-          <Typography variant='h4' sx={sectionTitleSx}>
+          <Typography variant='h4' sx={S.sectionTitleSx}>
             Studenti
           </Typography>
-          <Box sx={dataGridContainerSx}>
+          <Box sx={S.dataGridContainerSx}>
             <DataGrid
               checkboxSelection
               getRowId={getStudentRowId}
@@ -134,14 +109,14 @@ const Assign = () => {
               }}
               pageSizeOptions={[5, 10]}
               localeText={localeText}
-              sx={dataGridSx}
+              sx={S.dataGridSx}
             />
           </Box>
 
-          <Typography variant='h4' sx={sectionTitleSx}>
+          <Typography variant='h4' sx={S.sectionTitleSx}>
             Moduļi
           </Typography>
-          <Box sx={dataGridContainerSx}>
+          <Box sx={S.dataGridContainerSx}>
             <DataGrid
               checkboxSelection
               getRowId={getModuleRowId}
@@ -157,7 +132,7 @@ const Assign = () => {
               }}
               pageSizeOptions={[5, 10]}
               localeText={localeText}
-              sx={dataGridSx}
+              sx={S.dataGridSx}
             />
           </Box>
           <Button
@@ -165,7 +140,7 @@ const Assign = () => {
             variant='contained'
             onClick={handleSubmit}
             fullWidth
-            sx={submitButtonSx}
+            sx={S.submitButtonSx}
           >
             {status.success ? <DoneIcon /> : `Iesniegt`}
           </Button>

@@ -35,3 +35,13 @@ export const LocaleText = {
       ? `${count.toLocaleString()} rindas izvēlētas`
       : `${count.toLocaleString()} rinda izvēlēta`,
 }
+
+export const LocaleTextEvaluate = {
+  ...LocaleText,
+  noRowsLabel: 'Nav iesniegumu ko vērtēt',
+}
+
+export const LocaleTextStudent = {
+  ...LocaleText,
+  noRowsLabel: 'Nav pieņemtu lietotāju!',
+}

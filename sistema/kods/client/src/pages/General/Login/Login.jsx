@@ -89,7 +89,7 @@ const Login = () => {
             if (res.data.userType == 0) {
               nav('/user/tasks')
             } else if (res.data.userType == 1) {
-              nav('/admin/students')
+              nav('/teacher/students')
             }
           }
         } else if (res.data.userType == 0) {
