@@ -1,22 +1,25 @@
-import express from 'express';
-import requests from './requests.js';
-import authReq from './authReq.js';
-import customReq from './customReq.js';
+import express from 'express'
+import general from './general.js'
+import auth from './auth.js'
+import custom from './custom.js'
 
-const router = express.Router();
+const router = express.Router()
 
-router.use('/custom', customReq);
-router.use('/auth', authReq);
-router.use('/skolotajs', requests);
-router.use('/studenti', requests);
-router.use('/atteli', requests);
-router.use('/iesniegumi', requests);
-router.use('/komentari', requests);
-router.use('/moduli', requests);
-router.use('/moduli_studenti', requests);
-router.use('/moduli_uzdevumi', requests);
-router.use('/skolas', requests);
-router.use('/skolotajs_moduli', requests);
-router.use('/uzdevumi', requests);
+router.use('/auth', auth)
+router.use('/custom', custom)
 
-export default router;
+router.use('/lietotajs', general)
+router.use('/administrators', general)
+router.use('/skolotajs', general)
+router.use('/studenti', general)
+router.use('/fails', general)
+router.use('/iesniegumi', general)
+router.use('/komentari', general)
+router.use('/moduli', general)
+router.use('/moduli_studenti', general)
+router.use('/moduli_uzdevumi', general)
+router.use('/skolas', general)
+router.use('/skolotajs_moduli', general)
+router.use('/uzdevumi', general)
+
+export default router

@@ -1,9 +1,10 @@
-import express from 'express';
-import db from './db.js';
+import express from 'express'
+import db from './db.js'
+import { authenticateSession } from './auth.js'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get('/newStudents', (req, res) => {
+router.get('/newStudents', authenticateSession, (req, res) => {
   db.query(
     `select studenti_id, vards, uzvards, klase, epasts, st.skolas_id, nosaukums, tips
     from studenti st
@@ -11,16 +12,16 @@ router.get('/newStudents', (req, res) => {
     where akceptets = false`,
     (err, result) => {
       if (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message })
       } else {
-        res.send(result);
+        res.send(result)
       }
     }
-  );
-});
+  )
+})
 
-router.get('/modules_tasks/:id', (req, res) => {
-  const id = req.params.id;
+router.get('/modules_tasks/:id', authenticateSession, (req, res) => {
+  const id = req.params.id
 
   db.query(
     `select i.iesniegumi_id, concat(s.vards, " ", s.uzvards) as vardsUzvards, m.nosaukums as m_nos, u.uzdevumi_id, tema, u.nosaukums as u_nos, u.punkti as u_punkti, i.punkti as i_punkti, m.moduli_id
@@ -34,27 +35,27 @@ router.get('/modules_tasks/:id', (req, res) => {
     id,
     (err, result) => {
       if (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message })
       } else {
         const transformedArr = result.reduce((res, el) => {
-          const existingItem = res.find((i) => i.m_nos == el.m_nos);
+          const existingItem = res.find((i) => i.m_nos == el.m_nos)
 
-          const taskPoints = el.u_punkti;
-          const gottenPoints = el.i_punkti;
+          const taskPoints = el.u_punkti
+          const gottenPoints = el.i_punkti
 
-          const moduleName = el.m_nos;
-          delete el.m_nos;
+          const moduleName = el.m_nos
+          delete el.m_nos
 
-          const moduleID = el.moduli_id;
-          delete el.moduli_id;
+          const moduleID = el.moduli_id
+          delete el.moduli_id
 
-          const fullName = el.vardsUzvards;
-          delete el.vardsUzvards;
+          const fullName = el.vardsUzvards
+          delete el.vardsUzvards
 
           if (existingItem) {
-            existingItem.p_kopa += el.u_punkti;
-            existingItem.i_kopa += el.i_punkti;
-            existingItem.uzdevumi.push(el);
+            existingItem.p_kopa += el.u_punkti
+            existingItem.i_kopa += el.i_punkti
+            existingItem.uzdevumi.push(el)
           } else
             res.push({
               moduli_id: moduleID,
@@ -63,19 +64,19 @@ router.get('/modules_tasks/:id', (req, res) => {
               i_kopa: gottenPoints,
               vardsUzvards: fullName,
               uzdevumi: [{ ...el }],
-            });
+            })
 
-          return res;
-        }, []);
+          return res
+        }, [])
 
-        res.send(transformedArr);
+        res.send(transformedArr)
       }
     }
-  );
-});
+  )
+})
 
-router.get('/tasks_of_module/:id', (req, res) => {
-  const id = req.params.id;
+router.get('/tasks_of_module/:id', authenticateSession, (req, res) => {
+  const id = req.params.id
 
   db.query(
     `SELECT uzdevumi.*
@@ -85,31 +86,31 @@ router.get('/tasks_of_module/:id', (req, res) => {
     id,
     (err, result) => {
       if (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message })
       } else {
-        res.send(result);
+        res.send(result)
       }
     }
-  );
-});
+  )
+})
 
-router.delete('/removeTask/:id/:taskId', (req, res) => {
-  const id = req.params.id;
-  const taskId = req.params.taskId;
+router.delete('/removeTask/:id/:taskId', authenticateSession, (req, res) => {
+  const id = req.params.id
+  const taskId = req.params.taskId
   db.query(
     `DELETE FROM moduli_uzdevumi WHERE uzdevumi_id = ? and moduli_id = ?`,
     [taskId, id],
     (err, result) => {
       if (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message })
       } else {
-        res.send(result);
+        res.send(result)
       }
     }
-  );
-});
+  )
+})
 
-router.get('/taskInfo', (req, res) => {
+router.get('/taskInfo', authenticateSession, (req, res) => {
   db.query(
     `SELECT st.vards, st.uzvards, st.klase, sk.nosaukums as skola, sk.tips, i.iesniegumi_id, uzd.nosaukums
     FROM studenti st
@@ -119,15 +120,15 @@ router.get('/taskInfo', (req, res) => {
     WHERE st.akceptets = 1 AND i.punkti is NULL;`,
     (err, result) => {
       if (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message })
       } else {
-        res.send(result);
+        res.send(result)
       }
     }
-  );
-});
+  )
+})
 
-router.get('/generalStudentInfo', (req, res) => {
+router.get('/generalStudentInfo', authenticateSession, (req, res) => {
   db.query(
     `SELECT studenti.*, skolas.tips, skolas.nosaukums as skola
     from studenti
@@ -135,40 +136,44 @@ router.get('/generalStudentInfo', (req, res) => {
     where studenti.akceptets = 1;`,
     (err, result) => {
       if (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message })
       } else {
-        res.send(result);
+        res.send(result)
       }
     }
-  );
-});
+  )
+})
 
-router.get('/singleTask/:userID/:moduleID/:taskID', (req, res) => {
-  const userID = req.params.userID;
-  const moduleID = req.params.moduleID;
-  const taskID = req.params.taskID;
+router.get(
+  '/singleTask/:userID/:moduleID/:taskID',
+  authenticateSession,
+  (req, res) => {
+    const userID = req.params.userID
+    const moduleID = req.params.moduleID
+    const taskID = req.params.taskID
 
-  db.query(
-    `select i.iesniegumi_id, i.punkti as i_punkti, u.punkti as u_punkti, datums, atbilde, tema, u.nosaukums, apraksts, valoda, piemers
+    db.query(
+      `select i.iesniegumi_id, i.punkti as i_punkti, u.punkti as u_punkti, datums, atbilde, tema, u.nosaukums, apraksts, valoda, piemers
     from moduli_studenti ms
     join moduli m on m.moduli_id = ms.moduli_id
     join moduli_uzdevumi mu on mu.moduli_id = m.moduli_id
     join uzdevumi u on u.uzdevumi_id = mu.uzdevumi_id
     left join iesniegumi i on i.uzdevumi_id = u.uzdevumi_id and i.moduli_id = m.moduli_id
     where ms.studenti_id = ? and m.moduli_id = ? and u.uzdevumi_id = ?`,
-    [userID, moduleID, taskID],
-    (err, result) => {
-      if (err) {
-        res.status(500).json({ message: err.message });
-      } else {
-        res.send(result[0]);
+      [userID, moduleID, taskID],
+      (err, result) => {
+        if (err) {
+          res.status(500).json({ message: err.message })
+        } else {
+          res.send(result[0])
+        }
       }
-    }
-  );
-});
+    )
+  }
+)
 
-router.get('/singleTask/:subID', (req, res) => {
-  const subID = req.params.subID;
+router.get('/singleTask/:subID', authenticateSession, (req, res) => {
+  const subID = req.params.subID
 
   db.query(
     `select i.punkti as i_punkti, u.punkti as u_punkti, datums, atbilde, tema, u.nosaukums, apraksts, valoda, piemers
@@ -178,16 +183,16 @@ router.get('/singleTask/:subID', (req, res) => {
     subID,
     (err, result) => {
       if (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message })
       } else {
-        res.send(result[0]);
+        res.send(result[0])
       }
     }
-  );
-});
+  )
+})
 
-router.get('/comments/:subID', (req, res) => {
-  const subID = req.params.subID;
+router.get('/comments/:subID', authenticateSession, (req, res) => {
+  const subID = req.params.subID
 
   db.query(
     `select concat(vards, ' ', uzvards) as sutitajs, komentars, ir_students, k.datums as k_datums
@@ -199,25 +204,25 @@ router.get('/comments/:subID', (req, res) => {
     subID,
     (err, result) => {
       if (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message })
       } else {
-        res.send(result);
+        res.send(result)
       }
     }
-  );
-});
+  )
+})
 
-router.post('/studentModules', async (req, res) => {
-  const keys = Object.keys(req.body).toString();
-  const values = Object.values(req.body);
+router.post('/studentModules', authenticateSession, async (req, res) => {
+  const keys = Object.keys(req.body).toString()
+  const values = Object.values(req.body)
 
   db.query(
     `select studenti_id from moduli_studenti where studenti_id = ? and moduli_id = ?`,
     [req.body.studenti_id, req.body.moduli_id],
     (err, result) => {
       if (err) {
-        res.status(500).json({ message: err.message });
-        console.log(err);
+        res.status(500).json({ message: err.message })
+        console.log(err)
       } else {
         if (result.length == 0) {
           db.query(
@@ -225,17 +230,17 @@ router.post('/studentModules', async (req, res) => {
             [values],
             (err, result) => {
               if (err) {
-                res.status(500).json({ message: err.message });
-                console.log(err);
+                res.status(500).json({ message: err.message })
+                console.log(err)
               } else {
-                res.json({ message: 'Added entry' });
+                res.json({ message: 'Added entry' })
               }
             }
-          );
+          )
         }
       }
     }
-  );
-});
+  )
+})
 
-export default router;
+export default router

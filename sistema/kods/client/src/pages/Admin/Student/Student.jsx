@@ -1,53 +1,53 @@
-import { Grid, Typography, useMediaQuery } from '@mui/material';
-import useAxios from '../../../../hooks/useAxios';
-import url from '../../../../url';
-import InfoCard from '../../../components/User/InfoCard';
-import Title from '../../../components/General/Title';
-import axios from 'axios';
+import { Grid, Typography, useMediaQuery } from '@mui/material'
+import useAxios from '../../../hooks/useAxios'
+import url from '../../../../url'
+import InfoCard from '../../../components/User/InfoCard'
+import Title from '../../../components/General/Title'
+import axios from 'axios'
 
 const Students = () => {
-  const { data, setData, isPending } = useAxios(url + 'custom/newStudents');
-  const belowMd = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const { data, setData, isPending } = useAxios(url + 'custom/newStudents')
+  const belowMd = useMediaQuery((theme) => theme.breakpoints.down('md'))
 
   const getClassType = (schoolType) => {
     return ['Tehnikums', 'Augstskola'].includes(schoolType)
       ? '. kurss'
-      : '. klase';
-  };
+      : '. klase'
+  }
 
   const handleAccept = (ID, setError) => {
     axios
       .patch(url + 'studenti/' + ID, { akceptets: true })
       .then(() => {
-        setData(data.filter((el) => el.studenti_id != ID));
+        setData(data.filter((el) => el.studenti_id != ID))
       })
       .catch(() => {
-        setError(true);
+        setError(true)
 
         setTimeout(() => {
-          setError(false);
-        }, 6000);
-      });
-  };
+          setError(false)
+        }, 6000)
+      })
+  }
 
   const handleDeny = (ID, setError) => {
     axios
       .delete(url + 'studenti/' + ID)
       .then(() => {
-        setData(data.filter((el) => el.studenti_id != ID));
+        setData(data.filter((el) => el.studenti_id != ID))
       })
       .catch(() => {
-        setError(true);
+        setError(true)
 
         setTimeout(() => {
-          setError(false);
-        }, 6000);
-      });
-  };
+          setError(false)
+        }, 6000)
+      })
+  }
 
   return (
     <>
-      <Title text="Studentu Pieņemšana" />
+      <Title text='Studentu Pieņemšana' />
       {!isPending &&
         (data.length ? (
           <Grid
@@ -68,7 +68,7 @@ const Students = () => {
                   onAccept={handleAccept}
                   onDeny={handleDeny}
                 />
-              );
+              )
             })}
           </Grid>
         ) : (
@@ -77,7 +77,7 @@ const Students = () => {
           </Typography>
         ))}
     </>
-  );
-};
+  )
+}
 
-export default Students;
+export default Students

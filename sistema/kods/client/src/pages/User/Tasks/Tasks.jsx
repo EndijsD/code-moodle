@@ -1,19 +1,19 @@
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
-import url from '../../../../url';
-import useAxios from '../../../../hooks/useAxios';
-import ModuleAccordion from '../../../components/User/ModuleAccordion';
-import Title from '../../../components/General/Title';
-import { Box, CircularProgress, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
+import url from '../../../../url'
+import useAxios from '../../../hooks/useAxios'
+import ModuleAccordion from '../../../components/User/ModuleAccordion'
+import Title from '../../../components/General/Title'
+import { Box, CircularProgress, Typography } from '@mui/material'
+import { useParams } from 'react-router-dom'
 
 const Tasks = () => {
-  const { studentID } = useParams();
-  const auth = useAuthUser();
+  const { studentID } = useParams()
+  const auth = useAuthUser()
   const { data, isPending } = useAxios(
     url +
       'custom/modules_tasks/' +
       (auth.userType == 1 ? studentID : auth.userID)
-  );
+  )
 
   return !isPending ? (
     data.length ? (
@@ -33,7 +33,7 @@ const Tasks = () => {
               isTeacher={auth.userType == 1}
               studentIDFromTeacher={studentID}
             />
-          );
+          )
         })}
       </>
     ) : (
@@ -49,7 +49,7 @@ const Tasks = () => {
     <Box sx={{ height: '100%', alignContent: 'center' }}>
       <CircularProgress />
     </Box>
-  );
-};
+  )
+}
 
-export default Tasks;
+export default Tasks
