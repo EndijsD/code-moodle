@@ -27,7 +27,7 @@ const NewModule = () => {
   let tempArr = []
   const fetchData = () => {
     axios
-      .get(`${url}uzdevumi/`)
+      .get(`uzdevumi/`)
       .then(function (res) {
         setAllTasks(res.data)
         for (let i = 0; i < res.data.length; i++) {
@@ -67,12 +67,12 @@ const NewModule = () => {
 
   const handleSubmit = () => {
     let newId
-    axios.post(`${url}moduli`, { nosaukums: input }).then(function (res) {
+    axios.post(`moduli`, { nosaukums: input }).then(function (res) {
       newId = res.data.id
       for (let i = 0; i < allTasks.length; i++) {
         if (checkbox[i][1] == 'on') {
           let temp = { uzdevumi_id: checkbox[i][0], moduli_id: newId }
-          axios.post(`${url}moduli_uzdevumi`, temp)
+          axios.post(`moduli_uzdevumi`, temp)
         }
       }
       nav('/teacher/modules')

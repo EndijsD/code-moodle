@@ -1,7 +1,13 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-const useAxios = ({ method = 'get', url, body, params, doEffect = false }) => {
+const useAxios = ({
+  method = 'get',
+  url,
+  body,
+  params,
+  doUseEffect = false,
+}) => {
   const [data, setData] = useState(null)
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState(null)
@@ -13,6 +19,7 @@ const useAxios = ({ method = 'get', url, body, params, doEffect = false }) => {
     passedBody,
     passedParams,
   }) => {
+    console.log('call')
     return axios({
       method: method || passedMethod,
       url: url || passedUrl,
@@ -36,7 +43,7 @@ const useAxios = ({ method = 'get', url, body, params, doEffect = false }) => {
   }
 
   useEffect(() => {
-    if (!doEffect) return
+    if (doUseEffect) return
 
     axiosRequest({})
   }, [url])

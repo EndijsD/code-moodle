@@ -19,7 +19,7 @@ const ChatBox = ({ subID }) => {
 
   useEffect(() => {
     if (subID)
-      axios.get(url + 'custom/comments/' + subID).then((response) => {
+      axios.get('custom/comments/' + subID).then((response) => {
         setComments(response.data)
       })
   }, [subID])
@@ -27,7 +27,7 @@ const ChatBox = ({ subID }) => {
   const handleSend = () => {
     if (subID) {
       axios
-        .post(url + 'komentari', {
+        .post('komentari', {
           komentars: message,
           ir_students: auth.userType == 1 ? 0 : 1,
           datums: moment().format('YYYY-MM-DD HH:mm:ss'),

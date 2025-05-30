@@ -24,7 +24,7 @@ const Assign = () => {
 
   const fetchData = () => {
     axios
-      .get(`${url}custom/generalStudentInfo`)
+      .get(`custom/generalStudentInfo`)
       .then(function (res) {
         setStudents(res.data)
       })
@@ -32,7 +32,7 @@ const Assign = () => {
         setStatus({ pending: false, error: true, success: false })
       })
     axios
-      .get(`${url}moduli`)
+      .get(`moduli`)
       .then(function (res) {
         setModules(res.data)
         setStatus({ pending: false, error: false, success: false })
@@ -57,11 +57,9 @@ const Assign = () => {
           studenti_id: selected.students[i],
           moduli_id: selected.modules[k],
         }
-        axios
-          .post(`${url}custom/studentModules`, postObj)
-          .catch(function (err) {
-            setStatus({ pending: false, error: true, success: false })
-          })
+        axios.post(`custom/studentModules`, postObj).catch(function (err) {
+          setStatus({ pending: false, error: true, success: false })
+        })
       }
     }
     if (status.error != true) {

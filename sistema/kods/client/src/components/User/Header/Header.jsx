@@ -3,14 +3,22 @@ import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Logout } from '@mui/icons-material'
 import useSignOut from 'react-auth-kit/hooks/useSignOut'
 import { links } from './links'
 import * as S from './style'
+import { useTheme } from '@emotion/react'
+import axios from 'axios'
 
 const UserHeader = () => {
-  const signOut = useSignOut()
+  // const signOut = useSignOut()
+  const theme = useTheme()
+  const nav = useNavigate()
+
+  const logout = async () => {
+    axios.post(`/auth/logout`).finally(() => nav('/login'))
+  }
 
   return (
     <AppBar sx={S.AppBar}>
@@ -32,7 +40,7 @@ const UserHeader = () => {
           <Link
             style={{ ...S.LogOut, color: theme.palette.text.primary }}
             to='/'
-            onClick={() => signOut()}
+            onClick={logout}
           >
             <Logout />
           </Link>

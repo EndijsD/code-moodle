@@ -64,7 +64,7 @@ const EditTask = () => {
       }
       setStatus({ ...status, pending: true, error: false })
       axios
-        .patch(`${url}uzdevumi/${id}`, postData)
+        .patch(`uzdevumi/${id}`, postData)
         .then(function (response) {
           if (response.status === 200) {
             setStatus({
@@ -88,7 +88,7 @@ const EditTask = () => {
   useEffect(() => {
     if (data == undefined) {
       axios
-        .get(`${url}uzdevumi/${id}`)
+        .get(`uzdevumi/${id}`)
         .then(function (res) {
           let d = res.data[0]
           setData({

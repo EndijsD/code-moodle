@@ -62,17 +62,13 @@ const Login = () => {
       try {
         const res = await axios.post(`auth/login`, form)
 
-        if (
-          signIn({
-            auth: { token: res.data.accessToken },
-            userState: res.data,
-          })
-        ) {
+        if (String(res.status).charAt(0) == '2') {
           if (res.data.loma == 'students') nav('/user/tasks')
           else if (res.data.loma == 'skolotajs') nav('/teacher/students')
         }
       } catch (err) {
-        setResponse('error')
+        if (err.response?.status === 403) setResponse('wrong')
+        else setResponse('error')
       }
     }
 

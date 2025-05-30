@@ -17,7 +17,7 @@ export const Evaluate = () => {
     setFetchState({ pending: true, failed: false })
 
     axios
-      .get(url + 'custom/taskInfo')
+      .get('custom/taskInfo')
       .then(function (response) {
         setData(response.data)
         setFetchState({

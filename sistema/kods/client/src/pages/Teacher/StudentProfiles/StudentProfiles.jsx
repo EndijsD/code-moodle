@@ -17,7 +17,7 @@ const StudentProfiles = () => {
 
   const fetchData = () => {
     axios
-      .get(`${url}custom/generalStudentInfo`)
+      .get(`custom/generalStudentInfo`)
       .then(function (res) {
         setStudents(res.data)
         setStatus({ pending: false, error: false, success: false })

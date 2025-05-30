@@ -39,7 +39,7 @@ const Bank = () => {
   const fetchBankItems = () => {
     setFetchState({ pending: true, failed: false })
     axios
-      .get(url + 'uzdevumi')
+      .get('uzdevumi')
       .then((response) => {
         setData(response.data)
         setFetchState({
@@ -56,7 +56,7 @@ const Bank = () => {
   }
 
   const deleteTask = (id, itemId) => {
-    axios.delete(url + 'uzdevumi/' + id).then((res) => {
+    axios.delete('uzdevumi/' + id).then((res) => {
       if (res.status == 200) {
         const temp = [...data]
         temp.splice(itemId, 1)

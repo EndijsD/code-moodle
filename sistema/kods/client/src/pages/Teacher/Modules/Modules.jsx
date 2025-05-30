@@ -22,7 +22,7 @@ const Modules = () => {
   const [search, setSearch] = useState('')
 
   const fetchData = () => {
-    axios.get(`${url}moduli`).then(function (response) {
+    axios.get(`moduli`).then(function (response) {
       setData(response.data)
       setDisplay(response.data)
     })
@@ -51,7 +51,7 @@ const Modules = () => {
   }
 
   const handleDelete = (moduleID, arrEl) => {
-    axios.delete(url + 'moduli/' + moduleID).then((res) => {
+    axios.delete('moduli/' + moduleID).then((res) => {
       if (res.statusText == 'OK') {
         const temp = [...data]
         temp.splice(arrEl, 1)

@@ -21,11 +21,15 @@ router.get('/newStudents', authenticateSession, (req, res) => {
 })
 
 router.get('/modules_tasks/:id', authenticateSession, (req, res) => {
-  const id = req.params.id
+  let id
+
+  if (req.params.id) id = req.params.id
+  else id = req.user.lietotajs_id
 
   db.query(
-    `select i.iesniegumi_id, concat(s.vards, " ", s.uzvards) as vardsUzvards, m.nosaukums as m_nos, u.uzdevumi_id, tema, u.nosaukums as u_nos, u.punkti as u_punkti, i.punkti as i_punkti, m.moduli_id
+    `select i.iesniegumi_id, concat(l.vards, " ", l.uzvards) as vardsUzvards, m.nosaukums as m_nos, u.uzdevumi_id, tema, u.nosaukums as u_nos, u.punkti as u_punkti, i.punkti as i_punkti, m.moduli_id
     from studenti s
+    join lietotajs l on s.lietotajs_id = l.lietotajs_id
     join moduli_studenti ms on ms.studenti_id = s.studenti_id
     join moduli m on m.moduli_id = ms.moduli_id
     join moduli_uzdevumi mu on mu.moduli_id = m.moduli_id
@@ -112,8 +116,9 @@ router.delete('/removeTask/:id/:taskId', authenticateSession, (req, res) => {
 
 router.get('/taskInfo', authenticateSession, (req, res) => {
   db.query(
-    `SELECT st.vards, st.uzvards, st.klase, sk.nosaukums as skola, sk.tips, i.iesniegumi_id, uzd.nosaukums
+    `SELECT l.vards, l.uzvards, st.klase, sk.nosaukums as skola, sk.tips, i.iesniegumi_id, uzd.nosaukums
     FROM studenti st
+    join lietotajs l on st.lietotajs_id = l.lietotajs_id
     JOIN skolas sk  ON st.skolas_id = sk.skolas_id
     JOIN iesniegumi i ON i.studenti_id = st.studenti_id
     JOIN uzdevumi uzd ON uzd.uzdevumi_id = i.uzdevumi_id
@@ -130,10 +135,11 @@ router.get('/taskInfo', authenticateSession, (req, res) => {
 
 router.get('/generalStudentInfo', authenticateSession, (req, res) => {
   db.query(
-    `SELECT studenti.*, skolas.tips, skolas.nosaukums as skola
-    from studenti
-    join skolas on studenti.skolas_id = skolas.skolas_id
-    where studenti.akceptets = 1;`,
+    `SELECT lietotajs.*, skolas.tips, skolas.nosaukums as skola
+    from studenti s
+    join lietotajs l on s.lietotajs_id = l.lietotajs_id
+    join skolas on s.skolas_id = skolas.skolas_id
+    where s.akceptets = 1;`,
     (err, result) => {
       if (err) {
         res.status(500).json({ message: err.message })

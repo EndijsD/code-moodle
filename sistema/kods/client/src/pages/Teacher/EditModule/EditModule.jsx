@@ -30,11 +30,11 @@ const EditModule = () => {
   let tempArr = []
   let tempArr2 = []
   const fetchData = () => {
-    axios.get(`${url}moduli/${id}`).then(function (res) {
+    axios.get(`moduli/${id}`).then(function (res) {
       setInput(res.data[0].nosaukums)
 
       axios
-        .get(`${url}uzdevumi/`)
+        .get(`uzdevumi/`)
         .then(function (res) {
           setAllTasks(res.data)
           for (let i = 0; i < res.data.length; i++) {
@@ -42,7 +42,7 @@ const EditModule = () => {
             tempArr2[i] = false
           }
           axios
-            .get(`${url}custom/tasks_of_module/${id}`)
+            .get(`custom/tasks_of_module/${id}`)
             .then(function (res) {
               setTasks(res)
               setStatus({ pending: false, error: false })
@@ -95,19 +95,17 @@ const EditModule = () => {
   }
 
   const handleSubmit = () => {
-    axios
-      .patch(`${url}moduli/${id}`, { nosaukums: input })
-      .then(function (res) {
-        for (let i = 0; i < allTasks.length; i++) {
-          if (checkbox[i][1] == 'off' && changed[i] == true) {
-            axios.delete(`${url}custom/removeTask/${id}/${checkbox[i][0]}`)
-          } else if (checkbox[i][1] == 'on' && changed[i] == true) {
-            let temp = { uzdevumi_id: checkbox[i][0], moduli_id: id }
-            axios.post(`${url}moduli_uzdevumi`, temp)
-          }
+    axios.patch(`moduli/${id}`, { nosaukums: input }).then(function (res) {
+      for (let i = 0; i < allTasks.length; i++) {
+        if (checkbox[i][1] == 'off' && changed[i] == true) {
+          axios.delete(`custom/removeTask/${id}/${checkbox[i][0]}`)
+        } else if (checkbox[i][1] == 'on' && changed[i] == true) {
+          let temp = { uzdevumi_id: checkbox[i][0], moduli_id: id }
+          axios.post(`moduli_uzdevumi`, temp)
         }
-        nav('/teacher/modules')
-      })
+      }
+      nav('/teacher/modules')
+    })
   }
 
   return (

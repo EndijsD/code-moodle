@@ -22,15 +22,13 @@ const SingleTask = () => {
   const { moduleID, taskID, subID } = useParams()
   const linkEnd =
     auth.userType == 1 ? subID : auth.userID + '/' + moduleID + '/' + taskID
-  const { data, setData, isPending } = useAxios(
-    url + 'custom/singleTask/' + linkEnd
-  )
+  const { data, setData, isPending } = useAxios('custom/singleTask/' + linkEnd)
 
   const handleSubmit = () => {
     if (auth.userType == 0)
       if (data.iesniegumi_id) {
         axios
-          .patch(url + 'iesniegumi/' + data.iesniegumi_id, {
+          .patch('iesniegumi/' + data.iesniegumi_id, {
             atbilde: data.atbilde,
             punkti: null,
           })
@@ -41,7 +39,7 @@ const SingleTask = () => {
           })
       } else {
         axios
-          .post(url + 'iesniegumi', {
+          .post('iesniegumi', {
             datums: moment().format('YYYY-MM-DD HH:mm:ss'),
             atbilde: data.atbilde,
             uzdevumi_id: taskID,
@@ -56,7 +54,7 @@ const SingleTask = () => {
       }
     else {
       axios
-        .patch(url + 'iesniegumi/' + subID, {
+        .patch('iesniegumi/' + subID, {
           punkti: data.i_punkti,
         })
         .then((res) => {

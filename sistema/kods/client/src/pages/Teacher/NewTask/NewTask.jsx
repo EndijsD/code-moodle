@@ -66,7 +66,7 @@ const NewTask = () => {
       }
       setStatus({ ...status, pending: true, error: false })
       axios
-        .post(`${url}uzdevumi`, postData)
+        .post(`uzdevumi`, postData)
         .then(function (response) {
           if (response.data.message == 'Added entry') {
             setStatus({

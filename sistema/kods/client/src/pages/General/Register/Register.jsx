@@ -43,7 +43,7 @@ const Register = () => {
   useEffect(() => {
     setIsPending(true)
     axios
-      .get(`${url}skolas`)
+      .get(`skolas`)
       .then((res) => setSchools(res.data))
       .catch(() => setResponse('permError', false))
     setIsPending(false)
@@ -66,7 +66,7 @@ const Register = () => {
         const postData = { ...formValues }
         delete postData.parole_atk
         axios
-          .post(`${url}studenti`, postData)
+          .post(`studenti`, postData)
           .then(() => setResponse('suc'))
           .catch(() => setResponse('error'))
       } else setResponse('pass')

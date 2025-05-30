@@ -6,7 +6,7 @@ import Title from '../../../components/General/Title'
 import axios from 'axios'
 
 const Students = () => {
-  const { data, setData, isPending } = useAxios(url + 'custom/newStudents')
+  const { data, setData, isPending } = useAxios('custom/newStudents')
   const belowMd = useMediaQuery((theme) => theme.breakpoints.down('md'))
 
   const getClassType = (schoolType) => {
@@ -17,7 +17,7 @@ const Students = () => {
 
   const handleAccept = (ID, setError) => {
     axios
-      .patch(url + 'studenti/' + ID, { akceptets: true })
+      .patch('studenti/' + ID, { akceptets: true })
       .then(() => {
         setData(data.filter((el) => el.studenti_id != ID))
       })
@@ -32,7 +32,7 @@ const Students = () => {
 
   const handleDeny = (ID, setError) => {
     axios
-      .delete(url + 'studenti/' + ID)
+      .delete('studenti/' + ID)
       .then(() => {
         setData(data.filter((el) => el.studenti_id != ID))
       })
@@ -48,8 +48,9 @@ const Students = () => {
   return (
     <>
       <Title text='Studentu Pieņemšana' />
+
       {!isPending &&
-        (data.length ? (
+        (data && data.length ? (
           <Grid
             container
             spacing={4}

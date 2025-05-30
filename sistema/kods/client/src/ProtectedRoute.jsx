@@ -9,9 +9,9 @@ const ProtectedRoute = ({ role }) => {
 
   console.log('ProtectedRoute', auth, isAuth, role)
 
-  if (!isAuth || auth.loma !== role) {
-    return <Navigate to='/login' replace />
-  }
+  // if (!isAuth || auth.loma !== role) {
+  //   return <Navigate to='/login' replace />
+  // }
 
   return <Outlet />
 }
