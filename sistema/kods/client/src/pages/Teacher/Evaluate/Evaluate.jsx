@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import url from '../../../../url'
 import { Box, CircularProgress, Paper } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import Title from '../../../components/General/Title'

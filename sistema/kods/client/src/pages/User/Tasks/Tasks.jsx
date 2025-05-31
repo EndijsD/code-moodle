@@ -1,5 +1,3 @@
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
-import url from '../../../../url'
 import useAxios from '../../../hooks/useAxios'
 import ModuleAccordion from '../../../components/User/ModuleAccordion'
 import Title from '../../../components/General/Title'
@@ -8,7 +6,6 @@ import { useParams } from 'react-router-dom'
 
 const Tasks = () => {
   const { studentID } = useParams()
-  // const auth = useAuthUser()
   const { data, isPending } = useAxios({
     url: 'custom/modules_tasks/' + (1 ?? ''),
   })

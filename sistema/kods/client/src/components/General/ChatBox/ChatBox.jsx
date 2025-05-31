@@ -6,16 +6,15 @@ import {
 } from '@chatscope/chat-ui-kit-react'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css'
 import { useEffect, useState } from 'react'
-import url from '../../../../url'
 import axios from 'axios'
 import moment from 'moment'
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
 import * as S from './style'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const ChatBox = ({ subID }) => {
   const [comments, setComments] = useState([])
   const [message, setMessage] = useState('')
-  const auth = useAuthUser()
+  const { user } = useGlobalContext()
 
   useEffect(() => {
     if (subID)
@@ -29,7 +28,7 @@ const ChatBox = ({ subID }) => {
       axios
         .post('komentari', {
           komentars: message,
-          ir_students: auth.userType == 1 ? 0 : 1,
+          ir_students: user.loma == 'students' ? 1 : 0,
           datums: moment().format('YYYY-MM-DD HH:mm:ss'),
           iesniegumi_id: subID,
         })
@@ -40,7 +39,7 @@ const ChatBox = ({ subID }) => {
               ...comments,
               {
                 komentars: message,
-                ir_students: auth.userType == 1 ? 0 : 1,
+                ir_students: user.loma == 'students' ? 1 : 0,
                 datums: moment().format('YYYY-MM-DD HH:mm:ss'),
               },
             ])
@@ -58,7 +57,7 @@ const ChatBox = ({ subID }) => {
             model={{
               message: comment.komentars,
               direction:
-                auth.userType == 1
+                user.loma == 'skolotajs'
                   ? comment.ir_students == 1
                     ? 0
                     : 1
@@ -67,7 +66,9 @@ const ChatBox = ({ subID }) => {
             }}
             children={
               <Message.Header
-                sender={auth.userType == 1 ? comment.sutitajs : 'Skolotājs'}
+                sender={
+                  user.loma == 'skolotajs' ? comment.sutitajs : 'Skolotājs'
+                }
               />
             }
           />

@@ -10,8 +10,6 @@ import Landing from './pages/General/Landing'
 import Login from './pages/General/Login'
 import Register from './pages/General/Register'
 import NotFound from './pages/General/NotFound'
-import createStore from 'react-auth-kit/createStore'
-import AuthProvider from 'react-auth-kit'
 import ProtectedRoute from './ProtectedRoute'
 import SideBar from './components/Teacher/SideBar'
 import NewTask from './pages/Teacher/NewTask'
@@ -31,14 +29,6 @@ import * as S from './style'
 import { themeStyle } from './theme'
 import Profile from './pages/General/Profile/Profile'
 import { useGlobalContext } from './context/GlobalProvider'
-import { useEffect } from 'react'
-
-const store = createStore({
-  authName: '_auth',
-  authType: 'cookie',
-  cookieDomain: window.location.hostname,
-  cookieSecure: false,
-})
 
 const TeacherLayout = () => {
   return (
@@ -215,23 +205,13 @@ const router = createBrowserRouter([
 
 function App() {
   const theme = createTheme(themeStyle)
-  const { initialized, user } = useGlobalContext()
-
-  // useEffect(() => {
-  //   console.log('useratapp', user, window.location.pathname.split('/')[1])
-  //   if (user && window.location.pathname.split('/')[1] == 'login') {
-  //     if (user.loma == 'students') nav('/user/tasks')
-  //     else if (user.loma == 'skolotajs') nav('/teacher/students')
-  //   }
-  // }, [])
+  const { initialized } = useGlobalContext()
 
   return initialized ? (
-    <AuthProvider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <RouterProvider router={router} />
+    </ThemeProvider>
   ) : (
     <Box
       sx={{

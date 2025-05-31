@@ -13,9 +13,9 @@ import { useEffect, useState } from 'react'
 import * as S from './style'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import url from '../../../../url'
 import FormError from '../../../components/General/FormError'
 import { errorMes, initialFormValues } from '../../../data/General/RegisterData'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const Register = () => {
   const nav = useNavigate()
@@ -28,6 +28,17 @@ const Register = () => {
   const [active, setActive] = useState([false, false])
   const [schools, setSchools] = useState([])
   const [classes, setClasses] = useState([[]])
+  const { user, initialized } = useGlobalContext()
+
+  // Ja lietotājs ir ielogojies, tad lietotājs tiek aizvests atpakaļ uz sava lietotāja tipa sākuma lapu
+  useEffect(() => {
+    if (user) {
+      if (user.loma == 'students') nav('/user/tasks')
+      else if (user.loma == 'skolotajs') nav('/teacher/students')
+    }
+  }, [user])
+
+  if (!initialized || user) return
 
   const setResponse = (res, withTimeout = true) => {
     if (res == 'suc') {

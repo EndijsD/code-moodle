@@ -6,7 +6,7 @@ import { authenticateSession } from './auth.js'
 
 const router = express.Router()
 
-router.get('/', authenticateSession, async (req, res) => {
+router.get('/', async (req, res) => {
   const table = req.baseUrl.slice(1)
 
   db.query(`SELECT * FROM ??`, table, (err, result) => {
@@ -59,7 +59,7 @@ router.post('/', authenticateSession, async (req, res) => {
   )
 })
 
-router.post('/multiple', async (req, res) => {
+router.post('/multiple', authenticateSession, async (req, res) => {
   const table = req.baseUrl.slice(1)
   let data = req.body
 
@@ -103,7 +103,7 @@ const isNumeric = (str) => {
   return !isNaN(str) && !isNaN(parseFloat(str))
 }
 
-router.patch('/single/:id', async (req, res) => {
+router.patch('/single/:id', authenticateSession, async (req, res) => {
   const table = req.baseUrl.slice(1)
   const column = table + '_id'
   const id = req.params.id
@@ -140,7 +140,7 @@ router.patch('/single/:id', async (req, res) => {
   )
 })
 
-router.patch('/multiple', async (req, res) => {
+router.patch('/multiple', authenticateSession, async (req, res) => {
   const table = req.baseUrl.slice(1)
   const column = table + '_id'
   const updates = req.body
