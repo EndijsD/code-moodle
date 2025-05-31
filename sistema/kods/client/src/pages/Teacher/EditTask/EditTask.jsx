@@ -20,13 +20,13 @@ import { DropzoneArea } from 'mui-file-dropzone'
 import Title from '../../../components/General/Title'
 import { MainContainerSx } from './EditTaskStyle'
 import { initStatus } from '../../../data/initStatus'
-import { fieldError } from '../../../data/Teacher/NewTask/NewTaskInitVals'
+import { initFieldValid } from '../../../data/Teacher/NewTask/NewTaskInitVals'
 
 const EditTask = () => {
   const { id } = useParams()
   const nav = useNavigate()
   const [data, setData] = useState(undefined)
-  const [fieldValid, setFieldValid] = useState(fieldValid)
+  const [fieldValid, setFieldValid] = useState(initFieldValid)
   const [status, setStatus] = useState(initStatus)
 
   const isWhitespaceString = (str) => !/\S/.test(str) // Checks if string only contains white space returns true/false
@@ -64,7 +64,7 @@ const EditTask = () => {
       }
       setStatus({ ...status, pending: true, error: false })
       axios
-        .patch(`uzdevumi/${id}`, postData)
+        .patch(`uzdevumi/single/${id}`, postData)
         .then(function (response) {
           if (response.status === 200) {
             setStatus({

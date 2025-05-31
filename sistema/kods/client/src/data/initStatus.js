@@ -1,5 +1,10 @@
 export const initStatus = {
-  pending: true,
+  pending: false,
   error: false,
   success: false,
+}
+
+export const initStatusPending = {
+  ...initStatus,
+  pending: true,
 }

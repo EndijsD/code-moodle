@@ -23,6 +23,7 @@ import EditModule from './pages/Teacher/EditModule'
 import StudentProfiles from './pages/Teacher/StudentProfiles/StudentProfiles'
 import * as S from './style'
 import { themeStyle } from './theme'
+import Profile from './pages/General/Profile/Profile'
 
 const store = createStore({
   authName: '_auth',
@@ -95,10 +96,10 @@ const router = createBrowserRouter([
           //   path: 'grades',
           //   element: <div>To be implemented - Grades</div>,
           // },
-          // {
-          //   path: 'profile',
-          //   element: <Profile />,
-          // },
+          {
+            path: 'profile',
+            element: <Profile />,
+          },
           {
             path: '*',
             element: <NotFound link={'tasks'} />,
@@ -185,6 +186,10 @@ const router = createBrowserRouter([
                 element: <Tasks />,
               },
             ],
+          },
+          {
+            path: 'profile',
+            element: <Profile />,
           },
           {
             path: '*',

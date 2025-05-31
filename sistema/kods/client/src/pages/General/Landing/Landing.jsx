@@ -1,6 +1,6 @@
-import { Box, Divider } from '@mui/material';
-import * as S from './style';
-import { Link } from 'react-router-dom';
+import { Box, Divider } from '@mui/material'
+import * as S from './style'
+import { Link } from 'react-router-dom'
 
 const Landing = () => {
   return (
@@ -11,27 +11,28 @@ const Landing = () => {
       <S.Content>
         <S.StyledPaper>
           <S.LeftBox>
-            <Link to="login">
+            <Link to='login'>
               <S.MainButton>Pieslēgties</S.MainButton>
             </Link>
-            <Link to="register">
+            <Link to='register'>
               <S.MainButton>Rēģistrēties</S.MainButton>
             </Link>
           </S.LeftBox>
-          <Divider orientation="vertical" flexItem />
+          <Divider orientation='vertical' flexItem />
           <Box>
             <h2>Par vietni</h2>
             <S.Paragraph>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-              sed iure quod cum itaque, commodi mollitia perspiciatis eum id,
-              fuga quos repellat ut voluptate molestias vitae. Possimus porro
-              facilis iusto!
+              "Code Moodle" ir RTU Liepājas akadēmijas Informāciajas tehnoloģiju
+              2.kursa studentu Kārļa Lācīša un Endija Dārznieka studiju
+              projekts. "Code Moodle" ir serviss programmēšanas uzdevumu
+              veidošanai, uzdošanai, veikšanai un labošanai. Vietne ir paredzēta
+              studentiem, privātskolotājiem un skolām.
             </S.Paragraph>
           </Box>
         </S.StyledPaper>
       </S.Content>
     </>
-  );
-};
+  )
+}
 
-export default Landing;
+export default Landing
