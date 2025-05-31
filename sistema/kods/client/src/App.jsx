@@ -24,6 +24,7 @@ import StudentProfiles from './pages/Teacher/StudentProfiles/StudentProfiles'
 import * as S from './style'
 import { themeStyle } from './theme'
 import Profile from './pages/General/Profile/Profile'
+import { useGlobalContext } from './context/GlobalProvider'
 
 const store = createStore({
   authName: '_auth',
@@ -207,14 +208,26 @@ const router = createBrowserRouter([
 
 function App() {
   const theme = createTheme(themeStyle)
+  const { initialized } = useGlobalContext()
 
-  return (
+  return initialized ? (
     <AuthProvider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <RouterProvider router={router} />
       </ThemeProvider>
     </AuthProvider>
+  ) : (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+      }}
+    >
+      <h1>Loading...</h1>
+    </Box>
   )
 }
 export default App
