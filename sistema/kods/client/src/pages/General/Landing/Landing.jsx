@@ -37,10 +37,11 @@ const Landing = () => {
           <Box>
             <h2>Par vietni</h2>
             <S.Paragraph>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-              sed iure quod cum itaque, commodi mollitia perspiciatis eum id,
-              fuga quos repellat ut voluptate molestias vitae. Possimus porro
-              facilis iusto!
+              "Code Moodle" ir RTU Liepājas akadēmijas Informāciajas tehnoloģiju
+              2.kursa studentu Kārļa Lācīša un Endija Dārznieka studiju
+              projekts. "Code Moodle" ir serviss programmēšanas uzdevumu
+              veidošanai, uzdošanai, veikšanai un labošanai. Vietne ir paredzēta
+              studentiem, privātskolotājiem un skolām.
             </S.Paragraph>
           </Box>
         </S.StyledPaper>
