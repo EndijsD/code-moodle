@@ -1,18 +1,18 @@
 import { Box, Divider } from '@mui/material'
 import * as S from './style'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const Landing = () => {
   const { user } = useGlobalContext()
   const nav = useNavigate()
 
-  const goToLogin = () => {
+  const goTo = (route) => {
     if (user) {
       if (user.loma == 'students') nav('/user/tasks')
       else if (user.loma == 'skolotajs') nav('/teacher/students')
     } else {
-      nav('/login')
+      nav(route)
     }
   }
 
@@ -24,12 +24,16 @@ const Landing = () => {
       <S.Content>
         <S.StyledPaper>
           <S.LeftBox>
-            <S.MainButton onClick={goToLogin}>Pieslēgties</S.MainButton>
-            <Link to='register'>
-              <S.MainButton>Rēģistrēties</S.MainButton>
-            </Link>
+            <S.MainButton onClick={() => goTo('login')}>
+              Pieslēgties
+            </S.MainButton>
+            <S.MainButton onClick={() => goTo('register')}>
+              Rēģistrēties
+            </S.MainButton>
           </S.LeftBox>
+
           <Divider orientation='vertical' flexItem />
+
           <Box>
             <h2>Par vietni</h2>
             <S.Paragraph>

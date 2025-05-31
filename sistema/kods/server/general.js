@@ -125,9 +125,11 @@ router.patch('/single/:id', async (req, res) => {
       : value
   )
 
+  const setters = columns.flatMap((col, i) => [col, values[i]])
+
   db.query(
     `UPDATE ?? SET ${columnSetters} WHERE ?? = ?`,
-    [table, ...columns, ...values, column, id],
+    [table, ...setters, column, id],
     (err) => {
       if (err) {
         res.status(500).json({ message: err.message })

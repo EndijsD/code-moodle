@@ -1,4 +1,10 @@
-import { Box, createTheme, CssBaseline, ThemeProvider } from '@mui/material'
+import {
+  Box,
+  CircularProgress,
+  createTheme,
+  CssBaseline,
+  ThemeProvider,
+} from '@mui/material'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import Landing from './pages/General/Landing'
 import Login from './pages/General/Login'
@@ -25,6 +31,7 @@ import * as S from './style'
 import { themeStyle } from './theme'
 import Profile from './pages/General/Profile/Profile'
 import { useGlobalContext } from './context/GlobalProvider'
+import { useEffect } from 'react'
 
 const store = createStore({
   authName: '_auth',
@@ -208,7 +215,15 @@ const router = createBrowserRouter([
 
 function App() {
   const theme = createTheme(themeStyle)
-  const { initialized } = useGlobalContext()
+  const { initialized, user } = useGlobalContext()
+
+  // useEffect(() => {
+  //   console.log('useratapp', user, window.location.pathname.split('/')[1])
+  //   if (user && window.location.pathname.split('/')[1] == 'login') {
+  //     if (user.loma == 'students') nav('/user/tasks')
+  //     else if (user.loma == 'skolotajs') nav('/teacher/students')
+  //   }
+  // }, [])
 
   return initialized ? (
     <AuthProvider store={store}>
@@ -226,7 +241,7 @@ function App() {
         flex: 1,
       }}
     >
-      <h1>Loading...</h1>
+      <CircularProgress />
     </Box>
   )
 }
