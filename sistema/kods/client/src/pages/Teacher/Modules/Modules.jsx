@@ -50,7 +50,7 @@ const Modules = () => {
   }
 
   const handleDelete = (moduleID, arrEl) => {
-    axios.delete('moduli/' + moduleID).then((res) => {
+    axios.delete('moduli/single/' + moduleID).then((res) => {
       if (String(res.status).charAt(0) == '2') {
         const temp = [...data]
         temp.splice(arrEl, 1)

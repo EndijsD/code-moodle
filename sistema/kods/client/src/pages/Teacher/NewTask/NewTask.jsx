@@ -23,12 +23,14 @@ import {
   initData,
   initFieldValid,
 } from '../../../data/Teacher/NewTask/NewTaskInitVals'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const NewTask = () => {
   const nav = useNavigate()
   const [data, setData] = useState(initData)
   const [fieldValid, setFieldValid] = useState(initFieldValid)
   const [status, setStatus] = useState(initStatus)
+  const { user } = useGlobalContext()
 
   const isWhitespaceString = (str) => !/\S/.test(str) // Checks if string only contains white space returns true/false
 
@@ -62,12 +64,13 @@ const NewTask = () => {
         valoda: data.language,
         punkti: data.points,
         piemers: data.example,
+        skolotajs_id: user.skolotajs_id,
       }
       setStatus({ ...status, pending: true, error: false })
       axios
         .post(`uzdevumi`, postData)
         .then(function (response) {
-          if (response.data.message == 'Added entry') {
+          if (response.data.status === 200) {
             setStatus({
               ...status,
               pending: false,

@@ -79,24 +79,6 @@ router.get('/modules_tasks', authenticateSession, (req, res) => {
   )
 })
 
-router.get('/tasks/:id', authenticateSession, (req, res) => {
-  let id = req.params.id
-
-  db.query(
-    `select uzdevumi_id, tema, nosaukums, apraksts, valoda, punkti 
-    from uzdevumi 
-    where skolotajs_id = ?`,
-    id,
-    (err, result) => {
-      if (err) {
-        res.status(500).json({ message: err.message })
-      } else {
-        res.send(result)
-      }
-    }
-  )
-})
-
 router.get('/tasks_of_module/:id', authenticateSession, (req, res) => {
   const id = req.params.id
 
@@ -132,15 +114,20 @@ router.delete('/removeTask/:id/:taskId', authenticateSession, (req, res) => {
   )
 })
 
-router.get('/taskInfo', authenticateSession, (req, res) => {
+router.get('/taskInfo/:id', authenticateSession, (req, res) => {
+  const id = req.params.id
+
   db.query(
-    `SELECT l.vards, l.uzvards, st.klase, sk.nosaukums as skola, sk.tips, i.iesniegumi_id, uzd.nosaukums
+    `SELECT l.vards as vards, st.klase as klase ,l.uzvards as uzvards, sk.nosaukums as skola, sk.tips as tips, uzd.nosaukums as nosaukums, i.iesniegumi_id as iesniegumi_id 
     FROM studenti st
-    join lietotajs l on st.lietotajs_id = l.lietotajs_id
-    JOIN skolas sk  ON st.skolas_id = sk.skolas_id
+    JOIN lietotajs l ON st.lietotajs_id = l.lietotajs_id
     JOIN iesniegumi i ON i.studenti_id = st.studenti_id
     JOIN uzdevumi uzd ON uzd.uzdevumi_id = i.uzdevumi_id
-    WHERE st.akceptets = 1 AND i.punkti is NULL;`,
+    JOIN skolas sk ON sk.skolas_id = st.skolas_id
+    JOIN skolotajs skol ON skol.skolotajs_id = uzd.skolotajs_id
+    WHERE skol.skolotajs_id = ?;
+`,
+    [id],
     (err, result) => {
       if (err) {
         res.status(500).json({ message: err.message })
@@ -151,13 +138,17 @@ router.get('/taskInfo', authenticateSession, (req, res) => {
   )
 })
 
-router.get('/generalStudentInfo', authenticateSession, (req, res) => {
+router.get('/generalStudentInfo/:id', authenticateSession, (req, res) => {
+  const id = req.params.id
+
   db.query(
-    `SELECT lietotajs.*, skolas.tips, skolas.nosaukums as skola
-    from studenti s
-    join lietotajs l on s.lietotajs_id = l.lietotajs_id
-    join skolas on s.skolas_id = skolas.skolas_id
-    where s.akceptets = 1;`,
+    `SELECT s.studenti_id as studenti_id, l.vards as vards, l.uzvards as uzvards, skolas.nosaukums as skola, s.klase as klase, skolas.tips as tips
+FROM studenti s
+JOIN lietotajs l ON s.lietotajs_id = l.lietotajs_id
+JOIN skolas ON s.skolas_id = skolas.skolas_id
+JOIN skolotajs_students skst ON skst.studenti_id = s.studenti_id
+WHERE skst.skolotajs_id = ?`,
+    [id],
     (err, result) => {
       if (err) {
         res.status(500).json({ message: err.message })
@@ -267,6 +258,36 @@ router.post('/studentModules', authenticateSession, async (req, res) => {
       }
     }
   )
+})
+
+router.get('/tasks/:id', authenticateSession, (req, res) => {
+  let id = req.params.id
+
+  db.query(
+    `select uzdevumi_id, tema, nosaukums, apraksts, valoda, punkti 
+    from uzdevumi 
+    where skolotajs_id = ?`,
+    id,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message })
+      } else {
+        res.send(result)
+      }
+    }
+  )
+})
+
+router.delete('/removeTask/:id', authenticateSession, async (req, res) => {
+  const id = req.params.id
+
+  db.query(`DELETE FROM moduli_uzdevumi WHERE moduli_id = ?`, [id], (err) => {
+    if (err) {
+      res.status(500).json({ message: err.message })
+    } else {
+      res.json({ message: 'Deleted entry: ' + id })
+    }
+  })
 })
 
 export default router

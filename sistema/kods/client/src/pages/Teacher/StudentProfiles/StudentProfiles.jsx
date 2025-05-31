@@ -8,15 +8,17 @@ import { studentColumns } from '../../../data/Teacher/StudentProfiles/StudentPro
 import { MessageContainer } from './style'
 import { DataGridSx } from '../../../data/DataGrid/style'
 import { initStatus } from '../../../data/initStatus'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const StudentProfiles = () => {
   const [localeText, _] = useState(LocaleTextStudent)
   const [students, setStudents] = useState(null)
   const [status, setStatus] = useState(initStatus)
+  const { user } = useGlobalContext()
 
   const fetchData = () => {
     axios
-      .get(`custom/generalStudentInfo`)
+      .get(`custom/generalStudentInfo/${user.skolotajs_id}`)
       .then(function (res) {
         setStudents(res.data)
         setStatus({ pending: false, error: false, success: false })

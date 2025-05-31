@@ -15,6 +15,7 @@ import Title from '../../../components/General/Title'
 import * as S from './EditModuleStyle'
 import { initStatus } from '../../../data/initStatus'
 import { initSearch } from '../../../data/Teacher/EditModule/data'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const EditModule = () => {
   const nav = useNavigate()
@@ -26,15 +27,19 @@ const EditModule = () => {
   const [allTasks, setAllTasks] = useState(null)
   const [checkbox, setCheckbox] = useState(null)
   const [status, setStatus] = useState(initStatus)
+  const [startData, setStartData] = useState()
   let tempArr = []
   let tempArr2 = []
+
+  const { user } = useGlobalContext()
+
   const fetchData = () => {
-    axios.get(`moduli/${id}`).then(function (res) {
+    axios.get(`moduli/${id}`).then((res) => {
       setInput(res.data[0].nosaukums)
 
       axios
-        .get(`uzdevumi/`)
-        .then(function (res) {
+        .get(`custom/tasks/${user.skolotajs_id}`)
+        .then((res) => {
           setAllTasks(res.data)
           for (let i = 0; i < res.data.length; i++) {
             tempArr[i] = [res.data[i].uzdevumi_id, 'off']
@@ -42,8 +47,9 @@ const EditModule = () => {
           }
           axios
             .get(`custom/tasks_of_module/${id}`)
-            .then(function (res) {
+            .then((res) => {
               setTasks(res)
+              setStartData(res.data)
               setStatus({ pending: false, error: false })
               for (let k = 0; k < tempArr.length; k++) {
                 for (let i = 0; i < res.data.length; i++) {
@@ -55,12 +61,12 @@ const EditModule = () => {
               setChanged(tempArr2)
               setCheckbox(tempArr)
             })
-            .catch(function (error) {
+            .catch((error) => {
               console.log(error)
               setStatus({ pending: false, error: true })
             })
         })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error)
           setStatus({ pending: false, error: true })
         })
@@ -93,18 +99,45 @@ const EditModule = () => {
     setChanged(temp2)
   }
 
+  const PostData = async () => {
+    let postArr = checkbox
+      .filter((el) => el[1] === 'on')
+      .map((el, i) => ({
+        uzdevumi_id: el[0],
+        moduli_id: id,
+      }))
+    if (postArr.length != 0) {
+      axios.post('moduli_uzdevumi/multiple', postArr).catch((error) => {
+        console.log(error)
+        setStatus({ ...status, error: true })
+      })
+    }
+  }
+
   const handleSubmit = () => {
-    axios.patch(`moduli/${id}`, { nosaukums: input }).then(function (res) {
-      for (let i = 0; i < allTasks.length; i++) {
-        if (checkbox[i][1] == 'off' && changed[i] == true) {
-          axios.delete(`custom/removeTask/${id}/${checkbox[i][0]}`)
-        } else if (checkbox[i][1] == 'on' && changed[i] == true) {
-          let temp = { uzdevumi_id: checkbox[i][0], moduli_id: id }
-          axios.post(`moduli_uzdevumi`, temp)
+    axios
+      .patch(`moduli/single/${id}`, { nosaukums: input })
+      .then(() => {
+        if (startData.length != 0) {
+          axios
+            .delete(`custom/removeTask/${id}`)
+            .then(() => {
+              PostData()
+            })
+            .catch((error) => {
+              console.log(error)
+              setStatus({ ...status, error: true })
+            })
+        } else {
+          PostData()
         }
-      }
-      nav('/teacher/modules')
-    })
+      })
+      .finally(() => {
+        setStatus({ ...status, success: true })
+        setTimeout(() => {
+          nav('/teacher/modules')
+        }, 1000)
+      })
   }
 
   return (

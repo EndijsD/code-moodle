@@ -7,17 +7,22 @@ import { columns } from '../../../data/Teacher/Evaluate/EvaluateData'
 import { LocaleTextEvaluate } from '../../../data/DataGrid/DataGridLocaleText'
 import { DataGridSx } from '../../../data/DataGrid/style'
 import { initStatus } from '../../../data/initStatus'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 export const Evaluate = () => {
   const [fetchState, setFetchState] = useState(initStatus)
   const [data, setData] = useState(null)
 
+  const { user } = useGlobalContext()
+
   const fetchTasks = () => {
     setFetchState({ pending: true, failed: false })
 
     axios
-      .get('custom/taskInfo')
-      .then(function (response) {
+      .get(`custom/taskInfo/${user.skolotajs_id}`)
+      .then((response) => {
+        console.log(response, user.skolotajs_id)
+
         setData(response.data)
         setFetchState({
           ...fetchState,
