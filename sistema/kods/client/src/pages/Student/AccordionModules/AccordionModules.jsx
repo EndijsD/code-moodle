@@ -3,17 +3,25 @@ import ModuleAccordion from '../../../components/Student/ModuleAccordion'
 import Title from '../../../components/General/Title'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const AccordionModules = () => {
   const { studentID } = useParams()
+  const { user } = useGlobalContext()
   const { data, isPending } = useAxios({
-    url: 'custom/modules_tasks/' + (studentID || ''),
+    url: 'custom/modules_tasks/' + (studentID || user.studenti_id),
   })
 
   return !isPending ? (
     data && data.length ? (
       <>
-        <Title text={false ? data[0].vardsUzvards : 'Veicamie Uzdevumi'} />
+        <Title
+          text={
+            user?.loma === 'skolotajs'
+              ? data[0].vardsUzvards
+              : 'Veicamie Uzdevumi'
+          }
+        />
 
         {data.map((module, i) => {
           return (
@@ -24,7 +32,7 @@ const AccordionModules = () => {
               max_points={module.p_kopa}
               gotten_points={module.i_kopa}
               moduleID={module.moduli_id}
-              isTeacher={false}
+              isTeacher={user?.loma === 'skolotajs'}
               studentIDFromTeacher={studentID}
             />
           )
@@ -33,7 +41,9 @@ const AccordionModules = () => {
     ) : (
       <Box sx={{ height: '100%', alignContent: 'center' }}>
         <Typography>
-          {false ? 'Studentam nav uzdoti moduļi' : 'Nav veicamo uzdevumu'}
+          {user?.loma === 'skolotajs'
+            ? 'Studentam nav uzdoti moduļi'
+            : 'Nav veicamo uzdevumu'}
         </Typography>
       </Box>
     )

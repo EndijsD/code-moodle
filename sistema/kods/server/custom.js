@@ -20,7 +20,7 @@ router.get('/newStudents', authenticateSession, (req, res) => {
   )
 })
 
-router.get('/modules_tasks', authenticateSession, (req, res) => {
+router.get('/modules_tasks/:id', authenticateSession, (req, res) => {
   let id
 
   if (req.params.id) id = req.params.id
