@@ -14,6 +14,7 @@ import { Add, Delete, Edit } from '@mui/icons-material'
 import Title from '../../../components/General/Title'
 import { Link } from 'react-router-dom'
 import * as S from './ModulesStyle'
+import Spinner from '../../../components/General/Spinner/Spinner'
 
 const Modules = () => {
   const [data, setData] = useState(undefined)
@@ -119,7 +120,7 @@ const Modules = () => {
           })}
         </Grid>
       ) : (
-        <CircularProgress />
+        <Spinner />
       )}
     </>
   )

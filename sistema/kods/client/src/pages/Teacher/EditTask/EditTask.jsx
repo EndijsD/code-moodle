@@ -20,6 +20,7 @@ import Title from '../../../components/General/Title'
 import { MainContainerSx } from './EditTaskStyle'
 import { initStatus } from '../../../data/initStatus'
 import { initFieldValid } from '../../../data/Teacher/NewTask/NewTaskInitVals'
+import Spinner from '../../../components/General/Spinner/Spinner'
 
 const EditTask = () => {
   const { id } = useParams()
@@ -86,7 +87,7 @@ const EditTask = () => {
   }
 
   useEffect(() => {
-    if (data == undefined) {
+    if (status.pending ? <Spinner /> : data == undefined) {
       axios
         .get(`uzdevumi/${id}`)
         .then(function (res) {
@@ -225,9 +226,9 @@ const EditTask = () => {
           </Button>
         </S.Form>
       ) : data == 'error' ? (
-        <CircularProgress />
+        <Spinner />
       ) : (
-        data == undefined && <CircularProgress />
+        <Spinner />
       )}
     </Box>
   )

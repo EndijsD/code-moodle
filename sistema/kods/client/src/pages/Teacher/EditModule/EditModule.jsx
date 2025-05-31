@@ -16,6 +16,7 @@ import * as S from './EditModuleStyle'
 import { initStatus } from '../../../data/initStatus'
 import { initSearch } from '../../../data/Teacher/EditModule/data'
 import { useGlobalContext } from '../../../context/GlobalProvider'
+import Spinner from '../../../components/General/Spinner/Spinner'
 
 const EditModule = () => {
   const nav = useNavigate()
@@ -144,7 +145,7 @@ const EditModule = () => {
     <>
       <Title text='Moduļa rediģēšana' />
       {status.pending ? (
-        <CircularProgress />
+        <Spinner />
       ) : status.error ? (
         <Typography>Servera kļūda!</Typography>
       ) : input != '' && tasks != null ? (

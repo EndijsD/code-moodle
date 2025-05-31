@@ -1,7 +1,7 @@
 import { DataGrid } from '@mui/x-data-grid'
 import Title from '../../../components/General/Title'
 import { useEffect, useState } from 'react'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import axios from 'axios'
 import { LocaleTextStudent } from '../../../data/DataGrid/DataGridLocaleText'
 import { studentColumns } from '../../../data/Teacher/StudentProfiles/StudentProfiles'
@@ -9,6 +9,7 @@ import { MessageContainer } from './style'
 import { DataGridSx } from '../../../data/DataGrid/style'
 import { initStatus } from '../../../data/initStatus'
 import { useGlobalContext } from '../../../context/GlobalProvider'
+import Spinner from '../../../components/General/Spinner/Spinner'
 
 const StudentProfiles = () => {
   const [localeText, _] = useState(LocaleTextStudent)
@@ -39,9 +40,7 @@ const StudentProfiles = () => {
   return (
     <>
       {status.pending ? (
-        <Box sx={MessageContainer}>
-          <CircularProgress />
-        </Box>
+        <Spinner />
       ) : status.error ? (
         <Box sx={MessageContainer}>
           <Typography>Servera kļūda!</Typography>
@@ -65,7 +64,7 @@ const StudentProfiles = () => {
           />
         </>
       ) : (
-        <Typography>Servera kļūda!</Typography>
+        <Spinner />
       )}
     </>
   )

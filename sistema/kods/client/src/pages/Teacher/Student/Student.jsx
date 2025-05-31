@@ -3,6 +3,7 @@ import useAxios from '../../../hooks/useAxios'
 import InfoCard from '../../../components/Student/InfoCard'
 import Title from '../../../components/General/Title'
 import axios from 'axios'
+import Spinner from '../../../components/General/Spinner/Spinner'
 
 const Students = () => {
   const { data, setData, isPending } = useAxios('custom/newStudents')
@@ -48,34 +49,35 @@ const Students = () => {
     <>
       <Title text='Studentu Pieņemšana' />
 
-      {!isPending &&
-        (data && data.length ? (
-          <Grid
-            container
-            spacing={4}
-            sx={{ justifyContent: belowMd && 'center', textAlign: 'center' }}
-          >
-            {data.map((user) => {
-              return (
-                <InfoCard
-                  key={user.studenti_id}
-                  ID={user.studenti_id}
-                  name={user.vards}
-                  surname={user.uzvards}
-                  email={user.epasts}
-                  school={user.nosaukums}
-                  schoolClass={user.klase + getClassType(user.tips)}
-                  onAccept={handleAccept}
-                  onDeny={handleDeny}
-                />
-              )
-            })}
-          </Grid>
-        ) : (
-          <Typography sx={{ fontSize: 32, textAlign: 'center' }}>
-            Nav jauni pieprasījumi!
-          </Typography>
-        ))}
+      {isPending ? (
+        <Spinner />
+      ) : data && data.length ? (
+        <Grid
+          container
+          spacing={4}
+          sx={{ justifyContent: belowMd && 'center', textAlign: 'center' }}
+        >
+          {data.map((user) => {
+            return (
+              <InfoCard
+                key={user.studenti_id}
+                ID={user.studenti_id}
+                name={user.vards}
+                surname={user.uzvards}
+                email={user.epasts}
+                school={user.nosaukums}
+                schoolClass={user.klase + getClassType(user.tips)}
+                onAccept={handleAccept}
+                onDeny={handleDeny}
+              />
+            )
+          })}
+        </Grid>
+      ) : (
+        <Typography sx={{ fontSize: 32, textAlign: 'center' }}>
+          Nav jauni pieprasījumi!
+        </Typography>
+      )}
     </>
   )
 }

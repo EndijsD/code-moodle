@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { Box, CircularProgress, Paper } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import Title from '../../../components/General/Title'
 import { columns } from '../../../data/Teacher/Evaluate/EvaluateData'
@@ -8,6 +7,7 @@ import { LocaleTextEvaluate } from '../../../data/DataGrid/DataGridLocaleText'
 import { DataGridSx } from '../../../data/DataGrid/style'
 import { initStatus } from '../../../data/initStatus'
 import { useGlobalContext } from '../../../context/GlobalProvider'
+import Spinner from '../../../components/General/Spinner/Spinner'
 
 export const Evaluate = () => {
   const [fetchState, setFetchState] = useState(initStatus)
@@ -21,8 +21,6 @@ export const Evaluate = () => {
     axios
       .get(`custom/taskInfo/${user.skolotajs_id}`)
       .then((response) => {
-        console.log(response, user.skolotajs_id)
-
         setData(response.data)
         setFetchState({
           ...fetchState,
@@ -48,7 +46,9 @@ export const Evaluate = () => {
 
   return (
     <>
-      {data ? (
+      {fetchState.pending ? (
+        <Spinner />
+      ) : data ? (
         <>
           <Title text='Vērtēšana' />
           <DataGrid
@@ -67,9 +67,7 @@ export const Evaluate = () => {
           />
         </>
       ) : (
-        <Box sx={{ height: '100%', alignContent: 'center' }}>
-          <CircularProgress />
-        </Box>
+        <Spinner />
       )}
     </>
   )

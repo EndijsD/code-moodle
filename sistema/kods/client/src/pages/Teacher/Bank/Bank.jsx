@@ -25,8 +25,6 @@ import { useGlobalContext } from '../../../context/GlobalProvider'
 const Bank = () => {
   const [fetchState, setFetchState] = useState(initStatusPending)
   const [data, setData] = useState(null)
-  const [open, setOpen] = useState(false)
-
   const { user } = useGlobalContext()
 
   const fetchBankItems = () => {
@@ -42,6 +40,7 @@ const Bank = () => {
           })
         })
         .catch((error) => {
+          console.log(error)
           setFetchState({
             failed: true,
             pending: false,
@@ -49,10 +48,6 @@ const Bank = () => {
         })
     }
   }
-
-  useEffect(() => {
-    console.log(data)
-  }, [data])
 
   const deleteTask = (id, itemId) => {
     axios.delete('uzdevumi/single/' + id).then((res) => {
@@ -68,10 +63,6 @@ const Bank = () => {
     fetchBankItems()
   }, [])
 
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen)
-  }
-
   return (
     <>
       {fetchState.pending ? (
@@ -84,9 +75,7 @@ const Bank = () => {
         <>
           <Title text='Uzdevumu Banka' />
           <Link to='newTask' style={{ marginBottom: 16 }}>
-            <Button variant='contained' onClick={toggleDrawer(true)}>
-              Jauns uzdevums
-            </Button>
+            <Button variant='contained'>Jauns uzdevums</Button>
           </Link>
         </>
       )}

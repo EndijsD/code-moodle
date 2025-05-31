@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import Title from '../../../components/General/Title'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
@@ -13,6 +13,7 @@ import {
 } from '../../../data/Teacher/AssignPage/Assign'
 import { initStatus } from '../../../data/initStatus'
 import { useGlobalContext } from '../../../context/GlobalProvider'
+import Spinner from '../../../components/General/Spinner/Spinner'
 
 const Assign = () => {
   const [students, setStudents] = useState(null)
@@ -27,19 +28,21 @@ const Assign = () => {
   const fetchData = () => {
     axios
       .get(`custom/generalStudentInfo/${user.skolotajs_id}`)
-      .then(function (res) {
+      .then((res) => {
         setStudents(res.data)
       })
-      .catch(function (err) {
+      .catch((err) => {
         setStatus({ pending: false, error: true, success: false })
+        console.log(err)
       })
     axios
       .get(`moduli`)
-      .then(function (res) {
+      .then((res) => {
         setModules(res.data)
         setStatus({ pending: false, error: false, success: false })
       })
-      .catch(function (err) {
+      .catch((err) => {
+        console.log(err)
         setStatus({ pending: false, error: true, success: false })
       })
   }
@@ -59,7 +62,8 @@ const Assign = () => {
           studenti_id: selected.students[i],
           moduli_id: selected.modules[k],
         }
-        axios.post(`custom/studentModules`, postObj).catch(function (err) {
+        axios.post(`custom/studentModules`, postObj).catch((err) => {
+          console.log(err)
           setStatus({ pending: false, error: true, success: false })
         })
       }
@@ -79,10 +83,8 @@ const Assign = () => {
 
   return (
     <>
-      {status.pending ? (
-        <Box sx={S.loaderBoxSx}>
-          <CircularProgress />
-        </Box>
+      {!status || status.pending ? (
+        <Spinner />
       ) : status.error ? (
         <Box sx={S.errorBoxSx}>
           <Typography>Servera kļūda!</Typography>
@@ -146,7 +148,7 @@ const Assign = () => {
           </Button>
         </>
       ) : (
-        <Typography>Servera kļūda!</Typography>
+        <Spinner />
       )}
     </>
   )
