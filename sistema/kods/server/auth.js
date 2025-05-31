@@ -119,6 +119,14 @@ router.post('/logout', async (req, res) => {
       if (err) {
         res.status(500).json({ message: err.message })
       } else {
+        res.clearCookie('refreshToken', {
+          httpOnly: true,
+          sameSite: 'strict',
+        })
+        res.clearCookie('accessToken', {
+          httpOnly: true,
+          sameSite: 'strict',
+        })
         res.send({ message: 'Logged out' })
       }
     }

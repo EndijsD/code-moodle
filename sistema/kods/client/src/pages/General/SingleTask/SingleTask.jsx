@@ -8,24 +8,23 @@ import {
 } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import useAxios from '../../../hooks/useAxios'
-import url from '../../../../url'
 import * as S from './style'
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
 import CodeEditor from '@uiw/react-textarea-code-editor'
 import ChatBox from '../../../components/General/ChatBox'
 import axios from 'axios'
 import moment from 'moment'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const SingleTask = () => {
   const nav = useNavigate()
-  const auth = useAuthUser()
+  const { user } = useGlobalContext()
   const { moduleID, taskID, subID } = useParams()
   const linkEnd =
     auth.userType == 1 ? subID : auth.userID + '/' + moduleID + '/' + taskID
   const { data, setData, isPending } = useAxios('custom/singleTask/' + linkEnd)
 
   const handleSubmit = () => {
-    if (auth.userType == 0)
+    if (user.loma == 'students')
       if (data.iesniegumi_id) {
         axios
           .patch('iesniegumi/' + data.iesniegumi_id, {

@@ -9,17 +9,11 @@ import { useEffect, useState } from 'react'
 import * as S from './style'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import useSignIn from 'react-auth-kit/hooks/useSignIn'
-import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
 import FormError from '../../../components/General/FormError'
 import { errorMes, initialValues } from '../../../data/General/LoginData'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const Login = () => {
-  const signIn = useSignIn()
-  const auth = useAuthUser()
-  // const isAuthenticated = useIsAuthenticated()
   const [form, setForm] = useState(initialValues)
   const [showPassword, setShowPassword] = useState(false)
   const [problems, setProblems] = useState([])
@@ -30,12 +24,13 @@ const Login = () => {
 
   // Ja lietotājs ir ielogojies, tad lietotājs tiek aizvests atpakaļ uz sava lietotāja tipa sākuma lapu
   useEffect(() => {
-    console.log('user', user)
     if (user) {
       if (user.loma == 'students') nav('/user/tasks')
       else if (user.loma == 'skolotajs') nav('/teacher/students')
     }
   }, [user])
+
+  if (!initialized || user) return
 
   const handleClickShowPassword = () =>
     setShowPassword((showPassword) => !showPassword)

@@ -6,7 +6,6 @@ export const useGlobalContext = () => useContext(GlobalContext)
 
 const GlobalProvider = ({ children }) => {
   const refreshPooling = useRef()
-  // const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState(null)
   const [initialized, setInitialized] = useState(false)
 
@@ -23,7 +22,6 @@ const GlobalProvider = ({ children }) => {
           const refresh = () => {
             axios.post('auth/refresh').catch(() => {
               clearInterval(refreshPooling.current)
-              // setIsAuthenticated(false)
               setUser(null)
             })
           }
@@ -33,13 +31,13 @@ const GlobalProvider = ({ children }) => {
           refreshPooling.current = setInterval(refresh, 600000) // 10 min
         }
       } catch (e) {
-        // setIsAuthenticated(false)
         setUser(null)
+      } finally {
+        setInitialized(true)
       }
     }
 
     checkAuthAndStartRefresh()
-    setInitialized(true)
 
     return () => clearInterval(refreshPooling.current)
   }, [])

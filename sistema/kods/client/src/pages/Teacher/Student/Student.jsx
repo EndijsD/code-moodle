@@ -1,6 +1,5 @@
 import { Grid, Typography, useMediaQuery } from '@mui/material'
 import useAxios from '../../../hooks/useAxios'
-import url from '../../../../url'
 import InfoCard from '../../../components/User/InfoCard'
 import Title from '../../../components/General/Title'
 import axios from 'axios'
