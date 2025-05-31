@@ -14,28 +14,28 @@ import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated'
 import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
 import FormError from '../../../components/General/FormError'
 import { errorMes, initialValues } from '../../../data/General/LoginData'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const Login = () => {
   const signIn = useSignIn()
   const auth = useAuthUser()
-  const isAuthenticated = useIsAuthenticated()
+  // const isAuthenticated = useIsAuthenticated()
   const [form, setForm] = useState(initialValues)
   const [showPassword, setShowPassword] = useState(false)
   const [problems, setProblems] = useState([])
   const [problem, setProblem] = useState(null)
   const [isPending, setIsPending] = useState(false)
   const nav = useNavigate()
+  const { user, setUser, initialized } = useGlobalContext()
 
-  //Ja lietotājs ir ielogojies, tad lietotājs tiek aizvests atpakaļ uz sava lietotāja tipa sākuma lapu
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     if (auth.userType == 0) {
-  //       nav('/user/tasks')
-  //     } else if (auth.userType == 1) {
-  //       nav('/teacher/students')
-  //     }
-  //   }
-  // }, [])
+  // Ja lietotājs ir ielogojies, tad lietotājs tiek aizvests atpakaļ uz sava lietotāja tipa sākuma lapu
+  useEffect(() => {
+    console.log('user', user)
+    if (user) {
+      if (user.loma == 'students') nav('/user/tasks')
+      else if (user.loma == 'skolotajs') nav('/teacher/students')
+    }
+  }, [user])
 
   const handleClickShowPassword = () =>
     setShowPassword((showPassword) => !showPassword)
@@ -63,6 +63,7 @@ const Login = () => {
         const res = await axios.post(`auth/login`, form)
 
         if (String(res.status).charAt(0) == '2') {
+          setUser(res.data)
           if (res.data.loma == 'students') nav('/user/tasks')
           else if (res.data.loma == 'skolotajs') nav('/teacher/students')
         }

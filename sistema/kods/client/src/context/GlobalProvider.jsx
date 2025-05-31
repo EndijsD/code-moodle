@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 
 const GlobalContext = createContext()
@@ -6,6 +6,9 @@ export const useGlobalContext = () => useContext(GlobalContext)
 
 const GlobalProvider = ({ children }) => {
   const refreshPooling = useRef()
+  // const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [user, setUser] = useState(null)
+  const [initialized, setInitialized] = useState(false)
 
   axios.defaults.baseURL = 'http://localhost:3000'
   axios.defaults.withCredentials = true
@@ -13,23 +16,30 @@ const GlobalProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthAndStartRefresh = async () => {
       try {
-        await axios.get('/auth/check') // Check if accessToken is valid
+        const res = await axios.get('auth/check') // Check if accessToken is valid
 
-        // User is authenticated, start refresh interval
-        const refresh = () => {
-          axios.post('auth/refresh').catch(() => {
-            clearInterval(refreshPooling.current)
-          })
+        if (String(res.status).charAt(0) == '2') {
+          // User is authenticated, start refresh interval
+          const refresh = () => {
+            axios.post('auth/refresh').catch(() => {
+              clearInterval(refreshPooling.current)
+              // setIsAuthenticated(false)
+              setUser(null)
+            })
+          }
+
+          setUser(res.data)
+          refresh() // Initial call
+          refreshPooling.current = setInterval(refresh, 600000) // 10 min
         }
-
-        refresh() // Initial call
-        refreshPooling.current = setInterval(refresh, 600000) // 10 min
       } catch (e) {
-        // Not authenticated
+        // setIsAuthenticated(false)
+        setUser(null)
       }
     }
 
     checkAuthAndStartRefresh()
+    setInitialized(true)
 
     return () => clearInterval(refreshPooling.current)
   }, [])
@@ -38,6 +48,9 @@ const GlobalProvider = ({ children }) => {
     <GlobalContext.Provider
       value={{
         refreshPooling,
+        user,
+        setUser,
+        initialized,
       }}
     >
       {children}

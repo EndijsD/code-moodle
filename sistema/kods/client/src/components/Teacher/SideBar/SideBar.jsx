@@ -6,13 +6,16 @@ import { useState } from 'react'
 import useSignOut from 'react-auth-kit/hooks/useSignOut'
 import * as S from './style'
 import { links } from './links'
+import { useGlobalContext } from '../../../context/GlobalProvider'
+import axios from 'axios'
 
 const SideBar = () => {
   const [collapsed, setCollapsed] = useState(true)
   const theme = useTheme()
   const location = useLocation()
-  const signOut = useSignOut()
+  // const signOut = useSignOut()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'))
+  const { setUser } = useGlobalContext()
 
   const menuItemStyles = {
     button: {
@@ -24,6 +27,13 @@ const SideBar = () => {
         boxShadow: 'inset 5px 0 white',
       },
     },
+  }
+
+  const logout = () => {
+    axios.post(`auth/logout`).finally(() => {
+      setUser(null)
+      nav('/')
+    })
   }
 
   return (
@@ -84,9 +94,9 @@ const SideBar = () => {
       </div>
       <Menu style={{ alignSelf: !isSmallScreen && !collapsed && 'center' }}>
         <MenuItem
-          component={<Link to='/' />}
+          // component={<Link to='/' />}
           icon={<Logout />}
-          onClick={() => signOut()}
+          onClick={logout}
           style={{
             borderRadius: 50,
             margin: '32px 5px',

@@ -10,14 +10,19 @@ import { links } from './links'
 import * as S from './style'
 import { useTheme } from '@emotion/react'
 import axios from 'axios'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const UserHeader = () => {
   // const signOut = useSignOut()
   const theme = useTheme()
   const nav = useNavigate()
+  const { setUser } = useGlobalContext()
 
-  const logout = async () => {
-    axios.post(`/auth/logout`).finally(() => nav('/login'))
+  const logout = () => {
+    axios.post(`auth/logout`).finally(() => {
+      setUser(null)
+      nav('/login')
+    })
   }
 
   return (
