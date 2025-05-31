@@ -16,6 +16,7 @@ import Title from '../../../components/General/Title'
 import * as S from './style'
 import { initStatus } from '../../../data/initStatus'
 import { initSearch } from '../../../data/Teacher/EditModule/data'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const NewModule = () => {
   const nav = useNavigate()
@@ -25,9 +26,14 @@ const NewModule = () => {
   const [checkbox, setCheckbox] = useState(null)
   const [status, setStatus] = useState(initStatus)
   let tempArr = []
+
+  const { user } = useGlobalContext()
+
   const fetchData = () => {
+    console.log(user.skolotajs_id)
+
     axios
-      .get(`uzdevumi/`)
+      .get(`custom/tasks/${user.skolotajs_id}`)
       .then(function (res) {
         setAllTasks(res.data)
         for (let i = 0; i < res.data.length; i++) {
@@ -67,16 +73,18 @@ const NewModule = () => {
 
   const handleSubmit = () => {
     let newId
-    axios.post(`moduli`, { nosaukums: input }).then(function (res) {
-      newId = res.data.id
-      for (let i = 0; i < allTasks.length; i++) {
-        if (checkbox[i][1] == 'on') {
-          let temp = { uzdevumi_id: checkbox[i][0], moduli_id: newId }
-          axios.post(`moduli_uzdevumi`, temp)
+    axios
+      .post(`moduli`, { nosaukums: input, skolotajs_id: user.skolotajs_id })
+      .then(function (res) {
+        newId = res.data.id
+        for (let i = 0; i < allTasks.length; i++) {
+          if (checkbox[i][1] == 'on') {
+            let temp = { uzdevumi_id: checkbox[i][0], moduli_id: newId }
+            axios.post(`moduli_uzdevumi`, temp)
+          }
         }
-      }
-      nav('/teacher/modules')
-    })
+        nav('/teacher/modules')
+      })
   }
 
   return (

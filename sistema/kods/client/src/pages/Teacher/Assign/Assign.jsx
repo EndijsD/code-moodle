@@ -13,6 +13,7 @@ import {
   studentColumns,
 } from '../../../data/Teacher/AssignPage/Assign'
 import { initStatus } from '../../../data/initStatus'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const Assign = () => {
   const [students, setStudents] = useState(null)
@@ -22,9 +23,11 @@ const Assign = () => {
   const [status, setStatus] = useState(initStatus)
   const nav = useNavigate()
 
+  const { user } = useGlobalContext()
+
   const fetchData = () => {
     axios
-      .get(`custom/generalStudentInfo`)
+      .get(`custom/generalStudentInfo/${user.skolotajs_id}`)
       .then(function (res) {
         setStudents(res.data)
       })

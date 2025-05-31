@@ -3,21 +3,22 @@ import Title from '../../../components/General/Title'
 import { useEffect, useState } from 'react'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import axios from 'axios'
-import url from '../../../../url'
 import { LocaleTextStudent } from '../../../data/DataGrid/DataGridLocaleText'
 import { studentColumns } from '../../../data/Teacher/StudentProfiles/StudentProfiles'
 import { MessageContainer } from './style'
 import { DataGridSx } from '../../../data/DataGrid/style'
 import { initStatus } from '../../../data/initStatus'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const StudentProfiles = () => {
   const [localeText, _] = useState(LocaleTextStudent)
   const [students, setStudents] = useState(null)
   const [status, setStatus] = useState(initStatus)
+  const { user } = useGlobalContext()
 
   const fetchData = () => {
     axios
-      .get(`custom/generalStudentInfo`)
+      .get(`custom/generalStudentInfo/${user.skolotajs_id}`)
       .then(function (res) {
         setStudents(res.data)
         setStatus({ pending: false, error: false, success: false })
