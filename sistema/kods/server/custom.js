@@ -125,7 +125,8 @@ router.get('/taskInfo/:id', authenticateSession, (req, res) => {
     JOIN uzdevumi uzd ON uzd.uzdevumi_id = i.uzdevumi_id
     JOIN skolas sk ON sk.skolas_id = st.skolas_id
     JOIN skolotajs skol ON skol.skolotajs_id = uzd.skolotajs_id
-    WHERE skol.skolotajs_id = ?;
+    JOIN skolotajs_students skst ON skst.studenti_id = st.studenti_id
+    WHERE skol.skolotajs_id = ? AND skst.akceptets = 1;
 `,
     [id],
     (err, result) => {
@@ -147,7 +148,7 @@ FROM studenti s
 JOIN lietotajs l ON s.lietotajs_id = l.lietotajs_id
 JOIN skolas ON s.skolas_id = skolas.skolas_id
 JOIN skolotajs_students skst ON skst.studenti_id = s.studenti_id
-WHERE skst.skolotajs_id = ?`,
+WHERE skst.skolotajs_id = 1 AND skst.akceptets = 1`,
     [id],
     (err, result) => {
       if (err) {
