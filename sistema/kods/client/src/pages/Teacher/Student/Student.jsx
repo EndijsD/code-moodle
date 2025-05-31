@@ -5,7 +5,7 @@ import Title from '../../../components/General/Title'
 import axios from 'axios'
 
 const Students = () => {
-  const { data, setData, isPending } = useAxios('custom/newStudents')
+  const { data, setData, isPending } = useAxios({ url: 'custom/newStudents' })
   const belowMd = useMediaQuery((theme) => theme.breakpoints.down('md'))
 
   const getClassType = (schoolType) => {
@@ -16,9 +16,9 @@ const Students = () => {
 
   const handleAccept = (ID, setError) => {
     axios
-      .patch('studenti/' + ID, { akceptets: true })
+      .patch('custom/acceptOrReject/' + ID, { akceptets: true })
       .then(() => {
-        setData(data.filter((el) => el.studenti_id != ID))
+        setData((prev) => prev.filter((el) => el.studenti_id != ID))
       })
       .catch(() => {
         setError(true)
@@ -31,9 +31,9 @@ const Students = () => {
 
   const handleDeny = (ID, setError) => {
     axios
-      .delete('studenti/' + ID)
+      .patch('custom/acceptOrReject/' + ID, { akceptets: false })
       .then(() => {
-        setData(data.filter((el) => el.studenti_id != ID))
+        setData((prev) => prev.filter((el) => el.studenti_id != ID))
       })
       .catch(() => {
         setError(true)
