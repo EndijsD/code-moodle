@@ -19,7 +19,6 @@ const useAxios = ({
     passedBody,
     passedParams,
   }) => {
-    console.log('call')
     return axios({
       method: method || passedMethod,
       url: url || passedUrl,

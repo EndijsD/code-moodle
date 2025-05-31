@@ -3,7 +3,6 @@ import { Sidebar, Menu, MenuItem, sidebarClasses } from 'react-pro-sidebar'
 import { Link, useLocation } from 'react-router-dom'
 import { Logout } from '@mui/icons-material'
 import { useState } from 'react'
-import useSignOut from 'react-auth-kit/hooks/useSignOut'
 import * as S from './style'
 import { links } from './links'
 import { useGlobalContext } from '../../../context/GlobalProvider'
@@ -13,7 +12,6 @@ const SideBar = () => {
   const [collapsed, setCollapsed] = useState(true)
   const theme = useTheme()
   const location = useLocation()
-  // const signOut = useSignOut()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'))
   const { setUser } = useGlobalContext()
 
