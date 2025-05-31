@@ -63,6 +63,7 @@ const EditTask = () => {
         piemers: data.example,
       }
       setStatus({ ...status, pending: true, error: false })
+
       axios
         .patch(`uzdevumi/single/${id}`, postData)
         .then(function (response) {
@@ -74,7 +75,7 @@ const EditTask = () => {
               success: true,
             })
           }
-          // man we really gotta do smth about dem pics
+          // man we really gotta do smth about dem pics //2025 called and they said they're gonna do this now
           setTimeout(() => nav('/teacher/bank'), 500)
         })
         .catch(function (error) {

@@ -3,13 +3,6 @@ import {
   Button,
   ButtonGroup,
   CircularProgress,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Paper,
   Table,
   TableBody,
@@ -22,41 +15,47 @@ import {
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import url from '../../../../url'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Title from '../../../components/General/Title'
 import { MessageContainerSx } from './BankStyle'
+import { initStatusPending } from '../../../data/initStatus'
+import { useGlobalContext } from '../../../context/GlobalProvider'
 
 const Bank = () => {
-  const [fetchState, setFetchState] = useState({
-    pending: true,
-    failed: false,
-  })
+  const [fetchState, setFetchState] = useState(initStatusPending)
   const [data, setData] = useState(null)
   const [open, setOpen] = useState(false)
 
+  const { user } = useGlobalContext()
+
   const fetchBankItems = () => {
     setFetchState({ pending: true, failed: false })
-    axios
-      .get('uzdevumi')
-      .then((response) => {
-        setData(response.data)
-        setFetchState({
-          ...fetchState,
-          pending: false,
+    if (user.skolotajs_id) {
+      axios
+        .get(`custom/tasks/${user.skolotajs_id}`)
+        .then((response) => {
+          setData(response.data)
+          setFetchState({
+            ...fetchState,
+            pending: false,
+          })
         })
-      })
-      .catch((error) => {
-        setFetchState({
-          failed: true,
-          pending: false,
+        .catch((error) => {
+          setFetchState({
+            failed: true,
+            pending: false,
+          })
         })
-      })
+    }
   }
 
+  useEffect(() => {
+    console.log(data)
+  }, [data])
+
   const deleteTask = (id, itemId) => {
-    axios.delete('uzdevumi/' + id).then((res) => {
+    axios.delete('uzdevumi/single/' + id).then((res) => {
       if (res.status == 200) {
         const temp = [...data]
         temp.splice(itemId, 1)

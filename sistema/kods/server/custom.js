@@ -79,6 +79,24 @@ router.get('/modules_tasks/:id', authenticateSession, (req, res) => {
   )
 })
 
+router.get('/tasks/:id', authenticateSession, (req, res) => {
+  let id = req.params.id
+
+  db.query(
+    `select uzdevumi_id, tema, nosaukums, apraksts, valoda, punkti 
+    from uzdevumi 
+    where skolotajs_id = ?`,
+    id,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message })
+      } else {
+        res.send(result)
+      }
+    }
+  )
+})
+
 router.get('/tasks_of_module/:id', authenticateSession, (req, res) => {
   const id = req.params.id
 
