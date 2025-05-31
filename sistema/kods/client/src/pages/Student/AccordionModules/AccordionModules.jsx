@@ -1,19 +1,20 @@
 import useAxios from '../../../hooks/useAxios'
-import ModuleAccordion from '../../../components/User/ModuleAccordion'
+import ModuleAccordion from '../../../components/Student/ModuleAccordion'
 import Title from '../../../components/General/Title'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 
-const Tasks = () => {
+const AccordionModules = () => {
   const { studentID } = useParams()
   const { data, isPending } = useAxios({
-    url: 'custom/modules_tasks/' + (1 ?? ''),
+    url: 'custom/modules_tasks/' + (studentID || ''),
   })
 
   return !isPending ? (
-    data.length ? (
+    data && data.length ? (
       <>
         <Title text={false ? data[0].vardsUzvards : 'Veicamie Uzdevumi'} />
+
         {data.map((module, i) => {
           return (
             <ModuleAccordion
@@ -43,4 +44,4 @@ const Tasks = () => {
   )
 }
 
-export default Tasks
+export default AccordionModules

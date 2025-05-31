@@ -23,7 +23,7 @@ const TaskButton = ({
           ? '/teacher/evaluate/' + subID
           : isTeacher && !subID
           ? '/teacher/studentProfiles/' + studentIDFromTeacher
-          : moduleID + '/' + taskID
+          : moduleID + '/tasks/' + taskID
       }
     >
       <S.AnimButton disabled={isTeacher && !subID}>

@@ -9,7 +9,7 @@ const Landing = () => {
 
   const goTo = (route) => {
     if (user) {
-      if (user.loma == 'students') nav('/user/tasks')
+      if (user.loma == 'students') nav('/student/tasks')
       else if (user.loma == 'skolotajs') nav('/teacher/students')
     } else {
       nav(route)

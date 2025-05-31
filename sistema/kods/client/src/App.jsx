@@ -16,8 +16,8 @@ import NewTask from './pages/Teacher/NewTask'
 import Bank from './pages/Teacher/Bank'
 import Student from './pages/Teacher/Student'
 import EditTask from './pages/Teacher/EditTask'
-import UserHeader from './components/User/Header'
-import Tasks from './pages/User/Tasks'
+import UserHeader from './components/Student/Header'
+import AccordionModules from './pages/Student/AccordionModules'
 import Evaluate from './pages/Teacher/Evaluate'
 import SingleTask from './pages/General/SingleTask'
 import Modules from './pages/Teacher/Modules'
@@ -41,10 +41,11 @@ const TeacherLayout = () => {
   )
 }
 
-const UserLayout = () => {
+const StudentLayout = () => {
   return (
     <>
       <UserHeader />
+
       <Box sx={S.StudentLayout}>
         <Outlet />
       </Box>
@@ -56,7 +57,6 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Landing />,
-    errorElement: <NotFound />,
   },
   {
     path: '/login',
@@ -70,22 +70,22 @@ const router = createBrowserRouter([
     element: <ProtectedRoute role='students' />,
     children: [
       {
-        path: '/user',
-        element: <UserLayout />,
+        path: '/student',
+        element: <StudentLayout />,
         children: [
           {
             // index: true,
             // element: <UserHome />,
           },
           {
-            path: 'tasks',
+            path: 'modules',
             children: [
               {
                 index: true,
-                element: <Tasks />,
+                element: <AccordionModules />,
               },
               {
-                path: ':moduleID/:taskID',
+                path: ':moduleID/tasks/:taskID',
                 element: <SingleTask />,
               },
             ],
@@ -100,7 +100,7 @@ const router = createBrowserRouter([
           },
           {
             path: '*',
-            element: <NotFound link={'tasks'} />,
+            element: <NotFound link='modules' />,
           },
         ],
       },
@@ -181,7 +181,7 @@ const router = createBrowserRouter([
               },
               {
                 path: ':studentID',
-                element: <Tasks />,
+                element: <AccordionModules />,
               },
             ],
           },
@@ -191,7 +191,7 @@ const router = createBrowserRouter([
           },
           {
             path: '*',
-            element: <NotFound link={'students'} />,
+            element: <NotFound link='students' />,
           },
         ],
       },

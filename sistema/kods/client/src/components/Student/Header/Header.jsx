@@ -10,27 +10,28 @@ import * as S from './style'
 import { useTheme } from '@emotion/react'
 import axios from 'axios'
 import { useGlobalContext } from '../../../context/GlobalProvider'
+import { IconButton } from '@mui/material'
 
-const UserHeader = () => {
+const Header = () => {
   const theme = useTheme()
   const nav = useNavigate()
   const { setUser } = useGlobalContext()
 
   const logout = () => {
-    axios.post(`auth/logout`).finally(() => {
-      setUser(null)
-      nav('/login')
-    })
+    axios.post(`auth/logout`)
+    setUser(null)
+    nav('/login')
   }
 
   return (
     <AppBar sx={S.AppBar}>
       <Toolbar>
         <Typography variant='h6' sx={{ flexGrow: 1 }}>
-          <Link to={'tasks'} style={S.LogoLink}>
+          <Link to={'modules'} style={S.LogoLink}>
             Code Moodle
           </Link>
         </Typography>
+
         <Box>
           {links.map((link) => (
             <Link to={link.path} key={link.path}>
@@ -40,17 +41,17 @@ const UserHeader = () => {
               </Button>
             </Link>
           ))}
-          <Link
-            style={{ ...S.LogOut, color: theme.palette.text.primary }}
-            to='/'
+
+          <IconButton
+            style={{ color: theme.palette.common.white }}
             onClick={logout}
           >
             <Logout />
-          </Link>
+          </IconButton>
         </Box>
       </Toolbar>
     </AppBar>
   )
 }
 
-export default UserHeader
+export default Header

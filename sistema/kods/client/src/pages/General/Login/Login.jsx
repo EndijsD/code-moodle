@@ -25,7 +25,7 @@ const Login = () => {
   // Ja lietotājs ir ielogojies, tad lietotājs tiek aizvests atpakaļ uz sava lietotāja tipa sākuma lapu
   useEffect(() => {
     if (user) {
-      if (user.loma == 'students') nav('/user/tasks')
+      if (user.loma == 'students') nav('/student/modules')
       else if (user.loma == 'skolotajs') nav('/teacher/students')
     }
   }, [user])
@@ -59,7 +59,7 @@ const Login = () => {
 
         if (String(res.status).charAt(0) == '2') {
           setUser(res.data)
-          if (res.data.loma == 'students') nav('/user/tasks')
+          if (res.data.loma == 'students') nav('/student/modules')
           else if (res.data.loma == 'skolotajs') nav('/teacher/students')
         }
       } catch (err) {

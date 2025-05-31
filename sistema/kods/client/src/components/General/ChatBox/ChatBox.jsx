@@ -33,7 +33,7 @@ const ChatBox = ({ subID }) => {
           iesniegumi_id: subID,
         })
         .then((res) => {
-          if (res.statusText == 'OK') {
+          if (String(res.status).charAt(0) == '2') {
             setMessage('')
             setComments([
               ...comments,

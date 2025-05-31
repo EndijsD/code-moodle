@@ -1,4 +1,4 @@
-import { Typography, styled } from '@mui/material';
+import { Typography, styled } from '@mui/material'
 
 export const Title = styled(Typography)({
   fontWeight: 'bold',
@@ -9,4 +9,5 @@ export const Title = styled(Typography)({
   color: 'white',
   alignSelf: 'center',
   marginBottom: 32,
-});
+  textAlign: 'center',
+})

@@ -11,12 +11,3 @@ export const HeaderItemButton = {
   gap: '3px',
   lineHeight: '1px',
 }
-
-export const LogOut = {
-  background: '#fff',
-  display: 'inline-flex',
-  verticalAlign: 'middle',
-  borderRadius: '50px',
-  padding: '.3rem',
-  marginLeft: '15px',
-}

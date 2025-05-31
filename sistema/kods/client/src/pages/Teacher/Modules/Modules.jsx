@@ -51,7 +51,7 @@ const Modules = () => {
 
   const handleDelete = (moduleID, arrEl) => {
     axios.delete('moduli/' + moduleID).then((res) => {
-      if (res.statusText == 'OK') {
+      if (String(res.status).charAt(0) == '2') {
         const temp = [...data]
         temp.splice(arrEl, 1)
         setData(temp)
