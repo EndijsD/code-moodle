@@ -5,16 +5,39 @@ import { authenticateSession } from './auth.js'
 const router = express.Router()
 
 router.get('/newStudents', authenticateSession, (req, res) => {
+  const id = req.user.skolotajs_id
+
   db.query(
-    `select studenti_id, vards, uzvards, klase, epasts, st.skolas_id, nosaukums, tips
+    `select st.studenti_id, vards, uzvards, klase, epasts, st.skolas_id, nosaukums, tips
     from studenti st
+    join lietotajs l on l.lietotajs_id = st.lietotajs_id
     join skolas sk on st.skolas_id = sk.skolas_id
-    where akceptets = false`,
+    join skolotajs_students ss on ss.studenti_id = st.studenti_id
+    where ss.skolotajs_id = ? and akceptets IS NULL`,
+    id,
     (err, result) => {
       if (err) {
         res.status(500).json({ message: err.message })
       } else {
         res.send(result)
+      }
+    }
+  )
+})
+
+router.patch('/acceptOrReject/:id', authenticateSession, (req, res) => {
+  const id = req.user.skolotajs_id
+  const { akceptets } = req.body
+  const studenti_id = req.params.id
+
+  db.query(
+    `UPDATE skolotajs_students SET akceptets = ? WHERE skolotajs_id = ? and studenti_id = ?`,
+    [akceptets, id, studenti_id],
+    (err) => {
+      if (err) {
+        res.status(500).json({ message: err.message })
+      } else {
+        res.json({ message: 'Updated entry: ' + id })
       }
     }
   )
