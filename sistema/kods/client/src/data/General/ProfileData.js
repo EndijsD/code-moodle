@@ -4,4 +4,6 @@ export const ProfileDataInit = {
   epasts: '',
   parole: '',
   paroleAtk: '',
+  skolas_id: '',
+  klase: '',
 }

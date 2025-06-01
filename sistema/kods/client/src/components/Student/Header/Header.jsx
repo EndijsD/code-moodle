@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import { Link, useNavigate } from 'react-router-dom'
-import { Logout } from '@mui/icons-material'
+import { Logout, Person } from '@mui/icons-material'
 import { links } from './links'
 import * as S from './style'
 import { useTheme } from '@emotion/react'
@@ -41,7 +41,12 @@ const Header = () => {
               </Button>
             </Link>
           ))}
-
+          <IconButton
+            style={{ color: theme.palette.common.white }}
+            onClick={() => nav('/student/profile')}
+          >
+            <Person />
+          </IconButton>
           <IconButton
             style={{ color: theme.palette.common.white }}
             onClick={logout}

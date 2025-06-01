@@ -314,4 +314,20 @@ router.delete('/removeTask/:id', authenticateSession, async (req, res) => {
   })
 })
 
+router.get('/Student_School_Class/:id', authenticateSession, (req, res) => {
+  let id = req.params.id
+
+  db.query(
+    `SELECT st.klase as klase, st.skolas_id FROM studenti st WHERE st.studenti_id = ?`,
+    id,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message })
+      } else {
+        res.send(result)
+      }
+    }
+  )
+})
+
 export default router
