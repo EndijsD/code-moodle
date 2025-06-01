@@ -345,6 +345,7 @@ const Profile = () => {
               placeholder='Ievadiet paroli atkārtoti'
               label='Ievadiet paroli atkārtoti'
               onChange={handleChange}
+              type='password'
               error={submit && fieldValid.paroleAtk != ''}
               helperText={submit ? fieldValid.paroleAtk : ''}
             />

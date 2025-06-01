@@ -61,6 +61,7 @@ const Login = () => {
           setUser(res.data)
           if (res.data.loma == 'students') nav('/student/modules')
           else if (res.data.loma == 'skolotajs') nav('/teacher/students')
+          else if (res.data.loma === 'administrators') nav('/admin/teachers')
         }
       } catch (err) {
         if (err.response?.status === 403) setResponse('wrong')
