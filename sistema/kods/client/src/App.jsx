@@ -28,6 +28,9 @@ import * as S from './style'
 import { themeStyle } from './theme'
 import Profile from './pages/General/Profile/Profile'
 import { useGlobalContext } from './context/GlobalProvider'
+import Teachers from './pages/Admin/Teachers/Teachers'
+import Admins from './pages/Admin/Admins/Admins'
+import AdminHeader from './components/Admin/Header'
 import Type from './pages/General/Type'
 import RegisterStudent from './pages/General/RegisterStudent'
 import RegisterTeacher from './pages/General/RegisterTeacher'
@@ -48,6 +51,18 @@ const StudentLayout = () => {
   return (
     <>
       <UserHeader />
+
+      <Box sx={S.StudentLayout}>
+        <Outlet />
+      </Box>
+    </>
+  )
+}
+
+const AdminLayout = () => {
+  return (
+    <>
+      <AdminHeader />
 
       <Box sx={S.StudentLayout}>
         <Outlet />
@@ -212,6 +227,29 @@ const router = createBrowserRouter([
           {
             path: '*',
             element: <NotFound link='students' />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute role='administrators' />,
+    children: [
+      {
+        path: '/admin',
+        element: <AdminLayout />,
+        children: [
+          {
+            path: 'Admins',
+            element: <Admins />,
+          },
+          {
+            path: 'Teachers',
+            element: <Teachers />,
+          },
+          {
+            path: '*',
+            element: <NotFound link='modules' />,
           },
         ],
       },

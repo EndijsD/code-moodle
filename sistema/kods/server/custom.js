@@ -314,26 +314,20 @@ router.delete('/removeTask/:id', authenticateSession, async (req, res) => {
   })
 })
 
-// router.post('/student', authenticateSession, async (req, res) => {
+router.get('/Student_School_Class/:id', authenticateSession, (req, res) => {
+  let id = req.params.id
 
-//   if (req.body.password) {
-//     req.body.password = bcrypt.hashSync(req.body.password, 10)
-//   }
-
-//   const columns = Object.keys(req.body)
-//   const values = Object.values(req.body)
-
-//   db.query(
-//     `INSERT INTO lietotajs (??) VALUES (?)`,
-//     [columns, values],
-//     (err, result) => {
-//       if (err) {
-//         res.status(500).json({ message: err.message })
-//       } else {
-//         res.json({ message: 'Added entry', id: result.insertId })
-//       }
-//     }
-//   )
-// })
+  db.query(
+    `SELECT st.klase as klase, st.skolas_id FROM studenti st WHERE st.studenti_id = ?`,
+    id,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message })
+      } else {
+        res.send(result)
+      }
+    }
+  )
+})
 
 export default router

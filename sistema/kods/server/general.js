@@ -106,8 +106,8 @@ router.patch('/single/:id', authenticateSession, async (req, res) => {
   const column = table + '_id'
   const id = req.params.id
 
-  if (req.body.password) {
-    req.body.password = bcrypt.hashSync(req.body.password, 10)
+  if (req.body.parole) {
+    req.body.parole = bcrypt.hashSync(req.body.parole, 10)
   }
 
   const columns = Object.keys(req.body)

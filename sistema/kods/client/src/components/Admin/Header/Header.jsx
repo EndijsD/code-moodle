@@ -12,7 +12,7 @@ import axios from 'axios'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 import { IconButton } from '@mui/material'
 
-const Header = () => {
+const AdminHeader = () => {
   const theme = useTheme()
   const nav = useNavigate()
   const { setUser } = useGlobalContext()
@@ -25,38 +25,37 @@ const Header = () => {
 
   return (
     <AppBar sx={S.AppBar}>
-      <Toolbar>
-        <Typography variant='h6' sx={{ flexGrow: 1 }}>
-          <Link to={'modules'} style={S.LogoLink}>
-            Code Moodle
-          </Link>
-        </Typography>
-
-        <Box>
-          {links.map((link) => (
-            <Link to={link.path} key={link.path}>
-              <Button sx={S.HeaderItemButton}>
-                {link.icon}
-                {link.title}
-              </Button>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Typography variant='h6'>
+            <Link to={'modules'} style={S.LogoLink}>
+              Code Moodle
             </Link>
-          ))}
-          <IconButton
-            style={{ color: theme.palette.common.white }}
-            onClick={() => nav('/student/profile')}
+          </Typography>
+          <Button
+            style={{ color: theme.palette.common.white, gap: 8 }}
+            onClick={() => nav('/admin/Admins')}
           >
             <Person />
-          </IconButton>
-          <IconButton
-            style={{ color: theme.palette.common.white }}
-            onClick={logout}
+            Administrātori
+          </Button>
+          <Button
+            style={{ color: theme.palette.common.white, gap: 8 }}
+            onClick={() => nav('/admin/teachers')}
           >
-            <Logout />
-          </IconButton>
+            <Person />
+            Skolotāji
+          </Button>
         </Box>
+        <IconButton
+          style={{ color: theme.palette.common.white }}
+          onClick={logout}
+        >
+          <Logout />
+        </IconButton>
       </Toolbar>
     </AppBar>
   )
 }
 
-export default Header
+export default AdminHeader

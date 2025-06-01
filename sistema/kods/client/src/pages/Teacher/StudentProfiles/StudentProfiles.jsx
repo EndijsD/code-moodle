@@ -48,20 +48,29 @@ const StudentProfiles = () => {
       ) : students != null ? (
         <>
           <Title text='Studenti' />
-          <DataGrid
-            getRowId={getStudentRowId}
-            rows={students}
-            columns={studentColumns}
-            disableRowSelectionOnClick
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              display: 'table',
+              tableLayout: 'fixed',
             }}
-            pageSizeOptions={[5, 10]}
-            localeText={localeText}
-            sx={DataGridSx}
-          />
+          >
+            <DataGrid
+              getRowId={getStudentRowId}
+              rows={students}
+              columns={studentColumns}
+              disableRowSelectionOnClick
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10]}
+              localeText={localeText}
+              sx={DataGridSx}
+            />
+          </Box>
         </>
       ) : (
         <Spinner />

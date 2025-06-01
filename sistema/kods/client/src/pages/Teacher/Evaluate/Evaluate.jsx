@@ -8,6 +8,7 @@ import { DataGridSx } from '../../../data/DataGrid/style'
 import { initStatus } from '../../../data/initStatus'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 import Spinner from '../../../components/General/Spinner/Spinner'
+import { Box } from '@mui/material'
 
 export const Evaluate = () => {
   const [fetchState, setFetchState] = useState(initStatus)
@@ -51,20 +52,29 @@ export const Evaluate = () => {
       ) : data ? (
         <>
           <Title text='Vērtēšana' />
-          <DataGrid
-            getRowId={getRowId}
-            rows={data}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              display: 'table',
+              tableLayout: 'fixed',
             }}
-            pageSizeOptions={[5, 10]}
-            localeText={LocaleTextEvaluate}
-            disableRowSelectionOnClick
-            sx={DataGridSx}
-          />
+          >
+            <DataGrid
+              getRowId={getRowId}
+              rows={data}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10]}
+              localeText={LocaleTextEvaluate}
+              disableRowSelectionOnClick
+              sx={DataGridSx}
+            />
+          </Box>
         </>
       ) : (
         <Spinner />
