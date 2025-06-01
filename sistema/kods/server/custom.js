@@ -330,4 +330,40 @@ router.get('/Student_School_Class/:id', authenticateSession, (req, res) => {
   )
 })
 
+router.get('/teachers_by_school/:id', authenticateSession, (req, res) => {
+  let id = req.params.id
+
+  db.query(
+    `SELECT l.lietotajs_id as lietotajs_id, sk.skolotajs_id as skolotajs_id, l.vards as vards, l.uzvards as uzvards, l.epasts as epasts 
+    FROM lietotajs l JOIN skolotajs sk ON sk.lietotajs_id = l.lietotajs_id 
+    WHERE sk.skolas_id = ?`,
+    id,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message })
+      } else {
+        res.send(result)
+      }
+    }
+  )
+})
+
+router.get('/admins_by_school/:id', authenticateSession, (req, res) => {
+  let id = req.params.id
+
+  db.query(
+    `SELECT l.lietotajs_id as lietotajs_id, a.administrators_id as administrators_id, l.vards as vards, l.uzvards as uzvards, l.epasts as epasts 
+    FROM lietotajs l JOIN administrators a ON a.lietotajs_id = l.lietotajs_id 
+    WHERE a.skolas_id = ?`,
+    id,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message })
+      } else {
+        res.send(result)
+      }
+    }
+  )
+})
+
 export default router
