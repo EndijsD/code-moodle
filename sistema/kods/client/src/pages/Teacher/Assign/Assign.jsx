@@ -95,7 +95,14 @@ const Assign = () => {
           <Typography variant='h4' sx={S.sectionTitleSx}>
             Studenti
           </Typography>
-          <Box sx={S.dataGridContainerSx}>
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              display: 'table',
+              tableLayout: 'fixed',
+            }}
+          >
             <DataGrid
               checkboxSelection
               getRowId={getStudentRowId}
@@ -118,7 +125,14 @@ const Assign = () => {
           <Typography variant='h4' sx={S.sectionTitleSx}>
             Moduļi
           </Typography>
-          <Box sx={S.dataGridContainerSx}>
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              display: 'table',
+              tableLayout: 'fixed',
+            }}
+          >
             <DataGrid
               checkboxSelection
               getRowId={getModuleRowId}
