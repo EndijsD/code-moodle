@@ -21,6 +21,7 @@ const Landing = () => {
       <S.HeadingBox>
         <S.H1>Code Moodle</S.H1>
       </S.HeadingBox>
+
       <S.Content>
         <S.StyledPaper>
           <S.LeftBox>

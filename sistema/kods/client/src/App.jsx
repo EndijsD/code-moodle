@@ -8,7 +8,6 @@ import {
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import Landing from './pages/General/Landing'
 import Login from './pages/General/Login'
-import Register from './pages/General/Register'
 import NotFound from './pages/General/NotFound'
 import ProtectedRoute from './ProtectedRoute'
 import SideBar from './components/Teacher/SideBar'
@@ -29,6 +28,10 @@ import * as S from './style'
 import { themeStyle } from './theme'
 import Profile from './pages/General/Profile/Profile'
 import { useGlobalContext } from './context/GlobalProvider'
+import Type from './pages/General/Type'
+import RegisterStudent from './pages/General/RegisterStudent'
+import RegisterTeacher from './pages/General/RegisterTeacher'
+import RegisterAdministrator from './pages/General/RegisterAdministrator'
 
 const TeacherLayout = () => {
   return (
@@ -64,7 +67,24 @@ const router = createBrowserRouter([
   },
   {
     path: '/register',
-    element: <Register />,
+    children: [
+      {
+        index: true,
+        element: <Type />,
+      },
+      {
+        path: 'student',
+        element: <RegisterStudent />,
+      },
+      {
+        path: 'teacher',
+        element: <RegisterTeacher />,
+      },
+      {
+        path: 'administrator',
+        element: <RegisterAdministrator />,
+      },
+    ],
   },
   {
     element: <ProtectedRoute role='students' />,

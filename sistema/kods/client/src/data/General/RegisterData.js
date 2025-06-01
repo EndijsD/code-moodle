@@ -1,13 +1,3 @@
-export const initialFormValues = {
-  vards: '',
-  uzvards: '',
-  skolas_id: '',
-  klase: '',
-  epasts: '',
-  parole: '',
-  parole_atk: '',
-}
-
 export const errorMes = {
   permError: 'Servera problēma: nevarēja iegūt skolas',
   pass: 'Paroles lauki nesakrīt',

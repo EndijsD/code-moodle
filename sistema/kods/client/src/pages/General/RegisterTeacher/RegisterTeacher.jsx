@@ -1,8 +1,10 @@
 import { Close, Check, Visibility, VisibilityOff } from '@mui/icons-material'
 import {
   Button,
+  Checkbox,
   CircularProgress,
   FormControl,
+  FormControlLabel,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -14,21 +16,32 @@ import * as S from './style'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import FormError from '../../../components/General/FormError'
-import { errorMes, initialFormValues } from '../../../data/General/RegisterData'
+import { errorMes } from '../../../data/General/RegisterData'
 import { useGlobalContext } from '../../../context/GlobalProvider'
+import Spinner from '../../../components/General/Spinner/Spinner'
 
-const Register = () => {
+const initialFormValues = {
+  vards: '',
+  uzvards: '',
+  skolas_id: '',
+  epasts: '',
+  parole: '',
+  parole_atk: '',
+}
+
+const RegisterTeacher = () => {
   const nav = useNavigate()
   const [formValues, setFormValues] = useState(initialFormValues)
   const [showPassword, setShowPassword] = useState([false, false])
   const [problems, setProblems] = useState([])
   const [problem, setProblem] = useState(null)
   const [isPending, setIsPending] = useState(false)
+  const [isSchoolPending, setIsSchoolPending] = useState(true)
   const [success, setSuccess] = useState(false)
   const [active, setActive] = useState([false, false])
   const [schools, setSchools] = useState([])
-  const [classes, setClasses] = useState([[]])
   const { user, initialized } = useGlobalContext()
+  const [isSchoolChecked, setIsSchoolChecked] = useState(true)
 
   // Ja lietotājs ir ielogojies, tad lietotājs tiek aizvests atpakaļ uz sava lietotāja tipa sākuma lapu
   useEffect(() => {
@@ -40,7 +53,7 @@ const Register = () => {
 
   if (!initialized || user) return
 
-  const setResponse = (res, withTimeout = true) => {
+  const handleResponse = (res, withTimeout = true) => {
     if (res == 'suc') {
       setSuccess(true)
       setTimeout(() => nav('/login'), 1500)
@@ -52,72 +65,59 @@ const Register = () => {
   }
 
   useEffect(() => {
-    setIsPending(true)
+    setIsSchoolPending(true)
+
     axios
       .get(`skolas`)
-      .then((res) => setSchools(res.data))
-      .catch(() => setResponse('permError', false))
-    setIsPending(false)
+      .then((res) =>
+        setSchools(res.data ? res.data.filter((el) => el.tips != '-') : [])
+      )
+      .catch(() => handleResponse('permError', false))
+      .finally(() => setIsSchoolPending(false))
   }, [])
 
   const handleFormSubmit = (e) => {
     e.preventDefault()
     setIsPending(true)
 
-    let isAnyElEmpty = false
+    let hasProblems = false
     for (const [key, value] of Object.entries(formValues).reverse()) {
+      if (!isSchoolChecked && key == 'skolas_id') continue
+
       if (!value) {
-        isAnyElEmpty = true
-        setResponse(key)
+        handleResponse(key)
+        hasProblems = true
       }
     }
 
-    if (!isAnyElEmpty)
-      if (formValues.parole == formValues.parole_atk) {
-        const postData = { ...formValues }
-        delete postData.parole_atk
-        axios
-          .post(`studenti`, postData)
-          .then(() => setResponse('suc'))
-          .catch(() => setResponse('error'))
-      } else setResponse('pass')
-
-    setIsPending(false)
-  }
-
-  const updateClasses = (schoolID) => {
-    let type
-    for (let i = 0; i < schools.length; i++)
-      if (schools[i].skolas_id == schoolID) {
-        type = schools[i].tips
-        break
-      }
-
-    let range = [1]
-    let endText = 'klase'
-    switch (type) {
-      case 'Pamatskola':
-        range.push(9)
-        break
-      case 'Vidusskola':
-        range = [10, 12]
-        break
-      case 'Tehnikums':
-        range.push(4)
-        endText = 'kurss'
-        break
-      case 'Ģimnāzija':
-        range.push(12)
-        break
-      case 'Augstskola':
-        endText = 'kurss'
-        range.push(6)
+    if (hasProblems) {
+      setIsPending(false)
+      return
     }
 
-    let fullArr = []
-    for (let i = range[0]; i <= range[1]; i++) fullArr.push(i)
+    if (formValues.parole == formValues.parole_atk) {
+      const postData = { ...formValues }
+      const skolas_id = isSchoolChecked ? postData.skolas_id : 7
+      delete postData.parole_atk
+      delete postData.skolas_id
 
-    setClasses([fullArr, endText])
+      axios
+        .post('lietotajs', { ...postData, loma: 'skolotajs' })
+        .then((res) => {
+          axios
+            .post('skolotajs', {
+              skolas_id,
+              lietotajs_id: res.data.id,
+            })
+            .then(() => handleResponse('suc'))
+            .catch(() => handleResponse('error'))
+            .finally(() => setIsPending(false))
+        })
+        .catch(() => handleResponse('error'))
+    } else {
+      handleResponse('pass')
+      setIsPending(false)
+    }
   }
 
   const handleClickShowPassword = (index) => {
@@ -129,18 +129,21 @@ const Register = () => {
   const handleFormInputChange = (e) => {
     const { name, value } = e.target
 
-    if (name == 'skolas_id') {
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    })
+  }
+
+  const handleChange = (event) => {
+    setIsSchoolChecked(event.target.checked)
+
+    if (!event.target.checked) {
       setFormValues({
         ...formValues,
-        [name]: value,
-        klase: '',
+        skolas_id: '',
       })
-      updateClasses(value)
-    } else
-      setFormValues({
-        ...formValues,
-        [name]: value,
-      })
+    }
   }
 
   return (
@@ -180,50 +183,6 @@ const Register = () => {
               error={problems.includes('uzvards')}
             />
 
-            <FormControl
-              sx={S.FormControlSx}
-              variant='standard'
-              disabled={!schools.length}
-              required
-              error={problems.includes('skolas_id')}
-            >
-              <InputLabel htmlFor='school'>Skola</InputLabel>
-              <Select
-                name='skolas_id'
-                value={formValues.skolas_id}
-                inputProps={{ id: 'school' }}
-                onChange={handleFormInputChange}
-              >
-                {schools.map((school, i) => (
-                  <MenuItem key={i} value={school.skolas_id}>
-                    {school.nosaukums}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl
-              sx={S.FormControlSx}
-              variant='standard'
-              disabled={!classes[0].length}
-              required
-              error={problems.includes('klase')}
-            >
-              <InputLabel htmlFor='class'>Klase/Kurss</InputLabel>
-              <Select
-                name='klase'
-                inputProps={{ id: 'class' }}
-                value={formValues.klase}
-                onChange={handleFormInputChange}
-              >
-                {classes[0].map((num) => (
-                  <MenuItem key={num} value={num}>
-                    {num + '. ' + classes[1]}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
             <S.InputField
               label='E-pasts'
               variant='standard'
@@ -235,7 +194,7 @@ const Register = () => {
               error={problems.includes('epasts')}
               autoComplete='email'
               inputProps={{
-                maxLength: 100,
+                maxLength: 255,
               }}
             />
 
@@ -256,8 +215,8 @@ const Register = () => {
                 ),
               }}
               inputProps={{
-                pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
-                maxLength: 256,
+                // pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+                maxLength: 255,
               }}
               onMouseEnter={() =>
                 setActive((prev) =>
@@ -303,8 +262,8 @@ const Register = () => {
                 ),
               }}
               inputProps={{
-                pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
-                maxLength: 256,
+                // pattern: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+                maxLength: 255,
               }}
               onMouseEnter={() =>
                 setActive((prev) =>
@@ -334,6 +293,42 @@ const Register = () => {
               }
               autoComplete='new-password'
             />
+
+            <FormControlLabel
+              control={
+                <Checkbox checked={isSchoolChecked} onChange={handleChange} />
+              }
+              label={'Es mācu skolā'}
+            />
+
+            {isSchoolChecked &&
+              (isSchoolPending ? (
+                <Spinner />
+              ) : schools && schools.length > 0 ? (
+                <FormControl
+                  sx={S.FormControlSx}
+                  variant='standard'
+                  disabled={!schools.length}
+                  required
+                  error={problems.includes('skolas_id')}
+                >
+                  <InputLabel htmlFor='school'>Skola</InputLabel>
+                  <Select
+                    name='skolas_id'
+                    value={formValues.skolas_id}
+                    inputProps={{ id: 'school' }}
+                    onChange={handleFormInputChange}
+                  >
+                    {schools.map((school, i) => (
+                      <MenuItem key={i} value={school.skolas_id}>
+                        {school.nosaukums}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              ) : (
+                <S.SubTitle>Neviena skola nav pieteikusies sistēmai</S.SubTitle>
+              ))}
           </S.StyledBox>
 
           <S.ButtonBox>
@@ -344,15 +339,16 @@ const Register = () => {
               }
               color={
                 problems.some((el) => ['error', 'permError'].includes(el)) &&
-                !isPending
+                !isPending &&
+                !isSchoolPending
                   ? 'error'
                   : success
                   ? 'success'
                   : 'primary'
               }
-              disabled={isPending}
+              disabled={isPending || isSchoolPending}
             >
-              {isPending ? (
+              {isPending || isSchoolPending ? (
                 <CircularProgress size={24.5} />
               ) : success ? (
                 <Check />
@@ -378,4 +374,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default RegisterTeacher

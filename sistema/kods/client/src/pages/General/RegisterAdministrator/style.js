@@ -1,4 +1,4 @@
-import { styled, alpha } from '@mui/system'
+import { styled, alpha, padding } from '@mui/system'
 import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 
 export const MainBox = styled(Box)({
@@ -9,10 +9,9 @@ export const MainBox = styled(Box)({
 })
 
 export const StyledPaper = styled(Paper)(({ theme }) => ({
-  margin: '2rem 0',
   borderRadius: 10,
   width: 800,
-  padding: '2rem',
+  padding: '2rem 3rem',
 
   [theme.breakpoints.down('md')]: {
     width: 700,
@@ -61,7 +60,7 @@ export const SubTitle = styled(Typography)(({ theme }) => ({
 }))
 
 export const InputField = styled(TextField)(({ theme }) => ({
-  width: '80%',
+  width: '100%',
   alignSelf: 'center',
 
   [theme.breakpoints.down('sm')]: {
@@ -88,10 +87,12 @@ export const StyledBox = styled(Box)(({ theme }) => ({
     theme.palette.mode == 'light'
       ? theme.palette.grey[100]
       : theme.palette.grey[900],
-  padding: 20,
+  padding: '20px 60px',
   borderRadius: 10,
+  paddingBottom: 36,
 
   [theme.breakpoints.down('sm')]: {
+    padding: '20px',
     background: 'none',
   },
 }))
@@ -109,4 +110,4 @@ export const Info = styled(Typography)({
   fontSize: 12,
 })
 
-export const FormControlSx = { width: '80%', alignSelf: 'center' }
+export const FormControlSx = { width: '100%', alignSelf: 'center' }
