@@ -366,4 +366,24 @@ router.get('/admins_by_school/:id', authenticateSession, (req, res) => {
   )
 })
 
+router.get('/accessible_teachers/:id', authenticateSession, (req, res) => {
+  let id = req.params.id
+
+  db.query(
+    `SELECT vards, uzvards, skolas.tips, skolas.nosaukums ,skolotajs_id 
+FROM skolas JOIN skolotajs sk ON sk.skolas_id = skolas.skolas_id 
+JOIN lietotajs l ON l.lietotajs_id = sk.lietotajs_id
+WHERE sk.skolas_id = (select skolas_id FROM studenti where studenti_id = ?) OR skolas.tips = "-"
+`,
+    id,
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ message: err.message })
+      } else {
+        res.send(result)
+      }
+    }
+  )
+})
+
 export default router

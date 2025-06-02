@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import { Link, useNavigate } from 'react-router-dom'
 import { Logout, Person } from '@mui/icons-material'
-import { links } from './links'
 import * as S from './style'
 import { useTheme } from '@emotion/react'
 import axios from 'axios'
@@ -25,35 +24,34 @@ const Header = () => {
 
   return (
     <AppBar sx={S.AppBar}>
-      <Toolbar>
-        <Typography variant='h6' sx={{ flexGrow: 1 }}>
-          <Link to={'modules'} style={S.LogoLink}>
-            Code Moodle
-          </Link>
-        </Typography>
-
-        <Box>
-          {links.map((link) => (
-            <Link to={link.path} key={link.path}>
-              <Button sx={S.HeaderItemButton}>
-                {link.icon}
-                {link.title}
-              </Button>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Typography variant='h6'>
+            <Link to={'modules'} style={S.LogoLink}>
+              Code Moodle
             </Link>
-          ))}
-          <IconButton
-            style={{ color: theme.palette.common.white }}
+          </Typography>
+          <Button
+            style={{ color: theme.palette.common.white, gap: 8 }}
+            onClick={() => nav('/student/signup')}
+          >
+            <Person />
+            Pieteikšanās
+          </Button>
+          <Button
+            style={{ color: theme.palette.common.white, gap: 8 }}
             onClick={() => nav('/student/profile')}
           >
             <Person />
-          </IconButton>
-          <IconButton
-            style={{ color: theme.palette.common.white }}
-            onClick={logout}
-          >
-            <Logout />
-          </IconButton>
+            Profils
+          </Button>
         </Box>
+        <IconButton
+          style={{ color: theme.palette.common.white }}
+          onClick={logout}
+        >
+          <Logout />
+        </IconButton>
       </Toolbar>
     </AppBar>
   )

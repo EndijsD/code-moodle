@@ -35,6 +35,7 @@ import Type from './pages/General/Type'
 import RegisterStudent from './pages/General/RegisterStudent'
 import RegisterTeacher from './pages/General/RegisterTeacher'
 import RegisterAdministrator from './pages/General/RegisterAdministrator'
+import SignUp from './pages/Student/SignUp'
 
 const TeacherLayout = () => {
   return (
@@ -132,6 +133,10 @@ const router = createBrowserRouter([
           {
             path: 'profile',
             element: <Profile />,
+          },
+          {
+            path: 'signup',
+            element: <SignUp />,
           },
           {
             path: '*',
