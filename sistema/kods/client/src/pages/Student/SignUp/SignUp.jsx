@@ -14,7 +14,6 @@ const SignUp = () => {
   useEffect(() => {
     if (user) {
       console.log(user)
-
       fetchData()
     }
   }, [])

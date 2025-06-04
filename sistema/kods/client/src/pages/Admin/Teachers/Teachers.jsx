@@ -20,34 +20,26 @@ import { LocaleTextEvaluate } from '../../../data/DataGrid/DataGridLocaleText'
 import { DataGridSx } from '../../../data/DataGrid/style'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import CloseIcon from '@mui/icons-material/Close'
-import TeacherEditDrawer from './Drawer'
+import UserEditDrawer from '../../../components/Admin/UserDrawer'
 
 const Teachers = () => {
   const [data, setData] = useState(null)
   const [status, setStatus] = useState(initStatusPending)
-  const [editOpen, setEditOpen] = useState(false)
+  const [drawer, setDrawer] = useState({ open: false, mode: '' })
   const [selectedTeacher, setSelectedTeacher] = useState(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [teacherToDelete, setTeacherToDelete] = useState(null)
+  const { user } = useGlobalContext()
 
   const handleEditOpen = (teacher) => {
     setSelectedTeacher(teacher)
-    setEditOpen(true)
+    setDrawer({ mode: 'edit', open: true })
   }
 
   const handleEditClose = () => {
-    setEditOpen(false)
+    setDrawer((prev) => ({ ...prev, open: false }))
     setSelectedTeacher(null)
   }
-
-  const updateTeacherInList = (id, updatedFields) => {
-    setData((prev) =>
-      prev.map((t) => (t.skolotajs_id === id ? { ...t, ...updatedFields } : t))
-    )
-  }
-
-  const { user } = useGlobalContext()
 
   useEffect(() => {
     if (user) {
@@ -140,6 +132,21 @@ const Teachers = () => {
       ) : data != null ? (
         <>
           <Title text={'Skolotāju administrēšana'} />
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              mb: 4,
+            }}
+          >
+            <Button
+              variant='outlined'
+              onClick={() => setDrawer({ open: true, mode: 'add' })}
+            >
+              Pievienot skolotaju
+            </Button>
+          </Box>
           <Box sx={{ width: '100%', height: '100%' }}>
             <DataGrid
               getRowId={(row) => row.skolotajs_id}
@@ -154,12 +161,16 @@ const Teachers = () => {
               sx={DataGridSx}
             />
           </Box>
-          <TeacherEditDrawer
-            editOpen={editOpen}
+          <UserEditDrawer
             handleEditClose={handleEditClose}
-            teacher={selectedTeacher}
-            updateTeacherInList={updateTeacherInList}
+            user={selectedTeacher}
+            userType='teacher'
+            editOpen={drawer.open}
+            mode={drawer.mode}
+            setData={setData}
+            skolas_id={user.skolas_id}
           />
+
           <Dialog open={deleteDialogOpen} onClose={cancelDelete}>
             <DialogTitle id='delete-dialog-title'>
               Apstiprināt dzēšanu
@@ -168,7 +179,7 @@ const Teachers = () => {
               <DialogContentText>
                 Vai tiešām vēlaties dzēst lietotāju
                 <strong>
-                  {' '}
+                  {' ' /*!important*/}
                   {teacherToDelete?.vards} {teacherToDelete?.uzvards}
                 </strong>
                 ?

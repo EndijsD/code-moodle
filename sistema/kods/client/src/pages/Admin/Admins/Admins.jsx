@@ -20,33 +20,26 @@ import { LocaleTextEvaluate } from '../../../data/DataGrid/DataGridLocaleText'
 import { DataGridSx } from '../../../data/DataGrid/style'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import AdministratorEditDrawer from './AdministratorDrawer' // Your admin edit drawer component
+import UserEditDrawer from '../../../components/Admin/UserDrawer'
 
 const Administrators = () => {
   const [data, setData] = useState(null)
   const [status, setStatus] = useState(initStatusPending)
-  const [editOpen, setEditOpen] = useState(false)
   const [selectedAdmin, setSelectedAdmin] = useState(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [adminToDelete, setAdminToDelete] = useState(null)
+  const [drawer, setDrawer] = useState({ open: false, mode: '' })
+  const { user } = useGlobalContext()
 
-  const handleEditOpen = (admin) => {
-    setSelectedAdmin(admin)
-    setEditOpen(true)
+  const handleEditOpen = (teacher) => {
+    setSelectedAdmin(teacher)
+    setDrawer({ mode: 'edit', open: true })
   }
 
   const handleEditClose = () => {
-    setEditOpen(false)
+    setDrawer((prev) => ({ ...prev, open: false }))
     setSelectedAdmin(null)
   }
-
-  const updateAdminInList = (id, updatedFields) => {
-    setData((prev) =>
-      prev.map((a) => (a.lietotajs_id === id ? { ...a, ...updatedFields } : a))
-    )
-  }
-
-  const { user } = useGlobalContext()
 
   useEffect(() => {
     if (user) {
@@ -112,6 +105,7 @@ const Administrators = () => {
               <Button
                 onClick={() => handleDeleteClick(params.row)}
                 variant='contained'
+                disabled={params.row.lietotajs_id === user.lietotajs_id}
               >
                 <DeleteIcon />
               </Button>
@@ -135,7 +129,22 @@ const Administrators = () => {
         <>Servera kļūda!</>
       ) : data != null ? (
         <>
-          <Title text={'Administratoru administrēšana'} />
+          <Title text={'Administratoru administrēšana'} />{' '}
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              mb: 4,
+            }}
+          >
+            <Button
+              variant='outlined'
+              onClick={() => setDrawer({ open: true, mode: 'add' })}
+            >
+              Pievienot administratoru
+            </Button>
+          </Box>
           <Box sx={{ width: '100%', height: '100%' }}>
             <DataGrid
               getRowId={(row) => row.lietotajs_id}
@@ -150,11 +159,14 @@ const Administrators = () => {
               sx={DataGridSx}
             />
           </Box>
-          <AdministratorEditDrawer
-            editOpen={editOpen}
+          <UserEditDrawer
+            editOpen={drawer.open}
             handleEditClose={handleEditClose}
-            administrator={selectedAdmin}
-            updateAdminInList={updateAdminInList}
+            user={selectedAdmin}
+            setData={setData}
+            mode={drawer.mode}
+            userType='admin'
+            skolas_id={user.skolas_id}
           />
           <Dialog open={deleteDialogOpen} onClose={cancelDelete}>
             <DialogTitle id='delete-dialog-title'>
