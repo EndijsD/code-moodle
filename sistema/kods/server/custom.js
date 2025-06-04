@@ -370,12 +370,14 @@ router.get('/accessible_teachers/:id', authenticateSession, (req, res) => {
   let id = req.params.id
 
   db.query(
-    `SELECT vards, uzvards, skolas.tips, skolas.nosaukums ,skolotajs_id 
-FROM skolas JOIN skolotajs sk ON sk.skolas_id = skolas.skolas_id 
+    `SELECT vards, uzvards, skolas.tips as skolas_tips, skolas.nosaukums, sk.skolotajs_id
+FROM skolas
+JOIN skolotajs sk ON sk.skolas_id = skolas.skolas_id 
 JOIN lietotajs l ON l.lietotajs_id = sk.lietotajs_id
-WHERE sk.skolas_id = (select skolas_id FROM studenti where studenti_id = ?) OR skolas.tips = "-"
+WHERE (sk.skolas_id = (SELECT skolas_id FROM studenti WHERE studenti_id = ?) OR skolas.tips = '-')
+AND NOT EXISTS (SELECT 1 FROM skolotajs_students skst WHERE skst.skolotajs_id = sk.skolotajs_id AND skst.studenti_id = ?);
 `,
-    id,
+    [id, id],
     (err, result) => {
       if (err) {
         res.status(500).json({ message: err.message })

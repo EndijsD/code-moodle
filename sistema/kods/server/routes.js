@@ -20,6 +20,7 @@ router.use('/moduli_studenti', general)
 router.use('/moduli_uzdevumi', general)
 router.use('/skolas', general)
 router.use('/skolotajs_moduli', general)
+router.use('/skolotajs_students', general)
 router.use('/uzdevumi', general)
 
 export default router
