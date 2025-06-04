@@ -4,6 +4,7 @@ import Title from '../../../components/General/Title'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useGlobalContext } from '../../../context/GlobalProvider'
+import NoItems from '../../../components/General/NoItems/NoItems'
 
 const AccordionModules = () => {
   const { studentID } = useParams()
@@ -40,11 +41,13 @@ const AccordionModules = () => {
       </>
     ) : (
       <Box sx={{ height: '100%', alignContent: 'center' }}>
-        <Typography>
-          {user?.loma === 'skolotajs'
-            ? 'Studentam nav uzdoti moduļi'
-            : 'Nav veicamo uzdevumu'}
-        </Typography>
+        <NoItems
+          description={
+            user?.loma === 'skolotajs'
+              ? 'Studentam nav uzdoti moduļi'
+              : 'Nav veicamo uzdevumu'
+          }
+        />
       </Box>
     )
   ) : (

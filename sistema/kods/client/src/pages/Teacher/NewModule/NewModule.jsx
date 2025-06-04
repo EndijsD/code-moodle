@@ -30,8 +30,6 @@ const NewModule = () => {
   const { user } = useGlobalContext()
 
   const fetchData = () => {
-    console.log(user.skolotajs_id)
-
     axios
       .get(`custom/tasks/${user.skolotajs_id}`)
       .then(function (res) {

@@ -88,7 +88,7 @@ const NewTask = () => {
         })
         .catch(function (error) {
           setStatus({ ...status, pending: false, error: true })
-          console.log(error.response.data)
+          console.log(error)
         })
     }
     setFieldValid(tempObj)

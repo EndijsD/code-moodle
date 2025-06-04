@@ -50,15 +50,27 @@ router.get('/modules_tasks/:id', authenticateSession, (req, res) => {
   else id = req.user.studenti_id
 
   db.query(
-    `select concat(l.vards, " ", l.uzvards) as vardsUzvards, m.nosaukums as m_nos, u.uzdevumi_id, tema, u.nosaukums as u_nos, u.punkti as u_punkti, i.punkti as i_punkti, m.moduli_id
-    from studenti s
-    join lietotajs l on s.lietotajs_id = l.lietotajs_id
-    join moduli_studenti ms on ms.studenti_id = s.studenti_id
-    join moduli m on m.moduli_id = ms.moduli_id
-    join moduli_uzdevumi mu on mu.moduli_id = m.moduli_id
-    join uzdevumi u on u.uzdevumi_id = mu.uzdevumi_id
-    left join iesniegumi i on i.uzdevumi_id = u.uzdevumi_id and i.moduli_id = m.moduli_id
-    where s.studenti_id = ?`,
+    `SELECT 
+  CONCAT(l.vards, " ", l.uzvards) AS vardsUzvards,
+  m.nosaukums AS m_nos,
+  u.uzdevumi_id,
+  u.tema,
+  u.nosaukums AS u_nos,
+  u.punkti AS u_punkti,
+  i.punkti AS i_punkti,
+  m.moduli_id
+FROM studenti s
+JOIN lietotajs l ON s.lietotajs_id = l.lietotajs_id
+JOIN moduli_studenti ms ON ms.studenti_id = s.studenti_id
+JOIN moduli m ON m.moduli_id = ms.moduli_id
+JOIN moduli_uzdevumi mu ON mu.moduli_id = m.moduli_id
+JOIN uzdevumi u ON u.uzdevumi_id = mu.uzdevumi_id
+LEFT JOIN iesniegumi i 
+  ON i.uzdevumi_id = u.uzdevumi_id 
+  AND i.moduli_id = m.moduli_id
+  AND i.studenti_id = s.studenti_id
+WHERE s.studenti_id = ?;
+`,
     id,
     (err, result) => {
       if (err) {
@@ -149,9 +161,9 @@ router.get('/taskInfo/:id', authenticateSession, (req, res) => {
     JOIN skolas sk ON sk.skolas_id = st.skolas_id
     JOIN skolotajs skol ON skol.skolotajs_id = uzd.skolotajs_id
     JOIN skolotajs_students skst ON skst.studenti_id = st.studenti_id
-    WHERE skol.skolotajs_id = ? AND skst.akceptets = 1;
+    WHERE skol.skolotajs_id = ? AND i.punkti IS NULL;
 `,
-    [id],
+    id,
     (err, result) => {
       if (err) {
         res.status(500).json({ message: err.message })
@@ -171,7 +183,7 @@ FROM studenti s
 JOIN lietotajs l ON s.lietotajs_id = l.lietotajs_id
 JOIN skolas ON s.skolas_id = skolas.skolas_id
 JOIN skolotajs_students skst ON skst.studenti_id = s.studenti_id
-WHERE skst.skolotajs_id = 1 AND skst.akceptets = 1`,
+WHERE skst.skolotajs_id = ? AND skst.akceptets = 1`,
     [id],
     (err, result) => {
       if (err) {
