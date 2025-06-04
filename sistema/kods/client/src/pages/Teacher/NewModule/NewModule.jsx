@@ -16,6 +16,7 @@ import * as S from './style'
 import { initStatus } from '../../../data/initStatus'
 import { initSearch } from '../../../data/Teacher/EditModule/data'
 import { useGlobalContext } from '../../../context/GlobalProvider'
+import NoItems from '../../../components/General/NoItems/NoItems'
 
 const NewModule = () => {
   const nav = useNavigate()
@@ -207,7 +208,7 @@ const NewModule = () => {
           </Button>
         </Box>
       ) : (
-        <Typography>Nav uzdevumu!</Typography>
+        <NoItems description={'Nav uzdevumu!'} />
       )}
     </>
   )

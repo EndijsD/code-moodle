@@ -26,10 +26,10 @@ const AcceptActionDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel} sx={{ color: 'black' }}>
-          Cancel
+          Atcelt
         </Button>
         <Button onClick={onAccept} color='primary' autoFocus>
-          Confirm
+          Apstiprināt
         </Button>
       </DialogActions>
     </Dialog>

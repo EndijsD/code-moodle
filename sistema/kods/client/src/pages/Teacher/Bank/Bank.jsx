@@ -21,6 +21,7 @@ import Title from '../../../components/General/Title'
 import { MessageContainerSx } from './BankStyle'
 import { initStatusPending } from '../../../data/initStatus'
 import { useGlobalContext } from '../../../context/GlobalProvider'
+import NoItems from '../../../components/General/NoItems/NoItems'
 
 const Bank = () => {
   const [fetchState, setFetchState] = useState(initStatusPending)
@@ -121,7 +122,9 @@ const Bank = () => {
           </Table>
         </TableContainer>
       ) : (
-        !fetchState.pending && <Typography>Nav izveidoti uzdevumi</Typography>
+        !fetchState.pending && (
+          <NoItems description={'Nav izveidoti uzdevumi'} />
+        )
       )}
     </>
   )

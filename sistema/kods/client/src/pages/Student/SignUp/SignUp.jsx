@@ -21,8 +21,7 @@ import Title from '../../../components/General/Title/Title'
 import TeacherCard from '../../../components/Student/TeacherCard/TeacherCard'
 import AcceptActionDialog from '../../../components/General/AcceptActionDialog/AcceptActionDialog'
 import MenuIcon from '@mui/icons-material/Menu'
-import SearchIcon from '@mui/icons-material/Search'
-import DirectionsIcon from '@mui/icons-material/Directions'
+import NoItems from '../../../components/General/NoItems/NoItems'
 
 const SignUp = () => {
   const [status, setStatus] = useState(initStatusPending)
@@ -115,91 +114,104 @@ const SignUp = () => {
         <Spinner />
       ) : (
         status.success && (
-          <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+          <>
             <Title text='Pieteikties pie skolotāja' />
 
-            {teachers.length > 0 ? (
-              <>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
-                  <Paper
-                    component='form'
-                    sx={{
-                      p: '2px 4px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      width: 400,
-                    }}
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: teachers.length > 0 ? 'start' : 'center',
+              }}
+            >
+              {teachers.length > 0 ? (
+                <>
+                  <Box
+                    sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}
                   >
-                    <Popover
-                      open={Boolean(anchorEl)}
-                      anchorEl={anchorEl}
-                      onClose={handlePopoverClose}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
+                    <Paper
+                      component='form'
+                      sx={{
+                        p: '2px 4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: 400,
                       }}
                     >
-                      <Box sx={{ p: 2, minWidth: 220 }}>
-                        <Typography variant='subtitle1' fontWeight='bold'>
-                          Filtri
-                        </Typography>
-                        <Divider sx={{ my: 1 }} />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={includePrivate}
-                              onChange={handleCheckboxChange}
-                            />
-                          }
-                          label='Iekļaut privātskolotājus'
-                        />
-                      </Box>
-                    </Popover>
+                      <Popover
+                        open={Boolean(anchorEl)}
+                        anchorEl={anchorEl}
+                        onClose={handlePopoverClose}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'left',
+                        }}
+                      >
+                        <Box sx={{ p: 2, minWidth: 220 }}>
+                          <Typography variant='subtitle1' fontWeight='bold'>
+                            Filtri
+                          </Typography>
+                          <Divider sx={{ my: 1 }} />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={includePrivate}
+                                onChange={handleCheckboxChange}
+                              />
+                            }
+                            label='Iekļaut privātskolotājus'
+                          />
+                        </Box>
+                      </Popover>
 
-                    <InputBase
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                      sx={{ ml: 1, flex: 1 }}
-                      placeholder='Meklēt skolotāju'
-                    />
-                    <IconButton
-                      sx={{ p: '10px' }}
-                      onClick={handleMenuClick}
-                      aria-label='menu'
-                    >
-                      <MenuIcon />
-                    </IconButton>
-                  </Paper>
-                </Box>
-                <Grid container spacing={2} justifyContent='center'>
-                  {filteredData.map((teacher, i) => (
-                    <Grid item key={i}>
-                      <TeacherCard
-                        key={i}
-                        name={`${teacher.vards} ${teacher.uzvards}`}
-                        onClick={() => handleCardClick(teacher)}
+                      <InputBase
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        sx={{ ml: 1, flex: 1 }}
+                        placeholder='Meklēt skolotāju'
                       />
-                    </Grid>
-                  ))}
-                </Grid>
-              </>
-            ) : (
-              <Typography textAlign={'center'}>
-                Nav pieejamu skolotāju!
-              </Typography>
-            )}
+                      <IconButton
+                        sx={{ p: '10px' }}
+                        onClick={handleMenuClick}
+                        aria-label='menu'
+                      >
+                        <MenuIcon />
+                      </IconButton>
+                    </Paper>
+                  </Box>
+                  <Grid container spacing={2} justifyContent='center'>
+                    {filteredData.map((teacher, i) => (
+                      <Grid item key={i}>
+                        <TeacherCard
+                          key={i}
+                          name={`${teacher.vards} ${teacher.uzvards}`}
+                          onClick={() => handleCardClick(teacher)}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </>
+              ) : (
+                <NoItems
+                  description={'Nav pieejamu skolotāju!'}
+                  containerStyle={{ width: '40%' }}
+                />
+              )}
 
-            {/* Dialog */}
-            {selectedTeacher && (
-              <AcceptActionDialog
-                open={dialogOpen}
-                title='Apstiprināt skolotāju'
-                description={`Vai tiešām vēlaties pieteikties pie ${selectedTeacher.vards} ${selectedTeacher.uzvards}?`}
-                onAccept={handleAccept}
-                onCancel={handleCancel}
-              />
-            )}
-          </Box>
+              {/* Dialog */}
+              {selectedTeacher && (
+                <AcceptActionDialog
+                  open={dialogOpen}
+                  title='Apstiprināt skolotāju'
+                  description={`Vai tiešām vēlaties pieteikties pie ${selectedTeacher.vards} ${selectedTeacher.uzvards}?`}
+                  onAccept={handleAccept}
+                  onCancel={handleCancel}
+                />
+              )}
+            </Box>
+          </>
         )
       )}
     </>
