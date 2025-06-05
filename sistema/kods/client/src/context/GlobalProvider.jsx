@@ -19,8 +19,8 @@ const GlobalProvider = ({ children }) => {
 
         if (String(res.status).charAt(0) == '2') {
           // User is authenticated, start refresh interval
-          const refresh = () => {
-            axios.post('auth/refresh').catch(() => {
+          const refresh = async () => {
+            await axios.post('auth/refresh').catch(() => {
               clearInterval(refreshPooling.current)
               setUser(null)
             })
@@ -39,7 +39,7 @@ const GlobalProvider = ({ children }) => {
 
     checkAuthAndStartRefresh()
 
-    return () => clearInterval(refreshPooling.current)
+    // return () => clearInterval(refreshPooling.current)
   }, [])
 
   return (

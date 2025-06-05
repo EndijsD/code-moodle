@@ -15,7 +15,6 @@ import axios from 'axios'
 import { Check, Close } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { languages } from '../../../languages'
-import { DropzoneArea } from 'mui-file-dropzone'
 import Title from '../../../components/General/Title'
 import { initStatus } from '../../../data/initStatus'
 import {
@@ -24,6 +23,8 @@ import {
   initFieldValid,
 } from '../../../data/Teacher/NewTask/NewTaskInitVals'
 import { useGlobalContext } from '../../../context/GlobalProvider'
+import { getBase64 } from '../../../assets/generalFunction'
+import FileDropzone from '../../../components/General/FileDropzone'
 
 const NewTask = () => {
   const nav = useNavigate()
@@ -31,8 +32,7 @@ const NewTask = () => {
   const [fieldValid, setFieldValid] = useState(initFieldValid)
   const [status, setStatus] = useState(initStatus)
   const { user } = useGlobalContext()
-
-  const isWhitespaceString = (str) => !/\S/.test(str) // Checks if string only contains white space returns true/false
+  const [files, setFiles] = useState([])
 
   const handleFormInputChange = (e) => {
     const { name, value } = e.target
@@ -42,17 +42,17 @@ const NewTask = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     let incompleteData = false
     let tempObj = { ...fieldValid }
 
     for (const [key, value] of Object.entries(fieldValid)) {
-      if (isWhitespaceString(data[key])) {
+      if (String(data[key]).trim()) {
+        tempObj[key] = false
+      } else {
         tempObj[key] = true
         incompleteData = true
-      } else {
-        tempObj[key] = false
       }
     }
 
@@ -66,30 +66,39 @@ const NewTask = () => {
         piemers: data.example,
         skolotajs_id: user.skolotajs_id,
       }
+
       setStatus({ ...status, pending: true, error: false })
-      axios
-        .post(`uzdevumi`, postData)
-        .then(function (response) {
-          if (response.data.status === 200) {
-            setStatus({
-              ...status,
-              pending: false,
-              error: false,
-              success: true,
-            })
-          }
-          // response.data.id
-          // if (file) {
-          //   const fd = new FormData();
-          //   fd.append('file', file);
-          //   //axios post (back end not dun yet)
-          // }
-          setTimeout(() => nav('/teacher/bank'), 500)
+
+      try {
+        const responseTasks = await axios.post('uzdevumi', postData)
+
+        // let finalFiles = null
+        if (files.length) {
+          const filePromises = files.map((el) => ({
+            // nosaukums: el.name,
+            // tips: el.type,
+            // base64: await getBase64(el, true),
+            ...el,
+            uzdevumi_id: responseTasks.data.id,
+          }))
+
+          // finalFiles = await Promise.all(filePromises)
+
+          await axios.post('fails/multiple', filePromises)
+        }
+
+        setStatus({
+          ...status,
+          pending: false,
+          error: false,
+          success: true,
         })
-        .catch(function (error) {
-          setStatus({ ...status, pending: false, error: true })
-          console.log(error.response.data)
-        })
+
+        setTimeout(() => nav('/teacher/bank'), 500)
+      } catch (error) {
+        console.log(error)
+        setStatus({ ...status, pending: false, error: true })
+      }
     }
     setFieldValid(tempObj)
   }
@@ -151,10 +160,12 @@ const NewTask = () => {
               </MenuItem>
             ))}
           </Select>
+
           <FormHelperText>
             {fieldValid.language && 'Neaizpildīts obligātais lauciņš!'}
           </FormHelperText>
         </FormControl>
+
         <TextField
           error={fieldValid.points}
           required
@@ -166,6 +177,7 @@ const NewTask = () => {
           onChange={handleFormInputChange}
           autoComplete='off'
         />
+
         <TextField
           fullWidth
           label='Piemērs'
@@ -178,18 +190,12 @@ const NewTask = () => {
           onChange={handleFormInputChange}
           autoComplete='off'
         />
-        <DropzoneArea
-          acceptedFiles={['image/*']}
-          dropzoneText={'Nomet vai uzspied'}
-          onChange={(files) => console.log('Files:', files)}
-          filesLimit={10}
-          showPreviews
-          showPreviewsInDropzone={false}
-          useChipsForPreview
-          previewText='Izvēlētie faili'
-          dropzoneClass='dropzone'
-          showAlerts={false}
+
+        <FileDropzone
+          value={files}
+          onChange={(e) => setFiles(e.target.files)}
         />
+
         <Button
           color={
             status.error ? 'error' : status.success ? 'success' : 'primary'

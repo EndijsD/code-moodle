@@ -15,21 +15,23 @@ import axios from 'axios'
 import { Check, Close } from '@mui/icons-material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { languages } from '../../../languages'
-import { DropzoneArea } from 'mui-file-dropzone'
 import Title from '../../../components/General/Title'
 import { MainContainerSx } from './EditTaskStyle'
 import { initStatus } from '../../../data/initStatus'
 import { initFieldValid } from '../../../data/Teacher/NewTask/NewTaskInitVals'
 import Spinner from '../../../components/General/Spinner/Spinner'
+import { base64ToFile, getBase64 } from '../../../assets/generalFunction'
+import FileDropzone from '../../../components/General/FileDropzone'
 
 const EditTask = () => {
   const { id } = useParams()
   const nav = useNavigate()
-  const [data, setData] = useState(undefined)
+  const [data, setData] = useState()
   const [fieldValid, setFieldValid] = useState(initFieldValid)
   const [status, setStatus] = useState(initStatus)
-
-  const isWhitespaceString = (str) => !/\S/.test(str) // Checks if string only contains white space returns true/false
+  const [files, setFiles] = useState([])
+  const [filesOriginal, setFilesOriginal] = useState([])
+  const [isPendingFiles, setIsPendingFiles] = useState(true)
 
   const handleFormInputChange = (e) => {
     const { name, value } = e.target
@@ -39,17 +41,33 @@ const EditTask = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const processFiles = (files, filesOriginal) => {
+    // New files
+    const newFiles = files.filter((file) => !file.fails_id)
+
+    // Deleted files
+    const currentIds = new Set(
+      files.map((file) => file.fails_id).filter(Boolean)
+    )
+    console.log('currentIds', currentIds)
+    const deletedFileIds = filesOriginal
+      .map((file) => file.fails_id)
+      .filter((id) => !currentIds.has(id))
+
+    return { newFiles, deletedFileIds }
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
     let incompleteData = false
     let tempObj = { ...fieldValid }
 
     for (const [key, value] of Object.entries(fieldValid)) {
-      if (isWhitespaceString(data[key])) {
+      if (String(data[key]).trim()) {
+        tempObj[key] = false
+      } else {
         tempObj[key] = true
         incompleteData = true
-      } else {
-        tempObj[key] = false
       }
     }
 
@@ -64,49 +82,83 @@ const EditTask = () => {
       }
       setStatus({ ...status, pending: true, error: false })
 
-      axios
-        .patch(`uzdevumi/single/${id}`, postData)
-        .then(function (response) {
-          if (response.status === 200) {
-            setStatus({
-              ...status,
-              pending: false,
-              error: false,
-              success: true,
-            })
-          }
-          // man we really gotta do smth about dem pics //2025 called and they said they're gonna do this now
-          setTimeout(() => nav('/teacher/bank'), 500)
+      try {
+        await axios.patch(`uzdevumi/single/${id}`, postData)
+
+        // let finalFiles = null
+        console.log('files', files)
+        const { deletedFileIds, newFiles } = processFiles(files, filesOriginal)
+
+        console.log('deletedFileIds', deletedFileIds)
+        console.log('newFiles', newFiles)
+        if (deletedFileIds.length)
+          await axios.delete('fails/multiple', { data: deletedFileIds })
+
+        if (newFiles.length) {
+          const filePromises = newFiles.map((el) => ({
+            // nosaukums: el.name,
+            // tips: el.type,
+            // base64: await getBase64(el, true),
+            ...el,
+            uzdevumi_id: id,
+          }))
+
+          // finalFiles = await Promise.all(filePromises)
+
+          await axios.post('fails/multiple', filePromises)
+        }
+
+        setStatus({
+          ...status,
+          pending: false,
+          error: false,
+          success: true,
         })
-        .catch(function (error) {
-          setStatus({ ...status, pending: false, error: true })
-          console.log(error)
-        })
+
+        setTimeout(() => nav('/teacher/bank'), 500)
+      } catch (error) {
+        console.log(error)
+        setStatus({ ...status, pending: false, error: true })
+      }
     }
     setFieldValid(tempObj)
   }
 
   useEffect(() => {
-    if (status.pending ? <Spinner /> : data == undefined) {
-      axios
-        .get(`uzdevumi/${id}`)
-        .then(function (res) {
-          let d = res.data[0]
-          setData({
-            topic: d.tema,
-            name: d.nosaukums,
-            description: d.apraksts,
-            language: d.valoda,
-            points: d.punkti,
-            example: d.piemers,
-            files: d.files,
-          })
+    const getData = async () => {
+      try {
+        const responseTasks = await axios.get(`uzdevumi/${id}`)
+
+        let d = responseTasks.data[0]
+        setData({
+          topic: d.tema,
+          name: d.nosaukums,
+          description: d.apraksts,
+          language: d.valoda,
+          points: d.punkti,
+          example: d.piemers,
         })
-        .catch(function (error) {
-          setData('error')
-          console.log(error.response.data)
-        })
+
+        const responseFiles = await axios.get(`custom/files/${id}`)
+        const fileData = responseFiles.data
+
+        if (fileData.length > 0)
+          setFiles(
+            fileData
+            // fileData.map((el) => ({
+            //   ...el,
+            //   file: base64ToFile(el.base64, el.nosaukums, el.tips),
+            // }))
+          )
+        setFilesOriginal(fileData)
+        setIsPendingFiles(false)
+      } catch (error) {
+        console.log(error)
+        setData('error')
+      }
     }
+
+    getData()
   }, [])
 
   return (
@@ -167,10 +219,12 @@ const EditTask = () => {
                 </MenuItem>
               ))}
             </Select>
+
             <FormHelperText>
               {fieldValid.language && 'Neaizpildīts obligātais lauciņš!'}
             </FormHelperText>
           </FormControl>
+
           <TextField
             error={fieldValid.points}
             required
@@ -182,6 +236,7 @@ const EditTask = () => {
             onChange={handleFormInputChange}
             autoComplete='off'
           />
+
           <TextField
             fullWidth
             label='Piemērs'
@@ -194,23 +249,18 @@ const EditTask = () => {
             onChange={handleFormInputChange}
             autoComplete='off'
           />
-          <DropzoneArea
-            dropzoneText={'Nomet vai uzspied'}
-            value={data.files || []}
-            onChange={(files) => setData((prev) => ({ ...prev, files: files }))}
-            filesLimit={10}
-            showPreviews
-            showPreviewsInDropzone={false}
-            useChipsForPreview
-            previewText='Izvēlētie faili'
-            dropzoneClass='dropzone'
-            showAlerts={true}
+
+          <FileDropzone
+            value={files}
+            onChange={(e) => setFiles(e.target.files)}
+            isPending={isPendingFiles}
           />
+
           <Button
             color={
               status.error ? 'error' : status.success ? 'success' : 'primary'
             }
-            disabled={status.pending ? true : false}
+            disabled={status.pending}
             variant='contained'
             type='submit'
           >
@@ -221,7 +271,7 @@ const EditTask = () => {
             ) : status.error ? (
               <Close />
             ) : (
-              <>Mainīt</>
+              'Mainīt'
             )}
           </Button>
         </S.Form>

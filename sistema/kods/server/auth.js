@@ -86,10 +86,18 @@ router.post('/refresh', async (req, res) => {
       if (err) {
         res.status(500).json({ message: err.message })
       } else {
-        if (!result.length)
-          return res.status(403).json({ message: 'Invalid token' })
-        if (result[0].refresh_token != refreshToken)
-          return res.status(403).json({ message: 'Invalid token' })
+        if (!result.length || result[0].refresh_token != refreshToken) {
+          res.clearCookie('refreshToken', {
+            httpOnly: true,
+            sameSite: 'strict',
+          })
+          res.clearCookie('accessToken', {
+            httpOnly: true,
+            sameSite: 'strict',
+          })
+          res.status(403).json({ message: 'Invalid token' })
+          return
+        }
 
         jwt.verify(
           refreshToken,

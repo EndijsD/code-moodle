@@ -386,4 +386,21 @@ WHERE sk.skolas_id = (select skolas_id FROM studenti where studenti_id = ?) OR s
   )
 })
 
+router.get('/files/:id', authenticateSession, async (req, res) => {
+  const id = req.params.id
+
+  db.query(`SELECT * FROM fails WHERE uzdevumi_id = ?`, id, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: err.message })
+    } else {
+      res.json(
+        result.map((file) => ({
+          ...file,
+          base64: file.base64.toString(),
+        }))
+      )
+    }
+  })
+})
+
 export default router

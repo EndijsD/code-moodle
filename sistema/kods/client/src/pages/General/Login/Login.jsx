@@ -20,7 +20,7 @@ const Login = () => {
   const [problem, setProblem] = useState(null)
   const [isPending, setIsPending] = useState(false)
   const nav = useNavigate()
-  const { user, setUser, initialized } = useGlobalContext()
+  const { user, setUser, initialized, refreshPooling } = useGlobalContext()
 
   // Ja lietotājs ir ielogojies, tad lietotājs tiek aizvests atpakaļ uz sava lietotāja tipa sākuma lapu
   useEffect(() => {
@@ -58,6 +58,16 @@ const Login = () => {
         const res = await axios.post(`auth/login`, form)
 
         if (String(res.status).charAt(0) == '2') {
+          refreshPooling.current = setInterval(
+            () =>
+              axios.post('auth/refresh').catch(() => {
+                clearInterval(refreshPooling.current)
+                setUser(null)
+                nav('/login')
+              }),
+            600000
+          ) // 10 min
+
           setUser(res.data)
           if (res.data.loma == 'students') nav('/student/modules')
           else if (res.data.loma == 'skolotajs') nav('/teacher/students')
