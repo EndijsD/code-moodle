@@ -1,6 +1,7 @@
 export const ChatContainerStyle = {
   height: 300,
-  maxWidth: 700,
+  width: '100%',
+  maxWidth: 1000,
   boxShadow: '0 0 1px #363537',
   borderRadius: '10px',
 }

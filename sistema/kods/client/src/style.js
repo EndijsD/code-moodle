@@ -1,5 +1,5 @@
 export const TeacherLayout = {
-  m: '32px 10%',
+  p: '32px 5%',
   display: 'flex',
   flexDirection: 'column',
   flex: 1,
@@ -7,7 +7,7 @@ export const TeacherLayout = {
 }
 
 export const StudentLayout = {
-  m: '32px 10%',
+  p: '32px 5%',
   display: 'flex',
   flexDirection: 'column',
   flex: 1,

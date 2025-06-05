@@ -20,7 +20,6 @@ import { MainContainerSx } from './EditTaskStyle'
 import { initStatus } from '../../../data/initStatus'
 import { initFieldValid } from '../../../data/Teacher/NewTask/NewTaskInitVals'
 import Spinner from '../../../components/General/Spinner/Spinner'
-import { base64ToFile, getBase64 } from '../../../assets/generalFunction'
 import FileDropzone from '../../../components/General/FileDropzone'
 
 const EditTask = () => {
@@ -85,25 +84,16 @@ const EditTask = () => {
       try {
         await axios.patch(`uzdevumi/single/${id}`, postData)
 
-        // let finalFiles = null
-        console.log('files', files)
         const { deletedFileIds, newFiles } = processFiles(files, filesOriginal)
 
-        console.log('deletedFileIds', deletedFileIds)
-        console.log('newFiles', newFiles)
         if (deletedFileIds.length)
           await axios.delete('fails/multiple', { data: deletedFileIds })
 
         if (newFiles.length) {
           const filePromises = newFiles.map((el) => ({
-            // nosaukums: el.name,
-            // tips: el.type,
-            // base64: await getBase64(el, true),
             ...el,
             uzdevumi_id: id,
           }))
-
-          // finalFiles = await Promise.all(filePromises)
 
           await axios.post('fails/multiple', filePromises)
         }
@@ -142,14 +132,7 @@ const EditTask = () => {
         const responseFiles = await axios.get(`custom/files/${id}`)
         const fileData = responseFiles.data
 
-        if (fileData.length > 0)
-          setFiles(
-            fileData
-            // fileData.map((el) => ({
-            //   ...el,
-            //   file: base64ToFile(el.base64, el.nosaukums, el.tips),
-            // }))
-          )
+        setFiles(fileData)
         setFilesOriginal(fileData)
         setIsPendingFiles(false)
       } catch (error) {

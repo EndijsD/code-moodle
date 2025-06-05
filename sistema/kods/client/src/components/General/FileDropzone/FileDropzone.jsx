@@ -1,14 +1,9 @@
-import { alpha, Box, Tooltip, Typography, useTheme } from '@mui/material'
+import { alpha, Tooltip, Typography, useTheme } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
-import {
-  AttachFile,
-  Clear,
-  InfoOutlined,
-  InsertDriveFile,
-} from '@mui/icons-material'
+import { AttachFile, InfoOutlined } from '@mui/icons-material'
 import { getBase64 } from '../../../assets/generalFunction'
-import * as S from './style'
 import Spinner from '../Spinner/Spinner'
+import FilePreviews from '../FilePreviews/FilePreviews'
 
 const FileDropzone = ({ value, onChange, name, isPending = false }) => {
   const [files, setFiles] = useState([])
@@ -20,26 +15,8 @@ const FileDropzone = ({ value, onChange, name, isPending = false }) => {
   useEffect(() => {
     if (!value || !value.length || didOnce.current) return
 
-    const setData = async () => {
-      try {
-        // let finalFiles = null
-        // console.log('value', value)
-        // const filePromises = value.map(async (el) => ({
-        //   id: el.id,
-        //   name: el.file.name,
-        //   type: el.file.type,
-        //   base64: await getBase64(el.file, true),
-        // }))
+    setFiles(value)
 
-        // finalFiles = await Promise.all(filePromises)
-
-        setFiles(value)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    setData()
     didOnce.current = true
   }, [value])
 
@@ -83,7 +60,7 @@ const FileDropzone = ({ value, onChange, name, isPending = false }) => {
     }
   }
 
-  const removeFile = (file) => {
+  const remove = (file) => {
     const updated = files.filter((el) => el != file)
 
     setFiles(updated)
@@ -164,95 +141,7 @@ const FileDropzone = ({ value, onChange, name, isPending = false }) => {
         multiple
       />
 
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-        {files.map((file, i) => (
-          <S.Attachment
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: 200,
-              cursor: 'pointer',
-            }}
-            key={i}
-            title={file.nosaukums}
-            onClick={() => removeFile(file)}
-          >
-            <Box sx={{ position: 'relative' }}>
-              {file.tips.includes('image') ? (
-                <img
-                  style={{
-                    width: 200,
-                    maxHeight: 150,
-                    minHeight: 100,
-                    objectFit: 'contain',
-                    borderRadius: '4px',
-                    backgroundColor: theme.palette.common.black,
-                  }}
-                  src={file.base64}
-                />
-              ) : (
-                <Box
-                  sx={{
-                    width: 200,
-                    maxHeight: 150,
-                    minHeight: 100,
-                    backgroundColor: theme.palette.grey[200],
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: '4px',
-                  }}
-                >
-                  <InsertDriveFile
-                    sx={{
-                      width: 50,
-                      height: 50,
-                      color: theme.palette.grey[600],
-                    }}
-                  />
-                </Box>
-              )}
-
-              <Box
-                className='removeFile'
-                sx={{
-                  display: 'none',
-                  position: 'absolute',
-                  top: 0,
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: alpha(theme.palette.common.white, 0.5),
-                  borderRadius: '4px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Clear
-                  sx={{
-                    width: 50,
-                    height: 50,
-                    color: theme.palette.primary.main,
-                    background: alpha(theme.palette.primary.main, 0.3),
-                    borderRadius: '50%',
-                  }}
-                />
-              </Box>
-            </Box>
-
-            <Box
-              sx={{
-                backgroundColor: theme.palette.grey[100],
-                borderRadius: '0 0 4px 4px',
-                display: 'flex',
-                justifyContent: 'center',
-                p: 1,
-              }}
-            >
-              <Typography sx={{ fontSize: 12 }}>{file.nosaukums}</Typography>
-            </Box>
-          </S.Attachment>
-        ))}
-      </Box>
+      <FilePreviews files={files} onRemove={remove} />
     </>
   )
 }

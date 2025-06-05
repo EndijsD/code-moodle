@@ -23,7 +23,6 @@ import {
   initFieldValid,
 } from '../../../data/Teacher/NewTask/NewTaskInitVals'
 import { useGlobalContext } from '../../../context/GlobalProvider'
-import { getBase64 } from '../../../assets/generalFunction'
 import FileDropzone from '../../../components/General/FileDropzone'
 
 const NewTask = () => {
@@ -72,17 +71,11 @@ const NewTask = () => {
       try {
         const responseTasks = await axios.post('uzdevumi', postData)
 
-        // let finalFiles = null
         if (files.length) {
           const filePromises = files.map((el) => ({
-            // nosaukums: el.name,
-            // tips: el.type,
-            // base64: await getBase64(el, true),
             ...el,
             uzdevumi_id: responseTasks.data.id,
           }))
-
-          // finalFiles = await Promise.all(filePromises)
 
           await axios.post('fails/multiple', filePromises)
         }

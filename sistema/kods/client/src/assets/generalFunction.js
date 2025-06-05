@@ -27,21 +27,21 @@ export const getBase64 = (file, full = false) => {
   })
 }
 
-const base64ToBlob = (base64, mimeType = '') => {
-  const byteCharacters = window.atob(base64)
+// const base64ToBlob = (base64, mimeType = '') => {
+//   const byteCharacters = window.atob(base64)
 
-  const byteNumbers = new Array(byteCharacters.length)
+//   const byteNumbers = new Array(byteCharacters.length)
 
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i)
-  }
+//   for (let i = 0; i < byteCharacters.length; i++) {
+//     byteNumbers[i] = byteCharacters.charCodeAt(i)
+//   }
 
-  const byteArray = new Uint8Array(byteNumbers)
+//   const byteArray = new Uint8Array(byteNumbers)
 
-  return new Blob([byteArray], { type: mimeType })
-}
+//   return new Blob([byteArray], { type: mimeType })
+// }
 
-export const base64ToFile = (base64, filename, mimeType) => {
-  const blob = base64ToBlob(base64, mimeType)
-  return new File([blob], filename, { type: mimeType })
-}
+// export const base64ToFile = (base64, filename, mimeType) => {
+//   const blob = base64ToBlob(base64, mimeType)
+//   return new File([blob], filename, { type: mimeType })
+// }
