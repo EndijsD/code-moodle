@@ -230,8 +230,8 @@ const UserEditDrawer = ({
             error={errors.parole}
             helperText={
               errors.parole
-                ? 'Parolei jābūt vismaz 8 rakstzīmēm, jāiekļauj lielie un mazie burti un cipars.'
-                : ''
+                ? 'Parolei jasatur vismaz 8 rakstzīmēm, jāiekļauj lielie un mazie burti un cipars.'
+                : 'Parolei jasatur vismaz 8 rakstzīmēm, jāiekļauj lielie un mazie burti un cipars.'
             }
           />
           <TextField
@@ -244,7 +244,11 @@ const UserEditDrawer = ({
             value={formData.paroleAtk}
             onChange={handleFormChange}
             error={errors.paroleAtk}
-            helperText={errors.paroleAtk ? 'Paroles nesakrīt' : ''}
+            helperText={
+              errors.paroleAtk
+                ? 'Paroles nesakrīt'
+                : 'Parolei jasatur vismaz 8 rakstzīmēm, jāiekļauj lielie un mazie burti un cipars.'
+            }
           />
         </Box>
         <Box mt={2} display='flex' justifyContent='flex-start' gap={1}>
