@@ -1,6 +1,6 @@
 import { Typography, useMediaQuery, useTheme } from '@mui/material'
 import { Sidebar, Menu, MenuItem, sidebarClasses } from 'react-pro-sidebar'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Logout } from '@mui/icons-material'
 import { useState } from 'react'
 import * as S from './style'
@@ -14,6 +14,7 @@ const SideBar = () => {
   const location = useLocation()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'))
   const { setUser } = useGlobalContext()
+  const nav = useNavigate()
 
   const menuItemStyles = {
     button: {

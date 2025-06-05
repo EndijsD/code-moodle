@@ -17,6 +17,7 @@ import { initStatus } from '../../../data/initStatus'
 import { initSearch } from '../../../data/Teacher/EditModule/data'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 import Spinner from '../../../components/General/Spinner/Spinner'
+import NoItems from '../../../components/General/NoItems/NoItems'
 
 const EditModule = () => {
   const nav = useNavigate()
@@ -262,7 +263,7 @@ const EditModule = () => {
           </Button>
         </Box>
       ) : (
-        <Typography>Nav uzdevumu!</Typography>
+        <NoItems description={'Nav uzdevumu!'} />
       )}
     </>
   )

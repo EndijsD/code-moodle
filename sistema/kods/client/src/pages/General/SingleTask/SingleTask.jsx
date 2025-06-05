@@ -20,13 +20,19 @@ const SingleTask = () => {
   const { user } = useGlobalContext()
   const { moduleID, taskID, subID } = useParams()
 
-  const { data, setData, isPending } = useAxios({
-    url: 'custom/singleTask',
-    params: {
-      moduleID: moduleID,
-      taskID: taskID,
-    },
-  })
+  const { data, setData, isPending } = useAxios(
+    user && user.loma === 'students'
+      ? {
+          url: 'custom/singleTask',
+          params: {
+            moduleID: moduleID,
+            taskID: taskID,
+          },
+        }
+      : {
+          url: `custom/singleTask/${subID}`,
+        }
+  )
 
   const handleSubmit = () => {
     if (user.loma == 'students')
@@ -58,7 +64,7 @@ const SingleTask = () => {
       }
     else {
       axios
-        .patch('iesniegumi/' + subID, {
+        .patch('iesniegumi/single/' + subID, {
           punkti: data.i_punkti,
         })
         .then((res) => {

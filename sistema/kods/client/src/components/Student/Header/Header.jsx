@@ -10,6 +10,7 @@ import { useTheme } from '@emotion/react'
 import axios from 'axios'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 import { IconButton } from '@mui/material'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 
 const Header = () => {
   const theme = useTheme()
@@ -24,27 +25,48 @@ const Header = () => {
 
   return (
     <AppBar sx={S.AppBar}>
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <Typography variant='h6'>
             <Link to={'modules'} style={S.LogoLink}>
               Code Moodle
             </Link>
           </Typography>
-          <Button
-            style={{ color: theme.palette.common.white, gap: 8 }}
-            onClick={() => nav('/student/signup')}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: '1vw',
+              alignItems: 'center',
+            }}
           >
-            <Person />
-            Pieteikšanās
-          </Button>
-          <Button
-            style={{ color: theme.palette.common.white, gap: 8 }}
-            onClick={() => nav('/student/profile')}
-          >
-            <Person />
-            Profils
-          </Button>
+            <Button
+              style={{ color: theme.palette.common.white, gap: 8 }}
+              onClick={() => nav('/student/modules')}
+            >
+              <FormatListBulletedIcon />
+              Uzdevumi
+            </Button>
+            <Button
+              style={{ color: theme.palette.common.white, gap: 8 }}
+              onClick={() => nav('/student/signup')}
+            >
+              <Person />
+              Pieteikšanās
+            </Button>
+            <Button
+              style={{ color: theme.palette.common.white, gap: 8 }}
+              onClick={() => nav('/student/profile')}
+            >
+              <Person />
+              Profils
+            </Button>
+          </Box>
         </Box>
         <IconButton
           style={{ color: theme.palette.common.white }}

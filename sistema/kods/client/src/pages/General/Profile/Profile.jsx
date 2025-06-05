@@ -336,7 +336,11 @@ const Profile = () => {
               label='Parole'
               onChange={handleChange}
               error={submit && fieldValid.parole != ''}
-              helperText={submit ? fieldValid.parole : ''}
+              helperText={
+                submit
+                  ? fieldValid.parole
+                  : 'Parolei jasatur vismaz 8 rakstzīmēm, jāiekļauj lielie un mazie burti un cipars.'
+              }
             />
             <TextField
               sx={{ width: '100%' }}
@@ -347,7 +351,11 @@ const Profile = () => {
               onChange={handleChange}
               type='password'
               error={submit && fieldValid.paroleAtk != ''}
-              helperText={submit ? fieldValid.paroleAtk : ''}
+              helperText={
+                submit
+                  ? fieldValid.paroleAtk
+                  : 'Parolei jasatur vismaz 8 rakstzīmēm, jāiekļauj lielie un mazie burti un cipars.'
+              }
             />
             {user && user.loma === 'students' && (
               <>

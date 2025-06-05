@@ -27,7 +27,7 @@ const AdminHeader = () => {
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
           <Typography variant='h6'>
-            <Link to={'modules'} style={S.LogoLink}>
+            <Link to={'/admin/Admins'} style={S.LogoLink}>
               Code Moodle
             </Link>
           </Typography>
