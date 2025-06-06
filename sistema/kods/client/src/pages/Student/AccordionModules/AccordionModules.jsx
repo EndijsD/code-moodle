@@ -12,14 +12,14 @@ const AccordionModules = () => {
   const { data, isPending } = useAxios({
     url: 'custom/modules_tasks/' + (studentID || user.studenti_id),
   })
-
+  console.log(data)
   return !isPending ? (
     data && data.length ? (
       <>
         <Title
           text={
             user?.loma === 'skolotajs'
-              ? data[0].vardsUzvards
+              ? data[0].vards + ' ' + data[0].uzvards
               : 'Veicamie Uzdevumi'
           }
         />
