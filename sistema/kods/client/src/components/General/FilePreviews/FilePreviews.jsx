@@ -127,7 +127,7 @@ const FilePreviews = ({ files, onRemove = null }) => {
       ))}
 
       <Modal
-        open={open}
+        open={Boolean(open)}
         onClose={() => setOpen(null)}
         sx={{
           display: 'flex',

@@ -51,7 +51,8 @@ router.get('/modules_tasks/:id', authenticateSession, (req, res) => {
 
   db.query(
     `SELECT 
-  CONCAT(l.vards, " ", l.uzvards) AS vardsUzvards,
+  l.vards,
+  l.uzvards,
   m.nosaukums AS m_nos,
   u.uzdevumi_id,
   u.tema,
@@ -88,8 +89,11 @@ WHERE s.studenti_id = ?;
           const moduleID = el.moduli_id
           delete el.moduli_id
 
-          const fullName = el.vardsUzvards
-          delete el.vardsUzvards
+          const vards = el.vards
+          delete el.vards
+
+          const uzvards = el.uzvards
+          delete el.uzvards
 
           if (existingItem) {
             existingItem.p_kopa += el.u_punkti
@@ -101,7 +105,8 @@ WHERE s.studenti_id = ?;
               m_nos: moduleName,
               p_kopa: taskPoints,
               i_kopa: gottenPoints,
-              vardsUzvards: fullName,
+              vards,
+              uzvards,
               uzdevumi: [{ ...el }],
             })
 

@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 
+const isProduction = process.env.NODE_ENV === 'production'
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body
 
@@ -56,12 +58,14 @@ router.post('/login', async (req, res) => {
 
                 res.cookie('refreshToken', refreshToken, {
                   httpOnly: true,
-                  sameSite: 'strict',
+                  secure: isProduction,
+                  sameSite: isProduction ? 'none' : 'strict',
                 })
                 res.cookie('accessToken', accessToken, {
                   maxAge: 900000,
                   httpOnly: true,
-                  sameSite: 'strict',
+                  secure: isProduction,
+                  sameSite: isProduction ? 'none' : 'strict',
                 })
 
                 res.status(200).send(user)
@@ -89,11 +93,13 @@ router.post('/refresh', async (req, res) => {
         if (!result.length || result[0].refresh_token != refreshToken) {
           res.clearCookie('refreshToken', {
             httpOnly: true,
-            sameSite: 'strict',
+            secure: isProduction,
+            sameSite: isProduction ? 'none' : 'strict',
           })
           res.clearCookie('accessToken', {
             httpOnly: true,
-            sameSite: 'strict',
+            secure: isProduction,
+            sameSite: isProduction ? 'none' : 'strict',
           })
           res.status(403).json({ message: 'Invalid token' })
           return
@@ -109,7 +115,8 @@ router.post('/refresh', async (req, res) => {
             res.cookie('accessToken', accessToken, {
               maxAge: 900000,
               httpOnly: true,
-              sameSite: 'strict',
+              secure: isProduction,
+              sameSite: isProduction ? 'none' : 'strict',
             })
             res.sendStatus(200)
           }
@@ -129,11 +136,11 @@ router.post('/logout', async (req, res) => {
       } else {
         res.clearCookie('refreshToken', {
           httpOnly: true,
-          sameSite: 'strict',
+          secure: isProduction,
         })
         res.clearCookie('accessToken', {
           httpOnly: true,
-          sameSite: 'strict',
+          sameSite: isProduction ? 'none' : 'strict',
         })
         res.send({ message: 'Logged out' })
       }

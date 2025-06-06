@@ -1,10 +1,13 @@
 import {
+  alpha,
   Box,
   Button,
   Grid,
   InputAdornment,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import useAxios from '../../../hooks/useAxios'
@@ -16,11 +19,18 @@ import moment from 'moment'
 import { useGlobalContext } from '../../../context/GlobalProvider'
 import Spinner from '../../../components/General/Spinner/Spinner'
 import FilePreviews from '../../../components/General/FilePreviews/FilePreviews'
+import { Code, PlayArrow, Terminal } from '@mui/icons-material'
+import { useState } from 'react'
 
 const SingleTask = () => {
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'))
   const nav = useNavigate()
   const { user } = useGlobalContext()
   const { moduleID, taskID, subID } = useParams()
+  const [activeTab, setActiveTab] = useState('code')
+  const [languageSearch, setLanguageSearch] = useState('')
+  const [languageId, setLanguageId] = useState()
 
   const { data, setData, isPending } = useAxios(
     user && user.loma === 'students'
@@ -35,6 +45,14 @@ const SingleTask = () => {
           url: `custom/singleTask/${subID}`,
         }
   )
+
+  const { data: languages, isPending: isPendingLanguages } = useAxios({
+    url: `https://judge0-ce.p.rapidapi.com/languages`,
+    headers: {
+      'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
+      'x-rapidapi-key': '7c7a84795fmsh6c1a5cd0610eb43p1e8971jsn023e9db9c509',
+    },
+  })
 
   const { data: files, isPending: isPendingFiles } = useAxios({
     url: `custom/files/${taskID}`,
@@ -91,11 +109,18 @@ const SingleTask = () => {
       setData({ ...data, i_punkti: val.target.value })
   }
 
+  const runCode = () => {}
+
   return (
     !isPending &&
     data && (
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Grid container rowSpacing={10} columnSpacing={15} columns={2}>
+        <Grid
+          container
+          rowSpacing={isSmallScreen ? 3 : 10}
+          columnSpacing={isSmallScreen ? 3 : 15}
+          columns={2}
+        >
           <Grid item xs={2}>
             <S.Header>
               {user.loma == 'skolotajs' ? (
@@ -121,6 +146,7 @@ const SingleTask = () => {
                 <Typography variant='h6' color='text.secondary'>
                   {data.tema}
                 </Typography>
+
                 <Typography
                   variant='h4'
                   sx={{ fontWeight: '600', letterSpacing: 5 }}
@@ -128,6 +154,7 @@ const SingleTask = () => {
                   {data.nosaukums}
                 </Typography>
               </Box>
+
               <Box>
                 <Button variant='contained' onClick={handleSubmit}>
                   Iesniegt
@@ -142,30 +169,99 @@ const SingleTask = () => {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              gap: 1,
               justifyItems: 'center',
             }}
           >
-            <Typography variant='h5'>Programmas Kods</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Typography variant='h5' sx={{ mb: 1 }}>
+                {activeTab == 'language'
+                  ? 'Izvēlies valodu'
+                  : 'Programmas kods'}
+              </Typography>
 
+              <Box sx={{ display: 'flex', gap: '10px', alignItems: 'end' }}>
+                <Box sx={{ display: 'flex', gap: '5px' }}>
+                  <S.Tab
+                    variant='outlined'
+                    active={activeTab == 'code'}
+                    onClick={() => setActiveTab('code')}
+                  >
+                    <Code />
+                  </S.Tab>
+
+                  <S.Tab
+                    variant='outlined'
+                    active={activeTab == 'terminal'}
+                    onClick={() => setActiveTab('terminal')}
+                  >
+                    <Terminal />
+                  </S.Tab>
+                </Box>
+
+                <Button
+                  variant='contained'
+                  sx={{ height: 25, alignSelf: 'center' }}
+                  onClick={() => setActiveTab('language')}
+                >
+                  <PlayArrow />
+                </Button>
+              </Box>
+            </Box>
             <Box
               sx={{
                 height: 300,
                 overflow: 'auto',
                 width: '100%',
                 maxWidth: 1000,
+                background: '#161b22',
+                borderRadius: '10px',
               }}
             >
-              <CodeEditor
-                value={data.atbilde}
-                language={data.valoda}
-                style={S.CodeEditor}
-                onChange={(val) =>
-                  setData({ ...data, atbilde: val.target.value })
-                }
-                padding={15}
-                disabled={user.loma == 'skolotajs'}
-              />
+              {activeTab == 'language' ? (
+                <Box sx={{ p: 2, gap: 4, display: 'flex', flexWrap: 'wrap' }}>
+                  <S.Search
+                    label='Search field'
+                    type='search'
+                    variant='filled'
+                    value={languageSearch}
+                    onChange={(e) => setLanguageSearch(e.target.value)}
+                  />
+
+                  <Box sx={{ gap: 2, display: 'flex', flexWrap: 'wrap' }}>
+                    {languages &&
+                      languages
+                        .filter((el) =>
+                          el.name
+                            .toLowerCase()
+                            .includes(languageSearch.trim().toLowerCase())
+                        )
+                        .map((el, i) => (
+                          <S.LanguageBtn
+                            key={i}
+                            variant={
+                              languageId == el.id ? 'contained' : 'outlined'
+                            }
+                            onClick={() => {
+                              setLanguageId(el.id)
+                            }}
+                          >
+                            {el.name}
+                          </S.LanguageBtn>
+                        ))}
+                  </Box>
+                </Box>
+              ) : (
+                <CodeEditor
+                  value={data.atbilde}
+                  language={data.valoda}
+                  style={S.CodeEditor}
+                  onChange={(val) =>
+                    setData({ ...data, atbilde: val.target.value })
+                  }
+                  padding={16}
+                  disabled={user.loma == 'skolotajs'}
+                />
+              )}
             </Box>
           </Grid>
 

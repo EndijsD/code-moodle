@@ -7,6 +7,7 @@ const useAxios = ({
   body,
   params,
   doUseEffect = false,
+  headers,
 }) => {
   const [data, setData] = useState(null)
   const [isPending, setIsPending] = useState(true)
@@ -18,12 +19,14 @@ const useAxios = ({
     passedUrl,
     passedBody,
     passedParams,
+    passedHeaders,
   }) => {
     return axios({
       method: method || passedMethod,
       url: url || passedUrl,
       data: body || passedBody,
       params: params || passedParams,
+      headers: headers || passedHeaders,
     })
       .then((response) => {
         if (response?.data) setData(response.data)
@@ -53,6 +56,7 @@ const useAxios = ({
       passedBody: settings?.body,
       passedParams: settings?.params,
       passedUrl: settings?.url,
+      passedHeaders: settings?.passedHeaders,
     })
   }
 

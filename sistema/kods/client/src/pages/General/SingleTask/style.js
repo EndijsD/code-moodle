@@ -1,4 +1,12 @@
-import { Box, Typography, keyframes, styled } from '@mui/material'
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  alpha,
+  keyframes,
+  styled,
+} from '@mui/material'
 
 const gradient = keyframes`
     from, to {
@@ -24,7 +32,46 @@ export const Header = styled(Box)({
 export const CodeEditor = {
   fontSize: 16,
   minHeight: 300,
-  borderRadius: '10px',
   fontFamily:
     'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
 }
+
+export const Tab = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'active',
+})(({ active, theme }) => ({
+  border: '2px solid black',
+  borderBottom: 0,
+  borderRadius: '5px 5px 0 0',
+  p: '2px',
+  background: active ? '#161b22' : undefined, // alpha(theme.palette.primary.main, 0.2)
+  cursor: 'pointer',
+  color: active ? theme.palette.common.white : theme.palette.common.black,
+  borderBottom: '2px solid white',
+}))
+
+export const LanguageBtn = styled(Button)(({ variant }) => ({
+  color: 'white',
+  borderColor: 'white',
+
+  '&:hover': {
+    background: variant != 'contained' ? 'rgba(255,255,255,.2)' : undefined,
+    borderColor: 'white',
+  },
+}))
+
+export const Search = styled(TextField)({
+  width: '100%',
+
+  'label, & label.Mui-focused': {
+    color: 'white',
+  },
+
+  '&:hover .MuiInputBase-root:before, .MuiInputBase-root:before, .MuiInputBase-root:after':
+    {
+      borderColor: 'white',
+    },
+
+  input: {
+    color: 'white',
+  },
+})
