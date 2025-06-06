@@ -45,3 +45,26 @@ export const getBase64 = (file, full = false) => {
 //   const blob = base64ToBlob(base64, mimeType)
 //   return new File([blob], filename, { type: mimeType })
 // }
+
+export const isValidNumber = ({ value, type = 'int' }) => {
+  // Allow empty string or "0" as valid input
+  if (value === '' || value === '0') {
+    return true
+  }
+
+  // Reject if input contains any whitespace
+  if (/\s/.test(value)) return false
+
+  // Check if input is a valid number
+  const number = Number(value)
+  if (isNaN(number)) return false
+
+  // Check for specific number types (int, any)
+  if (type === 'int') {
+    // Reject if input contains a dot (decimal point) for "int"
+    if (/\./.test(value)) return false
+    if (!Number.isInteger(number)) return false
+  }
+
+  return true
+}

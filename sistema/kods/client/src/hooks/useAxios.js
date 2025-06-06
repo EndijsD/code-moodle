@@ -6,7 +6,7 @@ const useAxios = ({
   url,
   body,
   params,
-  doUseEffect = false,
+  doNotUseEffect = false,
   headers,
 }) => {
   const [data, setData] = useState(null)
@@ -21,6 +21,8 @@ const useAxios = ({
     passedParams,
     passedHeaders,
   }) => {
+    setIsPending(true)
+
     return axios({
       method: method || passedMethod,
       url: url || passedUrl,
@@ -45,7 +47,7 @@ const useAxios = ({
   }
 
   useEffect(() => {
-    if (doUseEffect) return
+    if (doNotUseEffect) return
 
     axiosRequest({})
   }, [url])

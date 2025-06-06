@@ -21,6 +21,7 @@ import Spinner from '../../../components/General/Spinner/Spinner'
 import FilePreviews from '../../../components/General/FilePreviews/FilePreviews'
 import { Code, PlayArrow, Terminal } from '@mui/icons-material'
 import { useState } from 'react'
+import { isValidNumber } from '../../../assets/generalFunction'
 
 const SingleTask = () => {
   const theme = useTheme()
@@ -31,6 +32,8 @@ const SingleTask = () => {
   const [activeTab, setActiveTab] = useState('code')
   const [languageSearch, setLanguageSearch] = useState('')
   const [languageId, setLanguageId] = useState()
+  const [inputArr, setInputArr] = useState([])
+  const [inputCount, setInputCount] = useState('')
 
   const { data, setData, isPending } = useAxios(
     user && user.loma === 'students'
@@ -109,7 +112,32 @@ const SingleTask = () => {
       setData({ ...data, i_punkti: val.target.value })
   }
 
-  const runCode = () => {}
+  const {
+    data: executedCodeResult,
+    setData: setExecutedCodeResult,
+    isPending: isPendingExecutedCodeResult,
+    request: executeCode,
+  } = useAxios({
+    method: 'post',
+    url: `https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=true&fields=*`,
+    headers: {
+      'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
+      'x-rapidapi-key': '7c7a84795fmsh6c1a5cd0610eb43p1e8971jsn023e9db9c509',
+    },
+    doNotUseEffect: true,
+  })
+
+  const runCode = () => {
+    setActiveTab('terminal')
+
+    executeCode({
+      body: {
+        language_id: languageId,
+        source_code: data.atbilde,
+        stdin: inputArr.join('\n'),
+      },
+    })
+  }
 
   return (
     !isPending &&
@@ -176,6 +204,10 @@ const SingleTask = () => {
               <Typography variant='h5' sx={{ mb: 1 }}>
                 {activeTab == 'language'
                   ? 'Izvēlies valodu'
+                  : activeTab == 'input'
+                  ? 'Ievade'
+                  : activeTab == 'terminal'
+                  ? 'Izvade'
                   : 'Programmas kods'}
               </Typography>
 
@@ -201,9 +233,22 @@ const SingleTask = () => {
                 <Button
                   variant='contained'
                   sx={{ height: 25, alignSelf: 'center' }}
-                  onClick={() => setActiveTab('language')}
+                  onClick={() => {
+                    if (activeTab == 'language') {
+                      if (languageId) setActiveTab('input')
+                    } else if (activeTab == 'input') runCode()
+                    else {
+                      setExecutedCodeResult(null)
+                      setInputArr([])
+                      setActiveTab('language')
+                    }
+                  }}
                 >
-                  <PlayArrow />
+                  {['language', 'input'].includes(activeTab) ? (
+                    'Nākamais'
+                  ) : (
+                    <PlayArrow />
+                  )}
                 </Button>
               </Box>
             </Box>
@@ -250,6 +295,52 @@ const SingleTask = () => {
                         ))}
                   </Box>
                 </Box>
+              ) : activeTab == 'input' ? (
+                <Box sx={{ p: 2, gap: 4, display: 'flex', flexWrap: 'wrap' }}>
+                  <S.Search
+                    label='Cik daudz ievades laukus vajag?'
+                    variant='filled'
+                    value={inputCount}
+                    onChange={(e) =>
+                      isValidNumber({ value: e.target.value }) &&
+                      setInputCount(e.target.value)
+                    }
+                  />
+
+                  <Box
+                    sx={{
+                      gap: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      width: '100%',
+                    }}
+                  >
+                    {[...Array(Number(inputCount))].map((_, i) => (
+                      <S.StyledTextField
+                        key={i}
+                        fullWidth
+                        label={'Input ' + (i + 1)}
+                        value={inputArr[i] || ''}
+                        onChange={(e) => {
+                          const newInputArr = [...inputArr]
+                          newInputArr[i] = e.target.value
+                          setInputArr(newInputArr)
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+              ) : activeTab == 'terminal' ? (
+                isPendingExecutedCodeResult ? (
+                  <Spinner />
+                ) : (
+                  <Box sx={{ p: 2, color: 'white' }}>
+                    <Typography component='pre' sx={{ whiteSpace: 'pre-wrap' }}>
+                      {executedCodeResult?.stdout ??
+                        executedCodeResult?.message}
+                    </Typography>
+                  </Box>
+                )
               ) : (
                 <CodeEditor
                   value={data.atbilde}

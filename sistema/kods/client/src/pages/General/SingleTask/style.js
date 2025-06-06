@@ -68,10 +68,34 @@ export const Search = styled(TextField)({
 
   '&:hover .MuiInputBase-root:before, .MuiInputBase-root:before, .MuiInputBase-root:after':
     {
-      borderColor: 'white',
+      borderColor: 'white !important',
     },
 
   input: {
     color: 'white',
+  },
+})
+
+export const StyledTextField = styled(TextField)({
+  width: '100%',
+
+  'label, & label.Mui-focused': {
+    color: 'white',
+  },
+
+  input: {
+    color: 'white',
+  },
+
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'white',
+    },
+    '&:hover fieldset': {
+      borderColor: 'white',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: 'white',
+    },
   },
 })
