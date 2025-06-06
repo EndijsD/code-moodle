@@ -174,7 +174,8 @@ const FilePreviews = ({ files, onRemove = null }) => {
           >
             <img
               style={{
-                width: '100%',
+                maxWidth: '100%',
+                maxHeight: '100%',
               }}
               src={open?.base64}
             />
