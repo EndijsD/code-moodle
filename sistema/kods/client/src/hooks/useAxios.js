@@ -10,7 +10,7 @@ const useAxios = ({
   headers,
 }) => {
   const [data, setData] = useState(null)
-  const [isPending, setIsPending] = useState(true)
+  const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState(null)
   // const [initialLoad, setInitialLoad] = useState(true)
 
