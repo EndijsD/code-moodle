@@ -9,7 +9,7 @@ const GlobalProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [initialized, setInitialized] = useState(false)
 
-  axios.defaults.baseURL = 'http://localhost:3000'
+  axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
   axios.defaults.withCredentials = true
 
   useEffect(() => {
